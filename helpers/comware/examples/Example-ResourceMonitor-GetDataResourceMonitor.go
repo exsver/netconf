@@ -1,0 +1,21 @@
+package main
+
+import (
+	"fmt"
+	"github.com/exsver/netconf/helpers/comware"
+	"log"
+)
+
+func main() {
+	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf", "netconf")
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+	data, err := sw.GetDataResourceMonitor()
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+	for _, monitor := range data.Monitors.Monitors {
+		fmt.Printf("Slot: %v, Name: %s, Used: %v, Total: %v\n", monitor.DeviceNode.Slot, monitor.Name, monitor.Used, monitor.Total)
+	}
+}
