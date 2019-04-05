@@ -564,8 +564,8 @@ func TestRPCReply_Error(t *testing.T) {
 						ErrorType:     "protocol",
 						ErrorTag:      "operation-failed",
 						ErrorSeverity: "error",
-						ErrorPath: "[edit interfaces xe-0/0/1]",
-						ErrorMessage: "VLAN-ID can only be specified on tagged ethernet interfaces",
+						ErrorPath:     "[edit interfaces xe-0/0/1]",
+						ErrorMessage:  "VLAN-ID can only be specified on tagged ethernet interfaces",
 						ErrorInfo: RPCErrorInfo{
 							Info: []byte("<bad-element>unit 0</bad-element>")},
 					},

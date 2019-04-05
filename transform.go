@@ -47,7 +47,7 @@ func ConvertToPairedTags(in []byte) []byte {
 			begin := bytes.Index(tag, []byte("<"))
 			end := bytes.Index(tag, []byte("/"))
 			openTag := append(tag[begin:end], []byte(">true")...)
-			closeTag := append([]byte("</"), append(tag[begin+1:end],[]byte(">") ...)...)
+			closeTag := append([]byte("</"), append(tag[begin+1:end], []byte(">")...)...)
 			allTag := append(openTag, closeTag...)
 			tags[i] = append(tag[:begin], allTag...)
 		}
@@ -63,7 +63,7 @@ func ConvertToPairedTags(in []byte) []byte {
 //      <level3/>
 //    </level2>
 //  </level1>
-func ConvertToXML(in []byte) (out []byte){
+func ConvertToXML(in []byte) (out []byte) {
 	ins := bytes.Split(in, []byte(`/`))
 	out = append([]byte(`<`), append(ins[len(ins)-1], []byte(`/>`)...)...)
 	for i := len(ins) - 2; i >= 0; i-- {
