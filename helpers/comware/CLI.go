@@ -17,7 +17,12 @@ type CDATA struct {
 	Data []byte `xml:",cdata"`
 }
 
+// RunCLICommand sends the specified cli commands via netconf.
+// Use configurationMode:
+// 		false - for execute commands in unprivileged mode
+//		true  - for execute commands in privileged mode (system-view)
 func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMode bool) ([]byte, error) {
+
 	request := netconf.RPCMessage{Xmlns: []string{netconf.BaseURI}}
 	if configurationMode == true {
 		request.InnerXML = []byte(`<CLI><Configuration>cmd_line</Configuration></CLI>`)
@@ -25,6 +30,7 @@ func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMod
 		request.InnerXML = []byte(`<CLI><Execution>cmd_line</Execution></CLI>`)
 	}
 	request.InnerXML = bytes.Replace(request.InnerXML, []byte("cmd_line"), []byte(command), 1)
+
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return nil, err
@@ -44,7 +50,7 @@ func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMod
 	return cliResponse.Execution.Data, nil
 }
 
-//required Comvare version >= 7.1.070
+// required Comvare version >= 7.1.070
 func (targetDevice *TargetDevice) IsConfigurationSaved() (saved bool, diff []byte, err error) {
 	diff, err = targetDevice.RunCLICommand(`display current-configuration diff`, false)
 	diff = bytes.Replace(diff, []byte("\n\n\n"), []byte("\n"), -1)
@@ -81,4 +87,9 @@ func ParseVlansFromConfigString(configString string) (vlans []int) {
 		}
 	}
 	return vlans
+}
+
+// CorrectNewLines replaces "\n\n\n" with "\n"
+func CorrectNewLines(in []byte) []byte {
+	return bytes.Replace(in, []byte("\n\n\n"), []byte("\n"), -1)
 }

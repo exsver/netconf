@@ -7,7 +7,8 @@ import (
 	"strconv"
 )
 
-//CLI equivalent "save force"
+// SaveForce saves the configuration to the existing next-startup configuration file
+// CLI equivalent "save force"
 func (targetDevice *TargetDevice) SaveForce() error {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<save/>`),
@@ -16,8 +17,10 @@ func (targetDevice *TargetDevice) SaveForce() error {
 	return targetDevice.PerformAction(request)
 }
 
-//The name of the specified configuration file must end with the extension .cfg.
-//The total length of the save path and file name must be no more than 191 characters.
+// Save the running configuration to the specified configuration file.
+// The name of the specified configuration file must end with the extension .cfg.
+// The total length of the save path and file name must be no more than 191 characters.
+// CLI equivalent "save <file_name>"
 func (targetDevice *TargetDevice) Save(fileName string) error {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(fmt.Sprintf(`<save><file>%s</file></save>`, fileName)),

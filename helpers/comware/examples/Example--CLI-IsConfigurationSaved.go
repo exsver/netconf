@@ -11,6 +11,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	ok, diff, err := sw.IsConfigurationSaved()
 	if err != nil {
 		log.Fatalf("%s", err)

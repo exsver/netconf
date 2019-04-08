@@ -12,6 +12,7 @@ type TargetDevice struct {
 	netconf.TargetDevice
 }
 
+// NewTargetDevice - Simple Constructor for TargetDevice
 func NewTargetDevice(ipString string, username string, password string) (*TargetDevice, error) {
 	parsedIP := net.ParseIP(ipString)
 	if parsedIP == nil {
