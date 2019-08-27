@@ -13,3 +13,20 @@ func (targetDevice *TargetDevice) GetDataMGROUP() (*MGROUP, error) {
 	}
 	return data.Top.MGROUP, nil
 }
+
+func (targetDevice *TargetDevice) NewMirroringGroup(id, groupType int) error {
+	mirrorGroup := MirrorGroup{
+		ID:   id,
+		Type: groupType,
+	}
+
+	return targetDevice.Configure(*mirrorGroup.ConvertToTop(), "create")
+}
+
+func (targetDevice *TargetDevice) RemoveMirroringGroup(id int) error {
+	mirrorGroup := MirrorGroup{
+		ID:   id,
+	}
+
+	return targetDevice.Configure(*mirrorGroup.ConvertToTop(), "remove")
+}

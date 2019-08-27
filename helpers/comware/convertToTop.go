@@ -94,6 +94,26 @@ func (iface *HybridInterface) ConvertToTop() *Top {
 	}
 }
 
+func (mirrorGroup *MirrorGroup) ConvertToTop() *Top {
+	return &Top{
+		MGROUP: &MGROUP{
+			Groups: &MirrorGroups{
+				MirrorGroups: []MirrorGroup{*mirrorGroup},
+			},
+		},
+	}
+}
+
+func (monitorPort *PortMirroringMonitorPort) ConvertToTop() *Top {
+	return &Top{
+		MGROUP: &MGROUP{
+			MonitorPort: &PortMirroringMonitorPorts{
+				MonitorPorts: []PortMirroringMonitorPort{*monitorPort},
+			},
+		},
+	}
+}
+
 func (acl *Group) ConvertToTop() *Top {
 	return &Top{
 		ACL: &ACL{

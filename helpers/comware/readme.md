@@ -11,3 +11,7 @@
       authorization-attribute user-role network-admin
       authorization-attribute user-role network-operator
     #
+      line vty 0 63
+      authentication-mode scheme
+      user-role network-admin
+      protocol inbound ssh

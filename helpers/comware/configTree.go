@@ -1435,22 +1435,25 @@ type MacSpecification struct {
 	SupportPortBridgeEnable  bool     `xml:"SupportPortBridgeEnable,omitempty"`
 }
 
-//Port mirroring configuration
+// Port mirroring configuration
 type MGROUP struct {
 	/* top level
 	   MGROUP
+		 Capabilities            ***ReadOnly***
 	     Groups
 	       []Group
 	     MonitorPort
 	       []Group
+		 ProbeVlan
+	       []Group
 	     SourcePorts
 	       []SourcePort
-	     Capabilities            ***ReadOnly***
 	*/
+	Capabilities *PortMirroringCapabilities `xml:"Capabilities"`
 	Groups       *MirrorGroups              `xml:"Groups"`
 	MonitorPort  *PortMirroringMonitorPorts `xml:"MonitorPort"`
+	ProbeVlan    *PortMirroringProbeVlans   `xml:"ProbeVlan"`
 	SourcePorts  *PortMirroringSourcePorts  `xml:"SourcePorts"`
-	Capabilities *PortMirroringCapabilities `xml:"Capabilities"`
 }
 
 // MirrorGroups table contains information about mirroring groups.
@@ -1461,8 +1464,8 @@ type MirrorGroups struct {
 
 type MirrorGroup struct {
 	XMLName xml.Name `xml:"Group"`
-	ID      int      `xml:"ID"`             //Valid values are:1-256
-	Type    int      `xml:"Type,omitempty"` //1 - Local, 2 - Remote-source, 3 - Remote-destination
+	ID      int      `xml:"ID"`             // Valid values are:1-256
+	Type    int      `xml:"Type,omitempty"` // 1 - Local, 2 - Remote-source, 3 - Remote-destination
 	Status  int      `xml:"Status,omitempty"`
 }
 
@@ -1476,6 +1479,18 @@ type PortMirroringMonitorPort struct {
 	XMLName xml.Name `xml:"Group"`
 	ID      int      `xml:"ID"`
 	Port    int      `xml:"Port"`
+}
+
+// PortMirroringProbeVlans table contains information about remote probe VLAN of mirroring groups.
+type PortMirroringProbeVlans struct {
+	XMLName    xml.Name                 `xml:"ProbeVlan"`
+	ProbeVlans []PortMirroringProbeVlan `xml:"Group"`
+}
+
+type PortMirroringProbeVlan struct {
+	XMLName xml.Name `xml:"Group"`
+	ID      int      `xml:"ID"`
+	VlanID  int      `xml:"VlanID"`
 }
 
 // PortMirroringSourcePorts table contains information about source ports of the mirroring group.
@@ -1698,7 +1713,7 @@ type VLANID struct {
 	Shared           bool     `xml:"Shared,omitempty"`
 }
 
-//IPv4 address of the VLAN interface
+// IPv4 address of the VLAN interface
 type Ipv4 struct {
 	XMLName     xml.Name `xml:"Ipv4"`
 	Ipv4Address string   `xml:"Ipv4Address"`
