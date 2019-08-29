@@ -1444,16 +1444,22 @@ type MGROUP struct {
 	       []Group
 	     MonitorPort
 	       []Group
+		 ReflectorPort
+	       []Group
+	     EgressPort
+	       []Group
 		 ProbeVlan
 	       []Group
 	     SourcePorts
 	       []SourcePort
 	*/
-	Capabilities *PortMirroringCapabilities `xml:"Capabilities"`
-	Groups       *MirrorGroups              `xml:"Groups"`
-	MonitorPort  *PortMirroringMonitorPorts `xml:"MonitorPort"`
-	ProbeVlan    *PortMirroringProbeVlans   `xml:"ProbeVlan"`
-	SourcePorts  *PortMirroringSourcePorts  `xml:"SourcePorts"`
+	Capabilities  *PortMirroringCapabilities   `xml:"Capabilities"`
+	Groups        *MirrorGroups                `xml:"Groups"`
+	MonitorPort   *PortMirroringMonitorPorts   `xml:"MonitorPort"`
+	ReflectorPort *PortMirroringReflectorPorts `xml:"ReflectorPort"`
+	EgressPort    *PortMirroringEgressPorts    `xml:"EgressPort"`
+	ProbeVlan     *PortMirroringProbeVlans     `xml:"ProbeVlan"`
+	SourcePorts   *PortMirroringSourcePorts    `xml:"SourcePorts"`
 }
 
 // MirrorGroups table contains information about mirroring groups.
@@ -1476,6 +1482,30 @@ type PortMirroringMonitorPorts struct {
 }
 
 type PortMirroringMonitorPort struct {
+	XMLName xml.Name `xml:"Group"`
+	ID      int      `xml:"ID"`
+	Port    int      `xml:"Port"`
+}
+
+// PortMirroringReflectorPorts table contains information about reflector port of mirroring groups
+type PortMirroringReflectorPorts struct {
+	XMLName        xml.Name                     `xml:"ReflectorPort"`
+	ReflectorPorts []PortMirroringReflectorPort `xml:"Group"`
+}
+
+type PortMirroringReflectorPort struct {
+	XMLName xml.Name `xml:"Group"`
+	ID      int      `xml:"ID"`
+	Port    int      `xml:"Port"`
+}
+
+// PortMirroringEgressPorts table contains information about egress port of mirroring groups.
+type PortMirroringEgressPorts struct {
+	XMLName     xml.Name                  `xml:"EgressPort"`
+	EgressPorts []PortMirroringEgressPort `xml:"Group"`
+}
+
+type PortMirroringEgressPort struct {
 	XMLName xml.Name `xml:"Group"`
 	ID      int      `xml:"ID"`
 	Port    int      `xml:"Port"`

@@ -14,7 +14,7 @@ func (targetDevice *TargetDevice) GetDataMGROUP() (*MGROUP, error) {
 	return data.Top.MGROUP, nil
 }
 
-func (targetDevice *TargetDevice) NewMirroringGroup(id, groupType int) error {
+func (targetDevice *TargetDevice) newMirroringGroup(id, groupType int) error {
 	mirrorGroup := MirrorGroup{
 		ID:   id,
 		Type: groupType,
@@ -23,9 +23,27 @@ func (targetDevice *TargetDevice) NewMirroringGroup(id, groupType int) error {
 	return targetDevice.Configure(*mirrorGroup.ConvertToTop(), "create")
 }
 
+func (targetDevice *TargetDevice) newEgressPort(id, IfIndex int) error {
+	egressPort := PortMirroringEgressPort{
+		ID:   id,
+		Port: IfIndex,
+	}
+
+	return targetDevice.Configure(*egressPort.ConvertToTop(), "create")
+}
+
+func (targetDevice *TargetDevice) newProbeVlan(id, vlanID int) error {
+	probeVlan := PortMirroringProbeVlan{
+		ID:     id,
+		VlanID: vlanID,
+	}
+
+	return targetDevice.Configure(*probeVlan.ConvertToTop(), "create")
+}
+
 func (targetDevice *TargetDevice) RemoveMirroringGroup(id int) error {
 	mirrorGroup := MirrorGroup{
-		ID:   id,
+		ID: id,
 	}
 
 	return targetDevice.Configure(*mirrorGroup.ConvertToTop(), "remove")

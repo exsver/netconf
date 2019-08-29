@@ -114,6 +114,26 @@ func (monitorPort *PortMirroringMonitorPort) ConvertToTop() *Top {
 	}
 }
 
+func (egressPort *PortMirroringEgressPort) ConvertToTop() *Top {
+	return &Top{
+		MGROUP: &MGROUP{
+			EgressPort: &PortMirroringEgressPorts{
+				EgressPorts: []PortMirroringEgressPort{*egressPort},
+			},
+		},
+	}
+}
+
+func (probeVlan *PortMirroringProbeVlan) ConvertToTop() *Top {
+	return &Top{
+		MGROUP: &MGROUP{
+			ProbeVlan: &PortMirroringProbeVlans{
+				ProbeVlans: []PortMirroringProbeVlan{*probeVlan},
+			},
+		},
+	}
+}
+
 func (acl *Group) ConvertToTop() *Top {
 	return &Top{
 		ACL: &ACL{
