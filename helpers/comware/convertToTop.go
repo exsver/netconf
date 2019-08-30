@@ -94,6 +94,12 @@ func (iface *HybridInterface) ConvertToTop() *Top {
 	}
 }
 
+func (mGroup *MGROUP) ConvertToTop() *Top {
+	return &Top{
+		MGROUP: mGroup,
+	}
+}
+
 func (mirrorGroup *MirrorGroup) ConvertToTop() *Top {
 	return &Top{
 		MGROUP: &MGROUP{

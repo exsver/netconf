@@ -1470,7 +1470,7 @@ type MirrorGroups struct {
 
 type MirrorGroup struct {
 	XMLName xml.Name `xml:"Group"`
-	ID      int      `xml:"ID"`             // Valid values are:1-256
+	ID      int      `xml:"ID"`             // Valid values are: 1-256
 	Type    int      `xml:"Type,omitempty"` // 1 - Local, 2 - Remote-source, 3 - Remote-destination
 	Status  int      `xml:"Status,omitempty"`
 }
@@ -1507,8 +1507,8 @@ type PortMirroringEgressPorts struct {
 
 type PortMirroringEgressPort struct {
 	XMLName xml.Name `xml:"Group"`
-	ID      int      `xml:"ID"`
-	Port    int      `xml:"Port"`
+	ID      int      `xml:"ID"`   // Mirroring group ID. Value range: 1 to 256
+	Port    int      `xml:"Port"` // Index of egress	port.
 }
 
 // PortMirroringProbeVlans table contains information about remote probe VLAN of mirroring groups.
@@ -1516,11 +1516,11 @@ type PortMirroringProbeVlans struct {
 	XMLName    xml.Name                 `xml:"ProbeVlan"`
 	ProbeVlans []PortMirroringProbeVlan `xml:"Group"`
 }
-
+// PortMirroringProbeVlan Dedicated VLAN that sends packets from the source device to the destination device.
 type PortMirroringProbeVlan struct {
 	XMLName xml.Name `xml:"Group"`
-	ID      int      `xml:"ID"`
-	VlanID  int      `xml:"VlanID"`
+	ID      int      `xml:"ID"`     // Mirroring group ID. Value range: 1 to 256
+	VlanID  int      `xml:"VlanID"` // Probe VLAN ID
 }
 
 // PortMirroringSourcePorts table contains information about source ports of the mirroring group.
@@ -1531,9 +1531,9 @@ type PortMirroringSourcePorts struct {
 
 type PortMirroringSourcePort struct {
 	XMLName   xml.Name `xml:"SourcePort"`
-	ID        int      `xml:"ID"`
-	IfIndex   int      `xml:"IfIndex,omitempty"`
-	Direction int      `xml:"Direction,omitempty"`
+	ID        int      `xml:"ID"`                  // Mirroring group ID. Value range: 1 to 256
+	IfIndex   int      `xml:"IfIndex,omitempty"`   // Interface index
+	Direction int      `xml:"Direction,omitempty"` // Direction of source port: 1—Inbound, 2—Outbound, 3—Both.
 }
 
 type PortMirroringCapabilities struct {

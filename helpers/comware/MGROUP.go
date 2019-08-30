@@ -14,34 +14,109 @@ func (targetDevice *TargetDevice) GetDataMGROUP() (*MGROUP, error) {
 	return data.Top.MGROUP, nil
 }
 
-func (targetDevice *TargetDevice) newMirroringGroup(id, groupType int) error {
-	mirrorGroup := MirrorGroup{
-		ID:   id,
-		Type: groupType,
+func (targetDevice *TargetDevice) NewMirroringGroupLocal(id, monitorPortIfIndex int, sourcePorts []PortMirroringSourcePort) error {
+	// Set or replace MirroringGroup ID
+	for i, _ := range sourcePorts {
+		sourcePorts[i].ID = id
 	}
 
-	return targetDevice.Configure(*mirrorGroup.ConvertToTop(), "create")
-}
-
-func (targetDevice *TargetDevice) newEgressPort(id, IfIndex int) error {
-	egressPort := PortMirroringEgressPort{
-		ID:   id,
-		Port: IfIndex,
+	conf := MGROUP{
+		Groups: &MirrorGroups{
+			MirrorGroups: []MirrorGroup{
+				{
+					ID:   id,
+					Type: 1,
+				},
+			},
+		},
+		SourcePorts: &PortMirroringSourcePorts{
+			SourcePorts: sourcePorts,
+		},
+		MonitorPort: &PortMirroringMonitorPorts{
+			MonitorPorts: []PortMirroringMonitorPort{
+				{
+					ID:   id,
+					Port: monitorPortIfIndex,
+				},
+			},
+		},
 	}
 
-	return targetDevice.Configure(*egressPort.ConvertToTop(), "create")
+	return targetDevice.Configure(*conf.ConvertToTop(), "create")
 }
 
-func (targetDevice *TargetDevice) newProbeVlan(id, vlanID int) error {
-	probeVlan := PortMirroringProbeVlan{
-		ID:     id,
-		VlanID: vlanID,
+func (targetDevice *TargetDevice) NewMirroringGroupRemoteSource(id, egressPortIfIndex, remoteProbeVlan int, sourcePorts []PortMirroringSourcePort) error {
+	// Set or replace MirroringGroup ID
+	for i, _ := range sourcePorts {
+		sourcePorts[i].ID = id
 	}
 
-	return targetDevice.Configure(*probeVlan.ConvertToTop(), "create")
+	conf := MGROUP{
+		Groups: &MirrorGroups{
+			MirrorGroups: []MirrorGroup{
+				{
+					ID:   id,
+					Type: 2,
+				},
+			},
+		},
+		SourcePorts: &PortMirroringSourcePorts{
+			SourcePorts: sourcePorts,
+		},
+		EgressPort: &PortMirroringEgressPorts{
+			EgressPorts: []PortMirroringEgressPort{
+				{
+					ID:   id,
+					Port: egressPortIfIndex,
+				},
+			},
+		},
+		ProbeVlan: &PortMirroringProbeVlans{
+			ProbeVlans: []PortMirroringProbeVlan{
+				{
+					ID:     id,
+					VlanID: remoteProbeVlan,
+				},
+			},
+		},
+	}
+
+	return targetDevice.Configure(*conf.ConvertToTop(), "create")
 }
 
-func (targetDevice *TargetDevice) RemoveMirroringGroup(id int) error {
+func (targetDevice *TargetDevice) NewMirroringGroupRemoteDestination(id, monitorPortIfIndex, remoteProbeVlan int) error {
+
+	conf := MGROUP{
+		Groups: &MirrorGroups{
+			MirrorGroups: []MirrorGroup{
+				{
+					ID:   id,
+					Type: 3,
+				},
+			},
+		},
+		MonitorPort: &PortMirroringMonitorPorts{
+			MonitorPorts: []PortMirroringMonitorPort{
+				{
+					ID:   id,
+					Port: monitorPortIfIndex,
+				},
+			},
+		},
+		ProbeVlan: &PortMirroringProbeVlans{
+			ProbeVlans: []PortMirroringProbeVlan{
+				{
+					ID:     id,
+					VlanID: remoteProbeVlan,
+				},
+			},
+		},
+	}
+
+	return targetDevice.Configure(*conf.ConvertToTop(), "create")
+}
+
+func (targetDevice *TargetDevice) MirroringGroupRemove(id int) error {
 	mirrorGroup := MirrorGroup{
 		ID: id,
 	}

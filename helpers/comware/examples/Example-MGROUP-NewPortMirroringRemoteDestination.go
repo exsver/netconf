@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/exsver/netconf/helpers/comware"
@@ -12,9 +11,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
-	err = sw.MirroringGroupRemove(1)
+
+	// Create new Port Mirroring group (remote destination)
+	err = sw.NewMirroringGroupRemoteDestination(1, 12, 8)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
-	fmt.Println("Removed or not exist")
 }
