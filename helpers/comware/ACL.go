@@ -87,12 +87,8 @@ func (targetDevice *TargetDevice) GetListOfIPv4NamedAdvanceRules() ([]IPv4NamedA
         <filter type="subtree">
           <top xmlns="http://www.hp.com/netconf/data:1.0">
             <ACL>
-              <IPv4NamedAdvanceRules>
-                <Rule>
-                  <GroupIndex>testACL</GroupIndex>
-                </Rule>
-              </IPv4NamedAdvanceRules>
-            </ACL>
+              <IPv4NamedAdvanceRules/>
+             </ACL>
 		  </top>
         </filter>
       </get>`),

@@ -14,14 +14,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
-	data, err := sw.GetDataACL()
+
+	data, err := sw.GetListOfIPv4NamedAdvanceRules()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 	spew.Dump(data)
-	dd, err := sw.GetListOfIPv4NamedAdvanceRules()
-	if err != nil {
-		log.Fatalf("%s", err)
-	}
-	spew.Dump(dd)
 }
+

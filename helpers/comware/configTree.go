@@ -203,9 +203,17 @@ type IPv4AdvanceRule struct {
 
 type IPv4NamedAdvanceRule struct {
 	XMLName      xml.Name `xml:"Rule"`
+	// GroupIndex - ACL name, or ACL number.  You must create an ACL first before you create, merge, or replace rules for it.
 	GroupIndex   string   `xml:"GroupIndex"`
+	// Value range: 0 to 65534.
+	// If you set this column to 65535, the system automatically assigns a new rule ID.
+	// This rule ID is the nearest higher multiple of the numbering step to the current highest rule ID, starting from 0.
 	RuleID       int      `xml:"RuleID"`
-	Action       int      `xml:"Action"` //Action: 1 - Deny, 2 - Permit
+	// Action on packets matching the rule.
+	// Action: 1 - Deny, 2 - Permit
+	Action       int      `xml:"Action"`
+	// Protocol type.
+	// Value range: 0 to 256. The value 256 represents all IPv4 protocols.
 	ProtocolType int      `xml:"ProtocolType,omitempty"`
 	Count        int      `xml:"Count,omitempty"`
 	Status       int      `xml:"Status,omitempty"`
@@ -256,22 +264,30 @@ type DstIPv4 struct {
 }
 
 type SrcPort struct {
-	//DstPortOp:
+	// SrcPortOp:
 	// 1 - lt    less than given port number
 	// 2 - eq    Equal to given port number
 	// 3 - gt    Greater than given port number
 	// 4 - neq   Not equal to given port number
 	// 5 - range Between two port numbers
 	SrcPortOp int `xml:"SrcPortOp"`
-	// DstPortValue1 specify a destination port
+	// SrcPortValue1 specify a source port
 	SrcPortValue1 int `xml:"SrcPortValue1"`
-	// DstPortValue2 used only in range case
+	// SrcPortValue2 used only in range case
 	SrcPortValue2 int `xml:"SrcPortValue2"`
 }
 
 type DstPort struct {
+	// DstPortOp:
+	// 1 - lt    less than given port number
+	// 2 - eq    Equal to given port number
+	// 3 - gt    Greater than given port number
+	// 4 - neq   Not equal to given port number
+	// 5 - range Between two port numbers
 	DstPortOp     int `xml:"DstPortOp"`
+	// DstPortValue1 specify a destination port
 	DstPortValue1 int `xml:"DstPortValue1"`
+	// DstPortValue2 used only in range case
 	DstPortValue2 int `xml:"DstPortValue2"`
 }
 
