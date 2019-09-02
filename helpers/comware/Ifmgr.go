@@ -3,9 +3,22 @@ package comware
 import (
 	"bytes"
 	"fmt"
-	"github.com/exsver/netconf"
 	"strconv"
+
+	"github.com/exsver/netconf"
 )
+
+func (targetDevice *TargetDevice) GetDataIfmgr() (*Ifmgr, error) {
+	request := netconf.RPCMessage{
+		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><Ifmgr/></top></filter></get>`),
+		Xmlns:    []string{netconf.BaseURI},
+	}
+	data, err := targetDevice.RetrieveData(request)
+	if err != nil {
+		return nil, err
+	}
+	return data.Top.Ifmgr, nil
+}
 
 //GetPortsList returns а list of all physical interfaces ([]Port), Bridge-aggregation interfaces, and Management interfaces. Exclude SVI.
 func (targetDevice *TargetDevice) GetPorts() ([]Port, error) {

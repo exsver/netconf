@@ -17,8 +17,8 @@ func main() {
 			Config: ssh.Config{
 				Ciphers: []string{"aes128-cbc", "hmac-sha1"},
 			},
-			User:            "netconf",
-			Auth:            []ssh.AuthMethod{ssh.Password("netconf")},
+			User:            "netconf-user",
+			Auth:            []ssh.AuthMethod{ssh.Password("netconf-password")},
 			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 			Timeout:         30 * time.Second},
 	}

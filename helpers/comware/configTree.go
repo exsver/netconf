@@ -1516,6 +1516,7 @@ type PortMirroringProbeVlans struct {
 	XMLName    xml.Name                 `xml:"ProbeVlan"`
 	ProbeVlans []PortMirroringProbeVlan `xml:"Group"`
 }
+
 // PortMirroringProbeVlan Dedicated VLAN that sends packets from the source device to the destination device.
 type PortMirroringProbeVlan struct {
 	XMLName xml.Name `xml:"Group"`
