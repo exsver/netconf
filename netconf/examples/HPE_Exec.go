@@ -1,13 +1,12 @@
 package main
 
 import (
-	"log"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"golang.org/x/crypto/ssh"
 
 	"github.com/exsver/netconf/netconf"
-	"github.com/exsver/netconf/rawxml"
 )
 
 func main() {
@@ -24,16 +23,13 @@ func main() {
 			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 			Timeout:         30 * time.Second},
 	}
-
-	err := targetDevice.Connect(300 * time.Second)
-	if err != nil {
-		log.Printf("%s\n", err.Error())
-	}
-
-	defer targetDevice.NetconfSession.Close()
-
-	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XmlHello))
-	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(rawxml.XMLMessagesHPE["GetDeviceBaseHostname"]))
-	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XmlClose))
-
+	targetDevice.Connect(30 * time.Second)
+	spew.Dump(targetDevice.NetconfSession.SessionID)
+	spew.Dump(targetDevice.NetconfSession.Capabilities)
+	message := netconf.RPCMessage{InnerXML: []byte(`<get-sessions/>`), Xmlns: []string{netconf.BaseURI}}
+	targetDevice.Exec(message, "")
+	targetDevice.Exec(message, "")
+	targetDevice.Exec(message, "")
+	targetDevice.Exec(message, "")
+	targetDevice.Disconnect()
 }

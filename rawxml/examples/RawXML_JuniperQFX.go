@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/exsver/netconf"
-	"github.com/exsver/netconf/rawxml"
-	"golang.org/x/crypto/ssh"
 	"time"
+
+	"golang.org/x/crypto/ssh"
+
+	"github.com/exsver/netconf/netconf"
+	"github.com/exsver/netconf/rawxml"
 )
 
 func main() {

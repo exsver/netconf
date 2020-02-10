@@ -1,15 +1,15 @@
 ### Description
-* Package netconf implements basic (low level) netconf functionality.
-* Package netconf/helpers/comware implements high level vendor specific functionality (HPE Comware7).
-* Package netcong/helpers/junos implements high level vendor specific functionality (Juniper JunOS).
+* Package netconf/netconf implements basic (low level) netconf functionality.
+* Package netconf/comware implements high level vendor specific functionality (HPE Comware7).
+* Package netcong/junos implements high level vendor specific functionality (Juniper JunOS).
 * Package netconf/rawxml provides few common xml examples.
 
 ### Examples
 See examples in following directories:
 
-* examples/
-* helpers/comware/examples
-* helpers/junos/examples
+* netconf/examples
+* comware/examples
+* junos/examples
 * rawxml/examples
 
 ### Сompatibility
