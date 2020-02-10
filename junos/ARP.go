@@ -29,6 +29,7 @@ func (targetDevice *TargetDevice) GetARPTableInformation() (ARPTableInformation,
 		InnerXML: []byte(`<get-arp-table-information><no-resolve/></get-arp-table-information>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return ARPTableInformation{}, err
@@ -39,14 +40,16 @@ func (targetDevice *TargetDevice) GetARPTableInformation() (ARPTableInformation,
 		for _, v := range rpcReply.Errors {
 			errorString = fmt.Sprintf("%s, error-type: %s, error-message: %s error-info: %s\n", errorString, v.ErrorType, v.ErrorMessage, v.ErrorInfo)
 		}
-		return ARPTableInformation{}, errors.New(errorString)
 
+		return ARPTableInformation{}, errors.New(errorString)
 	}
 
 	var arpTable ARPTableInformation
+
 	err = xml.Unmarshal(rpcReply.Content, &arpTable)
 	if err != nil {
 		return arpTable, err
 	}
+
 	return arpTable, nil
 }

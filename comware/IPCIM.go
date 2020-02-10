@@ -24,25 +24,26 @@ func (targetDevice *TargetDevice) GetIPSourceBindings() ([]SourceBinding, error)
 	}
 
 	return data.Top.IPCIM.IPSourceBindingInterface.SourceBindings, nil
-
 }
 
-func (targetDevice *TargetDevice) AddIPSourceBinding(IfIndex string, Ipv4Address string, MacAddress string, VLANID string) error {
+func (targetDevice *TargetDevice) AddIPSourceBinding(ifIndex string, ipv4Address string, macAddress string, vlanID string) error {
 	binding := SourceBinding{
-		IfIndex:     IfIndex,
-		Ipv4Address: Ipv4Address,
-		MacAddress:  MacAddress,
-		VLANID:      VLANID,
+		IfIndex:     ifIndex,
+		Ipv4Address: ipv4Address,
+		MacAddress:  macAddress,
+		VLANID:      vlanID,
 	}
+
 	return targetDevice.Configure(*binding.ConvertToTop(), "merge")
 }
 
-func (targetDevice *TargetDevice) DeleteIPSourceBinding(IfIndex string, Ipv4Address string, MacAddress string, VLANID string) error {
+func (targetDevice *TargetDevice) DeleteIPSourceBinding(ifIndex string, ipv4Address string, macAddress string, vlanID string) error {
 	binding := SourceBinding{
-		IfIndex:     IfIndex,
-		Ipv4Address: Ipv4Address,
-		MacAddress:  MacAddress,
-		VLANID:      VLANID,
+		IfIndex:     ifIndex,
+		Ipv4Address: ipv4Address,
+		MacAddress:  macAddress,
+		VLANID:      vlanID,
 	}
+
 	return targetDevice.Configure(*binding.ConvertToTop(), "remove")
 }

@@ -33,11 +33,12 @@ func (targetDevice *TargetDevice) Configure(config Top, operation string) error 
 	if err != nil {
 		return err
 	}
+
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<edit-config><target><running/></target><config><top/></config></edit-config>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
-	request.InnerXML = bytes.Replace(request.InnerXML, []byte("<top/>"), []byte(configXML), 1)
+	request.InnerXML = bytes.Replace(request.InnerXML, []byte("<top/>"), configXML, 1)
 
 	switch operation {
 	case "merge":
@@ -53,17 +54,22 @@ func (targetDevice *TargetDevice) Configure(config Top, operation string) error 
 	default:
 		return fmt.Errorf(`invalid operation string: "%s". Valid values are: "create", "merge", "replace", "remove", "delete"`, operation)
 	}
+
 	request.InnerXML = netconf.Normalize(request.InnerXML)
+
 	rpcReply, err := targetDevice.Action(request, "running")
 	if err != nil {
 		return err
 	}
+
 	if rpcReply.Error() != nil {
 		return rpcReply.Error()
 	}
+
 	if !rpcReply.OK {
 		return fmt.Errorf("unknown Error")
 	}
+
 	return nil
 }
 
@@ -72,28 +78,35 @@ func (targetDevice *TargetDevice) Configure(config Top, operation string) error 
 // По этому принцыпу работают все функции с именами Is****Exist(). Они вызывают RetrieveData() и в случае отсутсвия ошибки проверяют data.top == nil. Если data.top существует - возвращают true.
 func (targetDevice *TargetDevice) RetrieveData(request netconf.RPCMessage) (data Data, err error) {
 	request.InnerXML = netconf.Normalize(request.InnerXML)
+
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return data, err
 	}
+
 	if rpcReply.Error() != nil {
 		return data, rpcReply.Error()
 	}
-	err = xml.Unmarshal([]byte(rpcReply.Content), &data)
+
+	err = xml.Unmarshal(rpcReply.Content, &data)
 	if err != nil {
 		return data, err
 	}
+
 	return data, nil
 }
 
 func (targetDevice *TargetDevice) PerformAction(request netconf.RPCMessage) error {
 	request.InnerXML = netconf.Normalize(request.InnerXML)
+
 	rpcReply, err := targetDevice.Action(request, "running")
 	if err != nil {
 		return err
 	}
+
 	if rpcReply.Error() != nil {
 		return rpcReply.Error()
 	}
+
 	return nil
 }

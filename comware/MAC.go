@@ -41,19 +41,24 @@ func (targetDevice *TargetDevice) GetMacTable(filters []XMLFilter) ([]MacTableEn
         </get>`),
 		Xmlns: []string{netconf.BaseURI},
 	}
+
 	for _, filter := range filters {
 		if !((filter.Key == "VLANID") || (filter.Key == "MacAddress") || (filter.Key == "PortIndex") || (filter.Key == "Status") || (filter.Key == "Aging")) {
 			return nil, fmt.Errorf("invalid filter: %s. Valid filters are: VLANID,  MacAddress, PortIndex, Status, Aging", filter)
 		}
+
 		request.InnerXML = bytes.Replace(request.InnerXML, []byte(fmt.Sprintf("<%s/>", filter.Key)), filter.convertToXML(), 1)
 	}
+
 	data, err := targetDevice.RetrieveData(request)
 	if err != nil {
 		return nil, err
 	}
+
 	if data.Top == nil {
 		return nil, nil
 	}
+
 	return data.Top.MAC.MacUnicastTable.Unicast, nil
 }
 
@@ -62,10 +67,12 @@ func (targetDevice *TargetDevice) GetMacAgingTime() (*MacAging, error) {
 		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><MAC><MacAging/></MAC></top></filter></get>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	data, err := targetDevice.RetrieveData(request)
 	if err != nil {
 		return &MacAging{}, err
 	}
+
 	return data.Top.MAC.MacAging, nil
 }
 
@@ -74,9 +81,11 @@ func (targetDevice *TargetDevice) GetMacSpecification() (*MacSpecification, erro
 		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><MAC><MacSpecification/></MAC></top></filter></get>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	data, err := targetDevice.RetrieveData(request)
 	if err != nil {
 		return &MacSpecification{}, err
 	}
+
 	return data.Top.MAC.MacSpecification, nil
 }

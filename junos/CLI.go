@@ -11,7 +11,9 @@ func (targetDevice *TargetDevice) RunCLICommand(command string) ([]byte, error) 
 		InnerXML: []byte(`<command format="text">cmd_line</command>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	request.InnerXML = bytes.Replace(request.InnerXML, []byte("cmd_line"), []byte(command), 1)
 	rpcReply, err := targetDevice.Action(request, "")
+
 	return rpcReply.Content, err
 }

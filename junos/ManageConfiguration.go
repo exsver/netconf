@@ -22,10 +22,12 @@ func (targetDevice *TargetDevice) EditConfig(config Config, operation string) er
 	if err != nil {
 		return err
 	}
+
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<edit-config><target><candidate/></target><default-operation>merge</default-operation><configuration/></edit-config>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	switch operation {
 	case "merge", "":
 	case "replace":
@@ -35,18 +37,23 @@ func (targetDevice *TargetDevice) EditConfig(config Config, operation string) er
 	default:
 		return fmt.Errorf(`invalid operation string: "%s". Valid values are: "merge", "replace", "none"`, operation)
 	}
-	request.InnerXML = bytes.Replace(request.InnerXML, []byte("<configuration/>"), []byte(configXML), 1)
+
+	request.InnerXML = bytes.Replace(request.InnerXML, []byte("<configuration/>"), configXML, 1)
 	request.InnerXML = netconf.Normalize(request.InnerXML)
+
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return err
 	}
+
 	if rpcReply.Error() != nil {
 		return rpcReply.Error()
 	}
+
 	if !rpcReply.OK {
 		return fmt.Errorf("unknown Error")
 	}
+
 	return nil
 }
 
@@ -76,8 +83,9 @@ func (targetDevice *TargetDevice) GetConfig(source string, subtree string) (*Con
                  </configuration>
                </filter>
              </get-config>`)}
-		request.InnerXML = bytes.Replace(request.InnerXML, []byte(`sub_tree`), []byte(netconf.ConvertToXML([]byte(subtree))), 1)
+		request.InnerXML = bytes.Replace(request.InnerXML, []byte(`sub_tree`), netconf.ConvertToXML([]byte(subtree)), 1)
 	}
+
 	if source != "" {
 		request.InnerXML = bytes.Replace(request.InnerXML, []byte("candidate"), []byte(source), 1)
 	}
@@ -90,11 +98,14 @@ func (targetDevice *TargetDevice) GetConfig(source string, subtree string) (*Con
 	if rpcReply.Error() != nil {
 		return nil, rpcReply.Error()
 	}
+
 	var data Data
+
 	err = xml.Unmarshal(rpcReply.Content, &data)
 	if err != nil {
 		return nil, err
 	}
+
 	return data.Configuration, nil
 }
 
@@ -110,6 +121,7 @@ func (targetDevice *TargetDevice) GetConfiguration(format string) ([]byte, error
 	request := netconf.RPCMessage{
 		InnerXML: []byte(` <get-configuration format="text"/>`),
 	}
+
 	switch format {
 	case "text":
 	case "set":
@@ -126,6 +138,7 @@ func (targetDevice *TargetDevice) GetConfiguration(format string) ([]byte, error
 	if err != nil {
 		return []byte{}, err
 	}
+
 	if rpcReply.Error() != nil {
 		return []byte{}, rpcReply.Error()
 	}
@@ -135,10 +148,12 @@ func (targetDevice *TargetDevice) GetConfiguration(format string) ([]byte, error
 	}
 
 	var configurationText ConfigurationBytes
+
 	err = xml.Unmarshal(rpcReply.Content, &configurationText)
 	if err != nil {
 		return configurationText.Data, err
 	}
+
 	return configurationText.Data, nil
 }
 
@@ -154,26 +169,33 @@ func (targetDevice *TargetDevice) LoadConfigurationRolback(rollback int) error {
 		InnerXML: []byte(`<load-configuration rollback="0"/>`),
 	}
 	request.InnerXML = bytes.Replace(request.InnerXML, []byte("0"), []byte(strconv.Itoa(rollback)), 1)
+
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return err
 	}
+
 	if rpcReply.Error() != nil {
 		return rpcReply.Error()
 	}
 
 	var loadConfigurationResults LoadConfigurationResults
+
 	rpcReply.Content = netconf.ConvertToPairedTags(rpcReply.Content)
+
 	err = xml.Unmarshal(rpcReply.Content, &loadConfigurationResults)
 	if err != nil {
 		return err
 	}
+
 	if loadConfigurationResults.Error.Error() != nil {
 		return loadConfigurationResults.Error.Error()
 	}
+
 	if !loadConfigurationResults.OK {
 		return errors.New("LoadConfigurationRolback: Unknown status")
 	}
+
 	return nil
 }
 
@@ -183,6 +205,7 @@ func (targetDevice *TargetDevice) LoadConfigurationText(configuration string, ac
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<load-configuration action="merge" format="text"><configuration-text>conf_text</configuration-text></load-configuration>`),
 	}
+
 	switch action {
 	case "merge":
 	case "update":
@@ -194,25 +217,34 @@ func (targetDevice *TargetDevice) LoadConfigurationText(configuration string, ac
 	default:
 		return errors.New("wrong action string. Allowed actions are: merge | override | replace | update")
 	}
+
 	request.InnerXML = bytes.Replace(request.InnerXML, []byte("conf_text"), []byte(configuration), 1)
+
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return err
 	}
+
 	if rpcReply.Error() != nil {
 		return rpcReply.Error()
 	}
+
 	var loadConfigurationResults LoadConfigurationResults
+
 	rpcReply.Content = netconf.ConvertToPairedTags(rpcReply.Content)
+
 	err = xml.Unmarshal(rpcReply.Content, &loadConfigurationResults)
 	if err != nil {
 		return err
 	}
+
 	if loadConfigurationResults.Error.Error() != nil {
 		return loadConfigurationResults.Error.Error()
 	}
+
 	if !loadConfigurationResults.OK {
 		return errors.New("LoadConfiguration: Unknown status")
 	}
+
 	return nil
 }

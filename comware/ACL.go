@@ -23,10 +23,12 @@ func (targetDevice *TargetDevice) GetDataACL() (*ACL, error) {
       </get>`),
 		Xmlns: []string{netconf.BaseURI},
 	}
+
 	data, err := targetDevice.RetrieveData(request)
 	if err != nil {
 		return nil, err
 	}
+
 	return data.Top.ACL, nil
 }
 
@@ -67,6 +69,7 @@ func (targetDevice *TargetDevice) GetListOfNamedACL(filters []string) ([]NamedGr
         </filter>
       </get>`)
 	}
+
 	for _, filter := range filters {
 		request.InnerXML = bytes.Replace(request.InnerXML, convertToEmptyTag([]byte(filter)), []byte(filter), 1)
 	}
@@ -77,8 +80,9 @@ func (targetDevice *TargetDevice) GetListOfNamedACL(filters []string) ([]NamedGr
 	}
 
 	if data.Top == nil {
-		return nil, fmt.Errorf("no ACLs are found.")
+		return nil, fmt.Errorf("no ACLs are found")
 	}
+
 	return data.Top.ACL.NamedGroups.Groups, nil
 }
 
@@ -95,10 +99,12 @@ func (targetDevice *TargetDevice) GetListOfIPv4NamedAdvanceRules() ([]IPv4NamedA
       </get>`),
 		Xmlns: []string{netconf.BaseURI},
 	}
+
 	data, err := targetDevice.RetrieveData(request)
 	if err != nil {
 		return nil, err
 	}
+
 	return data.Top.ACL.IPv4NamedAdvanceRules.IPv4NamedAdvanceRules, nil
 }
 
@@ -148,5 +154,6 @@ func (targetDevice *TargetDevice) GetACLConfig() (*ACL, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return data.Top.ACL, nil
 }

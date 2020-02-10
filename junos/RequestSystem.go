@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/exsver/netconf/netconf"
-	)
+)
 
 type RebootResults struct {
 	RequestRebootResults xml.Name `xml:"request-reboot-results"`
@@ -12,13 +12,6 @@ type RebootResults struct {
 }
 
 func (targetDevice *TargetDevice) Reboot() error {
-	request := netconf.RPCMessage{
-		InnerXML: []byte(`<request-reboot/>`),
-		Xmlns:    []string{netconf.BaseURI},
-	}
-	_, err := targetDevice.Action(request, "")
-	return err
-
 	/*
 	   <rpc-reply xmlns:junos="http://xml.juniper.net/junos/15.1X53/junos" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
 	   <request-reboot-results>
@@ -44,4 +37,11 @@ func (targetDevice *TargetDevice) Reboot() error {
 	   </request-reboot-results>
 	   <rpc-reply>
 	*/
+	request := netconf.RPCMessage{
+		InnerXML: []byte(`<request-reboot/>`),
+		Xmlns:    []string{netconf.BaseURI},
+	}
+	_, err := targetDevice.Action(request, "")
+
+	return err
 }

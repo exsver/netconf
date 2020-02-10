@@ -65,5 +65,4 @@ func (targetDevice *TargetDevice) PingIPv4(host string) {
 
 	request.InnerXML = bytes.Replace(request.InnerXML, []byte("dst_IP"), []byte(host), 1)
 	targetDevice.RetrieveData(request)
-
 }

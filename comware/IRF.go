@@ -7,10 +7,12 @@ func (targetDevice *TargetDevice) GetDataIRF() (*IRF, error) {
 		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><IRF/></top></filter></get>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	data, err := targetDevice.RetrieveData(request)
 	if err != nil {
 		return nil, err
 	}
+
 	return data.Top.IRF, nil
 }
 
@@ -30,5 +32,6 @@ func (targetDevice *TargetDevice) IRFPortConfigurationActive() error {
 		Xmlns: []string{netconf.BaseURI},
 	}
 	err := targetDevice.PerformAction(request)
+
 	return err
 }

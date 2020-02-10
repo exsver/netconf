@@ -5,10 +5,11 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"golang.org/x/crypto/ssh"
 	"io"
 	"strconv"
 	"time"
+
+	"golang.org/x/crypto/ssh"
 )
 
 const (
@@ -38,7 +39,6 @@ type TargetDevice struct {
 }
 
 func (netconfSession *NetconfSession) Send(data []byte) error {
-
 	w := bufio.NewWriter(netconfSession.WriteCloser)
 
 	n, err := w.Write(data)
@@ -50,6 +50,7 @@ func (netconfSession *NetconfSession) Send(data []byte) error {
 	if (n+len(messageSeparator))%4096 < len(messageSeparator) {
 		padding := make([]byte, len(messageSeparator), len(messageSeparator))
 		_, err := w.Write(padding)
+
 		if err != nil {
 			return err
 		}
@@ -77,8 +78,12 @@ func (netconfSession *NetconfSession) Send(data []byte) error {
 
 func (netconfSession *NetconfSession) Receive() ([]byte, error) {
 	r := bufio.NewReader(netconfSession.Reader)
-	var err error
-	bts := make([]byte, 0)
+
+	var (
+		err error
+		bts = make([]byte, 0)
+	)
+
 	//	time.Sleep(time.Millisecond * 100)
 	for {
 		b, err := r.ReadByte()
@@ -97,7 +102,6 @@ func (netconfSession *NetconfSession) Receive() ([]byte, error) {
 }
 
 func (netconfSession *NetconfSession) SendAndReceive(data []byte) ([]byte, error) {
-
 	LogLevel.Info.Printf("Sending payload...\n")
 	LogLevel.Message.Printf("\nSend:\n%s\n", string(bytes.Trim(data, "\n")))
 
@@ -109,30 +113,32 @@ func (netconfSession *NetconfSession) SendAndReceive(data []byte) ([]byte, error
 	}
 
 	LogLevel.Info.Printf("Payload send.\n")
-
 	LogLevel.Info.Printf("Receiving payload...\n")
 
 	rcv := []byte{}
+
 	for {
 		rcv, err = netconfSession.Receive()
 		if err != nil {
 			LogLevel.Fail.Printf("Receiving payload failed: %s\n", err.Error())
 			return nil, err
 		}
+
 		if bytes.Equal(Normalize(rcv), Normalize(data)) {
 			LogLevel.Info.Printf("Message come back")
 			continue
 		}
+
 		break
 	}
 
 	LogLevel.Info.Printf("Payload received.\n")
 	LogLevel.Message.Printf("\nReceived:\n%s\n", string(bytes.Trim(rcv, "\n")))
+
 	return rcv, nil
 }
 
 func (targetDevice *TargetDevice) PrepareTransport(deadline time.Duration) (err error) {
-
 	if targetDevice.NetconfSession.SessionTransport == nil {
 		targetDevice.NetconfSession.SessionTransport = &Transport{}
 	}
@@ -190,9 +196,7 @@ func (targetDevice *TargetDevice) PrepareTransport(deadline time.Duration) (err 
 	LogLevel.Info.Printf("Stdout redirected\n")
 
 	if deadline != 0 {
-
 		go func(t *Transport, deadline time.Duration) {
-
 			LogLevel.Info.Printf("Starting deadline timer for current SSH session and connection...\n")
 
 			_ = time.AfterFunc(deadline, func() {
@@ -202,9 +206,7 @@ func (targetDevice *TargetDevice) PrepareTransport(deadline time.Duration) (err 
 					LogLevel.Info.Printf("Deadline timer: %s\n", err)
 				}
 			})
-
 		}(targetDevice.NetconfSession.SessionTransport, deadline)
-
 	}
 
 	return nil
@@ -215,12 +217,15 @@ func (netconfSession *NetconfSession) SendHello() (err error) {
 	if err != nil {
 		return
 	}
+
 	hello, err := unmarshalHello(rawReply)
 	if err != nil {
 		return
 	}
+
 	netconfSession.SessionID = hello.SessionID
 	netconfSession.Capabilities = hello.Capabilities
+
 	return nil
 }
 
@@ -230,20 +235,25 @@ func (netconfSession *NetconfSession) CloseSession(messageID string) error {
 	if messageID != "" {
 		closeMessage = bytes.Replace(closeMessage, []byte("close-uuid"), []byte(messageID), 1)
 	}
+
 	rawReply, err := netconfSession.SendAndReceive(closeMessage)
 	if err != nil {
 		return err
 	}
+
 	rpcReply, err := UnmarshalRpcReply(rawReply)
 	if err != nil {
 		return err
 	}
+
 	if rpcReply.MessageID != messageID {
 		return fmt.Errorf("closeSession: message-ID mismatch for close message. Got : %s, Want: %s", rpcReply.MessageID, messageID)
 	}
+
 	if !rpcReply.OK {
 		return fmt.Errorf("closeSession: can't find ok message in reply")
 	}
+
 	return nil
 }
 
@@ -255,24 +265,30 @@ func (netconfSession *NetconfSession) lockConfig(messageID string, config string
 		InnerXML:  generateLock(config),
 		Xmlns:     []string{BaseURI},
 	}
+
 	lockRPCMessage, err := lockMessage.MarshalRPCMessage()
 	if err != nil {
 		return err
 	}
+
 	rawReply, err := netconfSession.SendAndReceive(lockRPCMessage)
 	if err != nil {
 		return err
 	}
+
 	rpcReply, err := UnmarshalRpcReply(rawReply)
 	if err != nil {
 		return err
 	}
+
 	if rpcReply.MessageID != lockMessage.MessageID {
 		return fmt.Errorf("mismatch message ID for lock message. Got: %s, Want: %s", rpcReply.MessageID, lockMessage.MessageID)
 	}
+
 	if !rpcReply.OK || len(rpcReply.Errors) != 0 {
 		return fmt.Errorf("can't lock config")
 	}
+
 	return nil
 }
 
@@ -282,21 +298,26 @@ func (netconfSession *NetconfSession) unLockConfig(messageID string, config stri
 		InnerXML:  generateUnLock(config),
 		Xmlns:     []string{BaseURI},
 	}
+
 	lockRPCMessage, err := lockMessage.MarshalRPCMessage()
 	if err != nil {
 		return err
 	}
+
 	rawReply, err := netconfSession.SendAndReceive(lockRPCMessage)
 	if err != nil {
 		return err
 	}
+
 	rpcReply, err := UnmarshalRpcReply(rawReply)
 	if err != nil {
 		return err
 	}
+
 	if !rpcReply.OK || len(rpcReply.Errors) != 0 {
 		return fmt.Errorf("can't unlock config")
 	}
+
 	return nil
 }
 
@@ -315,9 +336,11 @@ func (targetDevice *TargetDevice) Action(rpcMessage RPCMessage, lockConfig strin
 	}
 
 	rpcReply, err = targetDevice.Exec(rpcMessage, lockConfig)
+
 	if !isSessionExist {
 		targetDevice.Disconnect()
 	}
+
 	return rpcReply, err
 }
 
@@ -328,22 +351,26 @@ func (targetDevice *TargetDevice) Exec(rpcMessage RPCMessage, lockConfig string)
 	// Lock config if lockConfig set
 	if lockConfig != "" {
 		targetDevice.NetconfSession.lastMessageID++
+
 		err = targetDevice.NetconfSession.lockConfig(strconv.Itoa(targetDevice.NetconfSession.lastMessageID), lockConfig)
 		if err != nil {
 			return rpcReply, err
 		}
-
 	}
+
 	targetDevice.NetconfSession.lastMessageID++
 	rpcMessage.MessageID = strconv.Itoa(targetDevice.NetconfSession.lastMessageID)
+
 	rpcMessageXML, err := rpcMessage.MarshalRPCMessage()
 	if err != nil {
 		return rpcReply, err
 	}
-	rawReply, err := targetDevice.NetconfSession.SendAndReceive([]byte(rpcMessageXML))
+
+	rawReply, err := targetDevice.NetconfSession.SendAndReceive(rpcMessageXML)
 	if err != nil {
 		return rpcReply, err
 	}
+
 	rpcReply, err = UnmarshalRpcReply(rawReply)
 	if err != nil {
 		return rpcReply, err
@@ -357,6 +384,7 @@ func (targetDevice *TargetDevice) Exec(rpcMessage RPCMessage, lockConfig string)
 		targetDevice.NetconfSession.lastMessageID++
 		targetDevice.NetconfSession.unLockConfig(strconv.Itoa(targetDevice.NetconfSession.lastMessageID), lockConfig)
 	}
+
 	return
 }
 
@@ -364,12 +392,16 @@ func (targetDevice *TargetDevice) Connect(timeout time.Duration) (err error) {
 	if targetDevice.NetconfSession != nil {
 		return errors.New("netconf session is exist")
 	}
+
 	targetDevice.NetconfSession = &NetconfSession{}
+
 	err = targetDevice.PrepareTransport(timeout)
 	if err != nil {
 		return err
 	}
+
 	err = targetDevice.NetconfSession.SendHello()
+
 	return err
 }
 
@@ -382,5 +414,6 @@ func (targetDevice *TargetDevice) Disconnect() (err error) {
 	targetDevice.NetconfSession.CloseSession(strconv.Itoa(targetDevice.NetconfSession.lastMessageID))
 	targetDevice.NetconfSession.SessionTransport.Close()
 	targetDevice.NetconfSession = nil
+
 	return err
 }

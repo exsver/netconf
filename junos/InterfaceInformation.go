@@ -51,6 +51,7 @@ func (targetDevice *TargetDevice) GetInterfaceInformation() ([]PhysicalInterface
 		InnerXML: []byte(`<get-interface-information/>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return []PhysicalInterface{}, err
@@ -61,8 +62,11 @@ func (targetDevice *TargetDevice) GetInterfaceInformation() ([]PhysicalInterface
 	}
 
 	rpcReply.Content = netconf.Normalize(rpcReply.Content)
+
 	var interfacesList PhysicalInterfaces
+
 	err = xml.Unmarshal(rpcReply.Content, &interfacesList)
+
 	return interfacesList.PhysicalInterfacesList, err
 }
 
@@ -165,6 +169,7 @@ func (targetDevice *TargetDevice) GetDiagnosticsOptics() ([]OpticsDiagnostics, e
 		InnerXML: []byte(`<get-interface-optics-diagnostics-information/>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return []OpticsDiagnostics{}, err
@@ -175,7 +180,10 @@ func (targetDevice *TargetDevice) GetDiagnosticsOptics() ([]OpticsDiagnostics, e
 	}
 
 	rpcReply.Content = netconf.Normalize(rpcReply.Content)
+
 	var interfacesList FiberInterfaces
+
 	err = xml.Unmarshal(rpcReply.Content, &interfacesList)
+
 	return interfacesList.InterfacesOptics, err
 }

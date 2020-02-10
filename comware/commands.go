@@ -15,6 +15,7 @@ func (targetDevice *TargetDevice) SaveForce() error {
 		InnerXML: []byte(`<save/>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	return targetDevice.PerformAction(request)
 }
 
@@ -27,6 +28,7 @@ func (targetDevice *TargetDevice) Save(fileName string) error {
 		InnerXML: []byte(fmt.Sprintf(`<save><file>%s</file></save>`, fileName)),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	return targetDevice.PerformAction(request)
 }
 
@@ -59,6 +61,7 @@ func (targetDevice *TargetDevice) SavePointBegin(confirmTimeout int) (commitID i
 		Xmlns:    []string{netconf.BaseURI},
 	}
 	data, err := targetDevice.RetrieveData(request)
+
 	return data.SavePoint.Commit.CommitID, err
 }
 
@@ -68,6 +71,7 @@ func (targetDevice *TargetDevice) SavePointEnd() error {
 		InnerXML: []byte(`<save-point><end/></save-point>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	return targetDevice.PerformAction(request)
 }
 
@@ -77,6 +81,7 @@ func (targetDevice *TargetDevice) SavePointGetCommits() (*SavePoint, error) {
 		Xmlns:    []string{netconf.BaseURI},
 	}
 	data, err := targetDevice.RetrieveData(request)
+
 	return data.SavePoint, err
 }
 
@@ -85,6 +90,7 @@ func (targetDevice *TargetDevice) SavePointCommit(label string, comment string) 
 		InnerXML: []byte(fmt.Sprintf(`<save-point><commit><label>%s</label><comment>%s</comment></commit></save-point>`, label, comment)),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	return targetDevice.PerformAction(request)
 }
 
@@ -93,6 +99,7 @@ func (targetDevice *TargetDevice) SavePointRollback(commitID int) error {
 		InnerXML: []byte(fmt.Sprintf(`<save-point><rollback><commit-id>%v</commit-id></rollback></save-point>`, commitID)),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	return targetDevice.PerformAction(request)
 }
 
@@ -101,5 +108,6 @@ func (targetDevice *TargetDevice) SavePointRollbackByLabel(label string) error {
 		InnerXML: []byte(fmt.Sprintf(`<save-point><rollback><commit-label>%s</commit-label></rollback></save-point>`, label)),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	return targetDevice.PerformAction(request)
 }

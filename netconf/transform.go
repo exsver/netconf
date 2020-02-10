@@ -8,15 +8,18 @@ import (
 func CorrectBackspaces(in []byte) (out []byte) {
 	out = []byte{}
 	temp := bytes.SplitAfter(in, []byte{0x8})
+
 	for _, v := range temp {
 		if len(v) == 0 { //empty slice in the end
 			continue
 		}
+
 		if len(v) == 1 {
 			if v[0] == 0x8 {
 				if len(out) == 0 { //nothing to delete
 					continue
 				}
+
 				out = out[0 : len(out)-1] // delete 1 byte
 			} else {
 				out = append(out, v...)
@@ -29,19 +32,22 @@ func CorrectBackspaces(in []byte) (out []byte) {
 			}
 		}
 	}
+
 	return out
 }
 
 func Normalize(in []byte) (out []byte) {
-	re_spaces := regexp.MustCompile(`[\s]{1,}`)
-	out = re_spaces.ReplaceAll(in, []byte(" "))
+	reSpaces := regexp.MustCompile(`[\s]{1,}`)
+	out = reSpaces.ReplaceAll(in, []byte(" "))
 	out = bytes.Replace(out, []byte(" <"), []byte("<"), -1)
 	out = bytes.Replace(out, []byte("> "), []byte(">"), -1)
+
 	return out
 }
 
 func ConvertToPairedTags(in []byte) []byte {
 	tags := bytes.SplitAfter(in, []byte(">"))
+
 	for i, tag := range tags {
 		if bytes.Contains(tag, []byte("/>")) {
 			begin := bytes.Index(tag, []byte("<"))
@@ -52,6 +58,7 @@ func ConvertToPairedTags(in []byte) []byte {
 			tags[i] = append(tag[:begin], allTag...)
 		}
 	}
+
 	return bytes.Join(tags, []byte{})
 }
 
@@ -66,8 +73,10 @@ func ConvertToPairedTags(in []byte) []byte {
 func ConvertToXML(in []byte) (out []byte) {
 	ins := bytes.Split(in, []byte(`/`))
 	out = append([]byte(`<`), append(ins[len(ins)-1], []byte(`/>`)...)...)
+
 	for i := len(ins) - 2; i >= 0; i-- {
 		out = append([]byte(`<`), append(ins[i], append([]byte(`>`), append(out, append([]byte(`</`), append(ins[i], []byte(`>`)...)...)...)...)...)...)
 	}
+
 	return out
 }

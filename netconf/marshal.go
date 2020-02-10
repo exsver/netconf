@@ -20,22 +20,25 @@ type RPCMessage struct {
 
 //MarshalRPCMessage generates and return a new RPC Message from RPCMessage struct.
 func (message *RPCMessage) MarshalRPCMessage() (rpc []byte, err error) {
-
 	rpc, err = xml.Marshal(message)
 	if err != nil {
 		return
 	}
+
 	if len(message.CustomAttrs) != 0 {
 		nss := []byte("<rpc ")
 		for _, v := range message.CustomAttrs {
 			nss = append(nss, fmt.Sprintf("%s ", v)...)
 		}
+
 		rpc = bytes.Replace(rpc, []byte("<rpc "), nss, 1)
 		rpc = bytes.Replace(rpc, []byte("<rpc>"), append(nss[:len(nss)-1], ">"...), 1)
 	}
+
 	if message.AppendXMLHeader {
 		rpc = append([]byte(XMLHeader), rpc...)
 	}
+
 	return
 }
 func generateLock(config string) []byte {
@@ -43,6 +46,7 @@ func generateLock(config string) []byte {
 	if config != "" {
 		lockXML = bytes.Replace(lockXML, []byte("running"), []byte(config), 1)
 	}
+
 	return lockXML
 }
 
@@ -51,5 +55,6 @@ func generateUnLock(config string) []byte {
 	if config != "" {
 		lockXML = bytes.Replace(lockXML, []byte("running"), []byte(config), 1)
 	}
+
 	return lockXML
 }

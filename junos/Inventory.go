@@ -59,6 +59,7 @@ func (targetDevice *TargetDevice) GetChassisHardware() (ChassisInventory, error)
 		InnerXML: []byte(`<get-chassis-inventory/>`),
 		Xmlns:    []string{netconf.BaseURI},
 	}
+
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return ChassisInventory{}, err
@@ -66,13 +67,15 @@ func (targetDevice *TargetDevice) GetChassisHardware() (ChassisInventory, error)
 
 	if rpcReply.Error() != nil {
 		return ChassisInventory{}, rpcReply.Error()
-
 	}
+
 	var inventory ChassisInventory
+
 	err = xml.Unmarshal(rpcReply.Content, &inventory)
 	if err != nil {
 		return inventory, err
 	}
+
 	return inventory, nil
 }
 
@@ -108,6 +111,7 @@ func (targetDevice *TargetDevice) GetSystemInformation() (SystemInformation, err
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<get-system-information/>`),
 	}
+
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return SystemInformation{}, err
@@ -115,9 +119,11 @@ func (targetDevice *TargetDevice) GetSystemInformation() (SystemInformation, err
 
 	if rpcReply.Error() != nil {
 		return SystemInformation{}, rpcReply.Error()
-
 	}
+
 	var systemInformation SystemInformation
+
 	err = xml.Unmarshal(rpcReply.Content, &systemInformation)
+
 	return systemInformation, err
 }

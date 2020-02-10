@@ -28,7 +28,6 @@ func TestMarshalRPCMessage(t *testing.T) {
 			t.Errorf("Got: rpc: %s err: %v", rpc, err)
 		}
 	}
-
 }
 
 func TestUnmarshalRpcReply(t *testing.T) {

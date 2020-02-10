@@ -23,13 +23,14 @@ type CDATA struct {
 // 		false - for execute commands in unprivileged mode
 //		true  - for execute commands in privileged mode (system-view)
 func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMode bool) ([]byte, error) {
-
 	request := netconf.RPCMessage{Xmlns: []string{netconf.BaseURI}}
-	if configurationMode == true {
+
+	if configurationMode {
 		request.InnerXML = []byte(`<CLI><Configuration>cmd_line</Configuration></CLI>`)
 	} else {
 		request.InnerXML = []byte(`<CLI><Execution>cmd_line</Execution></CLI>`)
 	}
+
 	request.InnerXML = bytes.Replace(request.InnerXML, []byte("cmd_line"), []byte(command), 1)
 
 	rpcReply, err := targetDevice.Action(request, "")
@@ -40,14 +41,18 @@ func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMod
 	if rpcReply.Error() != nil {
 		return nil, rpcReply.Error()
 	}
+
 	var cliResponse CLIResponse
-	err = xml.Unmarshal([]byte(rpcReply.Content), &cliResponse)
+
+	err = xml.Unmarshal(rpcReply.Content, &cliResponse)
 	if err != nil {
 		return nil, err
 	}
-	if configurationMode == true {
+
+	if configurationMode {
 		return cliResponse.Configuration.Data, nil
 	}
+
 	return cliResponse.Execution.Data, nil
 }
 
@@ -58,10 +63,12 @@ func (targetDevice *TargetDevice) IsConfigurationSaved() (saved bool, diff []byt
 	if err != nil {
 		return
 	}
+
 	diffLines := bytes.Split(diff, []byte("\n"))
 	if len(diffLines) == 2 && bytes.Equal(diffLines[1], []byte{}) {
 		return true, diff, err
 	}
+
 	return false, diff, err
 }
 
@@ -73,6 +80,7 @@ func vlanListCLIToIntSlice(vlanList string) ([]int, error) {
 	vlanList = strings.TrimPrefix(vlanList, "port access vlan ")       // for access port config
 	vlanList = strings.Replace(vlanList, " to ", "-", -1)
 	vlanList = strings.Replace(vlanList, " ", ",", -1)
+
 	return VlanListToIntSlice(vlanList)
 }
 
@@ -87,6 +95,7 @@ func ParseVlansFromConfigString(configString string) (vlans []int) {
 			}
 		}
 	}
+
 	return vlans
 }
 

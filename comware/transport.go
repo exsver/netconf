@@ -2,9 +2,10 @@ package comware
 
 import (
 	"fmt"
-	"golang.org/x/crypto/ssh"
 	"net"
 	"time"
+
+	"golang.org/x/crypto/ssh"
 
 	"github.com/exsver/netconf/netconf"
 )
