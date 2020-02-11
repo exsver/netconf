@@ -32,12 +32,12 @@ func TestMarshalRPCMessage(t *testing.T) {
 
 func TestUnmarshalRpcReply(t *testing.T) {
 	cases := []struct {
-		rawRpcReply []byte
+		rawRPCReply []byte
 		rpcReply    RPCReply //result
 		err         error    //result
 	}{
 		{ //GetHostame
-			rawRpcReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="101"><data><top xmlns="http://www.hp.com/netconf/config:1.0"><Device><Base><HostName>hp-5940-1</HostName></Base></Device></top></data></rpc-reply>`),
+			rawRPCReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="101"><data><top xmlns="http://www.hp.com/netconf/config:1.0"><Device><Base><HostName>hp-5940-1</HostName></Base></Device></top></data></rpc-reply>`),
 			rpcReply: RPCReply{
 				XMLName:   xml.Name{Local: "rpc-reply", Space: "urn:ietf:params:xml:ns:netconf:base:1.0"},
 				MessageID: "101",
@@ -45,7 +45,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 			err: nil,
 		},
 		{ //GetSessions
-			rawRpcReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="102"><get-sessions><Session><SessionID>1</SessionID><Line>vty2</Line><UserName>s3rj1k</UserName><Since>2018-05-05T14:19:45</Since><LockHeld>false</LockHeld></Session></get-sessions></rpc-reply>`),
+			rawRPCReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="102"><get-sessions><Session><SessionID>1</SessionID><Line>vty2</Line><UserName>s3rj1k</UserName><Since>2018-05-05T14:19:45</Since><LockHeld>false</LockHeld></Session></get-sessions></rpc-reply>`),
 			rpcReply: RPCReply{
 				XMLName:   xml.Name{Local: "rpc-reply", Space: "urn:ietf:params:xml:ns:netconf:base:1.0"},
 				MessageID: "102",
@@ -53,7 +53,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 			err: nil,
 		},
 		{ //OK-message test1
-			rawRpcReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="2"><ok/></rpc-reply>`),
+			rawRPCReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="2"><ok/></rpc-reply>`),
 			rpcReply: RPCReply{
 				XMLName:   xml.Name{Local: "rpc-reply", Space: "urn:ietf:params:xml:ns:netconf:base:1.0"},
 				MessageID: "2",
@@ -62,7 +62,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 			err: nil,
 		},
 		{ //OK-message test2
-			rawRpcReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="5"><some-tag/></rpc-reply>`),
+			rawRPCReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="5"><some-tag/></rpc-reply>`),
 			rpcReply: RPCReply{
 				XMLName:   xml.Name{Local: "rpc-reply", Space: "urn:ietf:params:xml:ns:netconf:base:1.0"},
 				MessageID: "5",
@@ -71,7 +71,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 			err: nil,
 		},
 		{ //OK-message test3 (ok with vertical tabs - juniper)
-			rawRpcReply: []byte{
+			rawRPCReply: []byte{
 				0x3c, 0x72, 0x70, 0x63, 0x2d, 0x72, 0x65, 0x70, 0x6c, 0x79, 0x20, 0x78, 0x6d, 0x6c, 0x6e, 0x73, //|<rpc-reply xmlns|
 				0x3a, 0x6a, 0x75, 0x6e, 0x6f, 0x73, 0x3d, 0x22, 0x68, 0x74, 0x74, 0x70, 0x3a, 0x2f, 0x2f, 0x78, //|:junos="http://x|
 				0x6d, 0x6c, 0x2e, 0x6a, 0x75, 0x6e, 0x69, 0x70, 0x65, 0x72, 0x2e, 0x6e, 0x65, 0x74, 0x2f, 0x6a, //|ml.juniper.net/j|
@@ -100,7 +100,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 			//        1(default), 99, 111, 208, 220, 855, 960, 3333, .. ....]]></Execution>
 			//    </CLI>
 			//  </rpc-reply>
-			rawRpcReply: []byte{
+			rawRPCReply: []byte{
 				0x3c, 0x3f, 0x78, 0x6d, 0x6c, 0x20, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x3d, 0x22, 0x31, //|<?xml version="1|
 				0x2e, 0x30, 0x22, 0x20, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x3d, 0x22, 0x55, 0x54, //|.0" encoding="UT|
 				0x46, 0x2d, 0x38, 0x22, 0x3f, 0x3e, 0x3c, 0x72, 0x70, 0x63, 0x2d, 0x72, 0x65, 0x70, 0x6c, 0x79, //|F-8"?><rpc-reply|
@@ -152,7 +152,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 			//    </error-info>
 			//  </rpc-error>
 			//</rpc-reply>
-			rawRpcReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="102"><rpc-error xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"><error-type>rpc</error-type><error-tag>unknown-element</error-tag><error-severity>error</error-severity><error-message xml:lang="en">Unexpected element 'urn:ietf:params:xml:ns:netconf:base:1.0':'get-sessionss' under element '/rpc</error-message><error-info><bad-element>get-sessionss</bad-element></error-info></rpc-error></rpc-reply>`),
+			rawRPCReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="102"><rpc-error xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"><error-type>rpc</error-type><error-tag>unknown-element</error-tag><error-severity>error</error-severity><error-message xml:lang="en">Unexpected element 'urn:ietf:params:xml:ns:netconf:base:1.0':'get-sessionss' under element '/rpc</error-message><error-info><bad-element>get-sessionss</bad-element></error-info></rpc-error></rpc-reply>`),
 			rpcReply: RPCReply{
 				XMLName:   xml.Name{Local: "rpc-reply", Space: "urn:ietf:params:xml:ns:netconf:base:1.0"},
 				MessageID: "102",
@@ -187,7 +187,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 			    <error-message xml:lang="en">Invalid IP address for interface Ethernet1/0</error-message>
 			  </rpc-error>
 			</rpc-reply>*/
-			rawRpcReply: []byte(`<rpc-reply message-id="101" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0"><rpc-error><error-type>application</error-type><error-tag>invalid-value</error-tag><error-severity>error</error-severity><error-path xmlns:t="http://example.com/schema/1.2/config">/t:top/t:interface[t:name="Ethernet0/0"]/t:mtu</error-path><error-message xml:lang="en">MTU value 25000 is not within range 256..9192</error-message></rpc-error><rpc-error><error-type>application</error-type><error-tag>invalid-value</error-tag><error-severity>error</error-severity><error-path xmlns:t="http://example.com/schema/1.2/config">/t:top/t:interface[t:name="Ethernet1/0"]/t:address/t:name</error-path><error-message xml:lang="en">Invalid IP address for interface Ethernet1/0</error-message></rpc-error></rpc-reply>`),
+			rawRPCReply: []byte(`<rpc-reply message-id="101" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0"><rpc-error><error-type>application</error-type><error-tag>invalid-value</error-tag><error-severity>error</error-severity><error-path xmlns:t="http://example.com/schema/1.2/config">/t:top/t:interface[t:name="Ethernet0/0"]/t:mtu</error-path><error-message xml:lang="en">MTU value 25000 is not within range 256..9192</error-message></rpc-error><rpc-error><error-type>application</error-type><error-tag>invalid-value</error-tag><error-severity>error</error-severity><error-path xmlns:t="http://example.com/schema/1.2/config">/t:top/t:interface[t:name="Ethernet1/0"]/t:address/t:name</error-path><error-message xml:lang="en">Invalid IP address for interface Ethernet1/0</error-message></rpc-error></rpc-reply>`),
 			rpcReply: RPCReply{
 				XMLName:   xml.Name{Local: "rpc-reply", Space: "urn:ietf:params:xml:ns:netconf:base:1.0"},
 				MessageID: "101",
@@ -212,9 +212,9 @@ func TestUnmarshalRpcReply(t *testing.T) {
 		},
 	}
 	for _, testCase := range cases {
-		rpc, err := UnmarshalRpcReply(testCase.rawRpcReply)
+		rpc, err := UnmarshalRPCReply(testCase.rawRPCReply)
 		if !reflect.DeepEqual(rpc, &testCase.rpcReply) || err != testCase.err {
-			t.Errorf("\n Got:  rpcReply: %s err: %v\n Want: rpcReply: %s err: %v", rpc, err, testCase.rpcReply, testCase.err)
+			t.Errorf("\n Got:  rpcReply: %v err: %v\n Want: rpcReply: %v err: %v", rpc, err, testCase.rpcReply, testCase.err)
 		}
 	}
 }

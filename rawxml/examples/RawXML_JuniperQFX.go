@@ -34,7 +34,7 @@ func main() {
 
 	defer targetDevice.NetconfSession.Close()
 
-	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XmlHello))
+	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XMLHello))
 	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(rawxml.XMLMessagesJunOS["GetChassisInventory"]))
-	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XmlClose))
+	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XMLClose))
 }

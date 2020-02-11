@@ -12,14 +12,6 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-const (
-	messageSeparator = `]]>]]>`
-	BaseURI          = "urn:ietf:params:xml:ns:netconf:base:1.0"
-	XMLHeader        = `<?xml version="1.0" encoding="UTF-8"?>`
-	XmlHello         = `<hello xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"><capabilities><capability>urn:ietf:params:netconf:base:1.0</capability></capabilities></hello>`
-	XmlClose         = `<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="close-uuid"><close-session/></rpc>`
-)
-
 // NetconfSession combine IO Reader and WriteCloser.
 type NetconfSession struct {
 	io.Reader
@@ -213,7 +205,7 @@ func (targetDevice *TargetDevice) PrepareTransport(deadline time.Duration) (err 
 }
 
 func (netconfSession *NetconfSession) SendHello() (err error) {
-	rawReply, err := netconfSession.SendAndReceive([]byte(XmlHello))
+	rawReply, err := netconfSession.SendAndReceive([]byte(XMLHello))
 	if err != nil {
 		return
 	}
@@ -231,7 +223,7 @@ func (netconfSession *NetconfSession) SendHello() (err error) {
 
 // CloseSession request graceful termination of a NETCONF session.
 func (netconfSession *NetconfSession) CloseSession(messageID string) error {
-	closeMessage := []byte(XmlClose)
+	closeMessage := []byte(XMLClose)
 	if messageID != "" {
 		closeMessage = bytes.Replace(closeMessage, []byte("close-uuid"), []byte(messageID), 1)
 	}
@@ -241,7 +233,7 @@ func (netconfSession *NetconfSession) CloseSession(messageID string) error {
 		return err
 	}
 
-	rpcReply, err := UnmarshalRpcReply(rawReply)
+	rpcReply, err := UnmarshalRPCReply(rawReply)
 	if err != nil {
 		return err
 	}
@@ -276,7 +268,7 @@ func (netconfSession *NetconfSession) lockConfig(messageID string, config string
 		return err
 	}
 
-	rpcReply, err := UnmarshalRpcReply(rawReply)
+	rpcReply, err := UnmarshalRPCReply(rawReply)
 	if err != nil {
 		return err
 	}
@@ -309,7 +301,7 @@ func (netconfSession *NetconfSession) unLockConfig(messageID string, config stri
 		return err
 	}
 
-	rpcReply, err := UnmarshalRpcReply(rawReply)
+	rpcReply, err := UnmarshalRPCReply(rawReply)
 	if err != nil {
 		return err
 	}
@@ -371,7 +363,7 @@ func (targetDevice *TargetDevice) Exec(rpcMessage RPCMessage, lockConfig string)
 		return rpcReply, err
 	}
 
-	rpcReply, err = UnmarshalRpcReply(rawReply)
+	rpcReply, err = UnmarshalRPCReply(rawReply)
 	if err != nil {
 		return rpcReply, err
 	}

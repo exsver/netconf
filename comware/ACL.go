@@ -32,7 +32,7 @@ func (targetDevice *TargetDevice) GetDataACL() (*ACL, error) {
 	return data.Top.ACL, nil
 }
 
-//Filters examples:
+// Filters examples:
 // all items -                        nil
 // ACL with name testACL -            []string{`<GroupIndex>testACL</GroupIndex>`}
 // ACLs with Description "aclDescr" - []string{`<Description>aclDescr</Description>`}
@@ -116,13 +116,13 @@ func (targetDevice *TargetDevice) PfilterRemove(pfilter *Pfilter) error {
 	return targetDevice.Configure(*pfilter.ConvertToTop(), "remove")
 }
 
-func (namedGroup *NamedGroup) NewPfilter() *Pfilter {
+func (namedGroup *NamedGroup) NewPfilter(applyObjectType, applyObjectIndex, applyDirection int) *Pfilter {
 	return &Pfilter{
-		AppObjType:   1,
+		AppObjType:   applyObjectType,
+		AppObjIndex:  applyObjectIndex,
 		AppACLType:   namedGroup.GroupType,
 		AppACLGroup:  namedGroup.GroupIndex,
-		AppDirection: 1,
-		HardCount:    2,
+		AppDirection: applyDirection,
 	}
 }
 

@@ -30,7 +30,7 @@ type RPCErrorInfo struct {
 	Info []byte `xml:",innerxml"`
 }
 
-func UnmarshalRpcReply(raw []byte) (rpcReply *RPCReply, err error) {
+func UnmarshalRPCReply(raw []byte) (rpcReply *RPCReply, err error) {
 	raw = CorrectBackspaces(raw)
 
 	err = xml.Unmarshal(raw, &rpcReply)

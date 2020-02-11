@@ -2,7 +2,7 @@ package comware
 
 import "encoding/xml"
 
-//Data used to collect information from device
+// Data used to collect information from device
 type Data struct {
 	XMLName   xml.Name   `xml:"data"`
 	Top       *Top       `xml:"top"`
@@ -14,7 +14,7 @@ type Filter struct {
 	Top     Top      `xml:"top"`
 }
 
-//Top used to configure device
+// Top used to configure device
 type Top struct {
 	XMLName         xml.Name         `xml:"top"`
 	ACL             *ACL             `xml:"ACL"`
@@ -176,17 +176,17 @@ type MACRules struct {
 type IPv4AdvanceRule struct {
 	XMLName xml.Name `xml:"Rule"`
 	GroupID int      `xml:"GroupID"`
-	//RuleID int in range 0-65534
+	// RuleID int in range 0-65534
 	RuleID int `xml:"RuleID"`
-	//Action: 1 - Deny, 2 - Permit
+	// Action: 1 - Deny, 2 - Permit
 	Action int `xml:"Action"`
-	//ProtocolType defines:
-	//Protocol number INTEGER<0-255>, 256 - any IP protocol
+	// ProtocolType defines:
+	// Protocol number INTEGER<0-255>, 256 - any IP protocol
 	// 1 - ICMP
 	// 6 - TCP
 	// 17 - UDP
 	// ...
-	//https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
+	// https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
 	ProtocolType int      `xml:"ProtocolType,omitempty"`
 	Count        int      `xml:"Count,omitempty"`
 	Status       int      `xml:"Status,omitempty"`

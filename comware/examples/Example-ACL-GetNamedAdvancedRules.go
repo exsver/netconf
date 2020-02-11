@@ -20,6 +20,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	spew.Dump(data)
 }
 

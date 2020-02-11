@@ -9,7 +9,8 @@ import (
 
 func main() {
 	netconf.LogLevel.Verbose()
-	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf", "netconf")
+
+	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
@@ -21,6 +22,7 @@ func main() {
 		AppACLType:   1,         // 1 - IPv4, 2 - IPv6, 3 - MAC, 4 - User-defined, 5 - default.
 		AppACLGroup:  "testACL", // ACLName
 	}
+
 	err = sw.PfilterRemove(&pfilter)
 	if err != nil {
 		log.Fatalf("%s", err)
