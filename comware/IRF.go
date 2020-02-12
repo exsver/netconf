@@ -16,7 +16,7 @@ func (targetDevice *TargetDevice) GetDataIRF() (*IRF, error) {
 	return data.Top.IRF, nil
 }
 
-//CLI equivalent "irf-port-configuration active"
+// CLI equivalent "irf-port-configuration active"
 func (targetDevice *TargetDevice) IRFPortConfigurationActive() error {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`

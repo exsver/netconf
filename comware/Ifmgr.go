@@ -177,7 +177,7 @@ func (targetDevice *TargetDevice) GetIfIdentity() (map[int]IfIdentity, error) {
 	return ifIdentity, nil
 }
 
-//CLI equivalent "port link-type [access|trunk|hybrid]"
+// CLI equivalent "port link-type [access|trunk|hybrid]"
 func (targetDevice *TargetDevice) SetInterfaceLinkType(ifIndex int, linkType string) error {
 	iface := Interface{IfIndex: ifIndex}
 
@@ -229,14 +229,14 @@ func (targetDevice *TargetDevice) SetInterfaceDesription(ifIndex int, descriptio
 	return targetDevice.Configure(*iface.ConvertToTop(), "merge")
 }
 
-//RestoreInterfaceConfiguration sets following port settings to Default values:
-//Description
-//AdminStatus
-//Speed/Duplex/MDI
-//BPDUDrop
-//FlowControl
-//Broadcast/Multicast/UnknownUnicast Suppression
-//Jumboframe
+// RestoreInterfaceConfiguration sets following port settings to Default values:
+// - Description
+// - AdminStatus
+// - Speed/Duplex/MDI
+// - BPDUDrop
+// - FlowControl
+// - Broadcast/Multicast/UnknownUnicast Suppression
+// - Jumboframe
 func (targetDevice *TargetDevice) RestoreInterfaceConfiguration(ifIndex int) error {
 	iface := &Ifmgr{
 		EthInterfaces: &EthInterfaces{
@@ -254,8 +254,8 @@ func (targetDevice *TargetDevice) RestoreInterfaceConfiguration(ifIndex int) err
 	return targetDevice.Configure(*iface.ConvertToTop(), "replace")
 }
 
-//RestoreInterfaceDefaultConfiguration sets all port settings to default values.
-//CLI equivalent "default" in interface view
+// RestoreInterfaceDefaultConfiguration sets all port settings to default values.
+// CLI equivalent "default" in interface view
 func (targetDevice *TargetDevice) RestoreInterfaceDefaultConfiguration(ifIndex int) error {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`
@@ -321,7 +321,7 @@ func (targetDevice *TargetDevice) GetEthPortStatistics() ([]InterfaceEthPortStat
 	return data.Top.Ifmgr.EthPortStatistics.Interfaces, nil
 }
 
-//ClearAllIfStatistics clear statistics on all interfaces
+// ClearAllIfStatistics clear statistics on all interfaces
 func (targetDevice *TargetDevice) ClearAllIfStatistics() error {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`

@@ -16,7 +16,7 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 
-	data, err := sw.GetListOfIPv4NamedAdvanceRules()
+	data, err := sw.ACLGetIPv4NamedAdvanceRules(nil)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}

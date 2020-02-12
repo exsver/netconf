@@ -26,7 +26,7 @@ func main() {
 	// All advanced IPv4 ACLs -           []string{`<GroupCategory>2</GroupCategory>`, `<GroupType>1</GroupType>`}
 	// All ACLs with rule number 1 -      []string{`<RuleNum>1</RuleNum>`}
 
-	acls, err := sw.GetListOfNamedACL([]string{`<GroupType>1</GroupType>`})
+	acls, err := sw.ACLGetNamedGroups([]string{`<GroupType>1</GroupType>`})
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
