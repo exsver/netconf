@@ -220,8 +220,8 @@ type IPv4NamedAdvanceRule struct {
 	Fragment     bool     `xml:"Fragment,omitempty"` // If an ACL is for QoS traffic classification or packet filtering do not specify the fragment.
 	Logging      bool     `xml:"Logging,omitempty"`  // The logging takes effect only when the module (for example, packet filtering) that uses the ACL supports logging.
 	Counting     bool     `xml:"Counting,omitempty"`
-	SrcAny       bool     `xml:"SrcAny,omitempty"`
-	DstAny       bool     `xml:"DstAny,omitempty"`
+	SrcAny       *bool     `xml:"SrcAny,omitempty"`
+	DstAny       *bool     `xml:"DstAny,omitempty"`
 	SrcIPv4      *SrcIPv4 `xml:"SrcIPv4,omitempty"`
 	DstIPv4      *DstIPv4 `xml:"DstIPv4,omitempty"`
 	SrcPort      *SrcPort `xml:"SrcPort,omitempty"`
@@ -274,7 +274,7 @@ type SrcPort struct {
 	// SrcPortValue1 specify a source port
 	SrcPortValue1 int `xml:"SrcPortValue1"`
 	// SrcPortValue2 used only in range case
-	SrcPortValue2 int `xml:"SrcPortValue2"`
+	SrcPortValue2 int `xml:"SrcPortValue2,omitempty"`
 }
 
 type DstPort struct {
@@ -288,7 +288,7 @@ type DstPort struct {
 	// DstPortValue1 specify a destination port
 	DstPortValue1 int `xml:"DstPortValue1"`
 	// DstPortValue2 used only in range case
-	DstPortValue2 int `xml:"DstPortValue2"`
+	DstPortValue2 int `xml:"DstPortValue2,omitempty"`
 }
 
 type IPv6AdvanceRule struct {

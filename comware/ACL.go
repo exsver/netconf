@@ -108,6 +108,10 @@ func (targetDevice *TargetDevice) GetListOfIPv4NamedAdvanceRules() ([]IPv4NamedA
 	return data.Top.ACL.IPv4NamedAdvanceRules.IPv4NamedAdvanceRules, nil
 }
 
+func (targetDevice *TargetDevice) ACLAddIPv4NamedAdvanceRules(rules *IPv4NamedAdvanceRules) error {
+	return targetDevice.Configure(*rules.ConvertToTop(), "create")
+}
+
 func (targetDevice *TargetDevice) PfilterApply(pfilter *Pfilter) error {
 	return targetDevice.Configure(*pfilter.ConvertToTop(), "merge")
 }
