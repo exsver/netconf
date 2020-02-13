@@ -220,12 +220,13 @@ type IPv4NamedAdvanceRule struct {
 	Fragment     bool     `xml:"Fragment,omitempty"` // If an ACL is for QoS traffic classification or packet filtering do not specify the fragment.
 	Logging      bool     `xml:"Logging,omitempty"`  // The logging takes effect only when the module (for example, packet filtering) that uses the ACL supports logging.
 	Counting     bool     `xml:"Counting,omitempty"`
-	SrcAny       *bool     `xml:"SrcAny,omitempty"`
-	DstAny       *bool     `xml:"DstAny,omitempty"`
+	SrcAny       *bool    `xml:"SrcAny,omitempty"`
+	DstAny       *bool    `xml:"DstAny,omitempty"`
 	SrcIPv4      *SrcIPv4 `xml:"SrcIPv4,omitempty"`
 	DstIPv4      *DstIPv4 `xml:"DstIPv4,omitempty"`
 	SrcPort      *SrcPort `xml:"SrcPort,omitempty"`
 	DstPort      *DstPort `xml:"DstPort,omitempty"`
+	Comment      string   `xml:"Comment,omitempty"`  // Rule comment, a case-sensitive string of 1 to 127 characters.
 }
 
 type IPv4BasicRule struct {

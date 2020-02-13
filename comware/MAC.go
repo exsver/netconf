@@ -15,6 +15,7 @@ import (
 //  - Status
 //  - Aging
 // Filter examples:
+//  - all mac-addresses									   nil
 //  - all mac-addresses with VLANID 99  --                 []XMLFilter{{Key: "VLANID", Value:"99", IsRegExp:false,},}
 //  - all mac-addresses with VLANID 99 and PortIndex 1 --  []XMLFilter{{Key: "VLANID", Value:"99", IsRegExp:false,},{Key: "PortIndex", Value:"1", IsRegExp:false,},}
 //  - all mac-addresses starts with "40-B0-34" --          []XMLFilter{{Key: "MacAddress", Value:"^40-B0-34", IsRegExp:true,},}

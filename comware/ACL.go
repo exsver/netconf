@@ -85,12 +85,16 @@ func (targetDevice *TargetDevice) ACLGetNamedGroups(filters []string) ([]NamedGr
 
 	return data.Top.ACL.NamedGroups.Groups, nil
 }
+
+// ACLGetIPv4NamedAdvanceRules returns ACL rules ([]IPv4NamedAdvanceRule) and error
 // Available filters are:
 //  - GroupIndex
 //  - RuleID
 //  - Action
 //  - ProtocolType
-//  - Count
+//  - Fragment
+//  - Logging
+//  - Counting
 //  - Status
 //  - SrcIPv4Addr
 //  - SrcIPv4Wildcard
@@ -103,57 +107,75 @@ func (targetDevice *TargetDevice) ACLGetNamedGroups(filters []string) ([]NamedGr
 //  - DstPortValue1
 //  - DstPortValue2
 // Filter examples:
-//  - all rules with ProtocolType "ICMP"					[]comware.XMLFilter{{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false,}}
-//  - all rules with Action "Deny"							[]comware.XMLFilter{{Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false,}}
-//  - all rules with ProtocolType "ICMP" and Action "Deny"  []comware.XMLFilter{{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false,}, {Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false,}}
+//  - all rules for acl named testACL                           []comware.XMLFilter{{Key: "GroupIndex", Value: "testACL", IsRegExp: false}}
+//  - all rules with ProtocolType "ICMP"					    []comware.XMLFilter{{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false}}
+//  - all rules with Action "Deny"							    []comware.XMLFilter{{Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false}}
+//  - all rules with ProtocolType "ICMP" and Action "Deny"      []comware.XMLFilter{{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false}, {Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false}}
+//  - all rules with DstIPv4Addr matches by regexp "^10.100"    []comware.XMLFilter{{Key: "DstIPv4Addr", Value: "^10.100", IsRegExp: true}}
+//  - all rules with Counting                                   []comware.XMLFilter{{Key: "Counting", Value: "true", IsRegExp: false}}
 func (targetDevice *TargetDevice) ACLGetIPv4NamedAdvanceRules(filters []XMLFilter) ([]IPv4NamedAdvanceRule, error) {
-	request := netconf.RPCMessage{InnerXML: []byte(`
-      <get>
-        <filter type="subtree">
-          <top xmlns="http://www.hp.com/netconf/data:1.0">
-            <ACL>
-              <IPv4NamedAdvanceRules>
-                <Rule>
-                  <GroupIndex/>
-                  <RuleID/>
-                  <Action/>
-                  <ProtocolType/>
-                  <Count/>
-                  <Status/>
-                  <Fragment/>
-                  <Logging/>
-                  <Counting/>
-                  <SrcAny/>
-                  <DstAny/>
-                  <SrcIPv4>
-                    <SrcIPv4Addr/>
-                    <SrcIPv4Wildcard/> 
-                  </SrcIPv4>
-                  <DstIPv4>
-                    <DstIPv4Addr/>
-                    <DstIPv4Wildcard/> 
-                  </DstIPv4>
-                  <SrcPort>
-                    <SrcPortOp/>
-                    <SrcPortValue1/>
-                    <SrcPortValue2/> 
-                  </SrcPort>
-                  <DstPort>
-                    <DstPortOp/>
-                    <DstPortValue1/>
-                    <DstPortValue2/> 
-                  </DstPort>
-                </Rule>
-              </IPv4NamedAdvanceRules>
-            </ACL>
-		  </top>
-        </filter>
-      </get>`),
+	request := netconf.RPCMessage{
+		InnerXML: []byte(`
+          <get>
+            <filter type="subtree">
+              <top xmlns="http://www.hp.com/netconf/data:1.0">
+                <ACL>
+                  <IPv4NamedAdvanceRules/>
+                </ACL>
+		      </top>
+            </filter>
+          </get>`),
 		Xmlns: []string{netconf.BaseURI},
 	}
 
-	for _, filter := range filters {
-		request.InnerXML = bytes.Replace(request.InnerXML, []byte(fmt.Sprintf("<%s/>", filter.Key)), filter.convertToXML(), 1)
+	if filters != nil {
+		request.InnerXML = []byte(`
+          <get>
+            <filter type="subtree">
+              <top xmlns="http://www.hp.com/netconf/data:1.0">
+                <ACL>
+                  <IPv4NamedAdvanceRules>
+                    <Rule>
+                      <GroupIndex/>
+                      <RuleID/>
+                      <Action/>
+                      <ProtocolType/>
+                      <Count/>
+                      <Status/>
+                      <Fragment/>
+                      <Logging/>
+                      <Counting/>
+                      <SrcAny/>
+                      <DstAny/>
+                      <SrcIPv4>
+                        <SrcIPv4Addr/>
+                        <SrcIPv4Wildcard/> 
+                      </SrcIPv4>
+                      <DstIPv4>
+                        <DstIPv4Addr/>
+                        <DstIPv4Wildcard/> 
+                      </DstIPv4>
+                      <SrcPort>
+                        <SrcPortOp/>
+                        <SrcPortValue1/>
+                        <SrcPortValue2/> 
+                      </SrcPort>
+                      <DstPort>
+                        <DstPortOp/>
+                        <DstPortValue1/>
+                        <DstPortValue2/> 
+                      </DstPort>
+                      <Comment/>
+                    </Rule>
+                  </IPv4NamedAdvanceRules>
+                </ACL>
+              </top>
+            </filter>
+          </get>`)
+
+		for _, filter := range filters {
+			request.InnerXML = bytes.Replace(request.InnerXML, []byte(fmt.Sprintf("<%s/>", filter.Key)), filter.convertToXML(), 1)
+		}
 	}
 
 	data, err := targetDevice.RetrieveData(request)
