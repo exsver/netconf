@@ -29,7 +29,7 @@ func main() {
 	defer sw.Disconnect()
 
 	// all rules (all ACLs)
-	data, err := sw.ACLGetIPv4NamedAdvanceRules(nil)
+	data, err := sw.ACLIPv4NamedAdvanceRulesGet(nil)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
@@ -37,7 +37,7 @@ func main() {
 	spew.Dump(data)
 
 	// all rules for acl named testACL
-	data, err = sw.ACLGetIPv4NamedAdvanceRules([]comware.XMLFilter{{Key: "GroupIndex", Value: "testACL", IsRegExp: false}})
+	data, err = sw.ACLIPv4NamedAdvanceRulesGet([]comware.XMLFilter{{Key: "GroupIndex", Value: "testACL", IsRegExp: false}})
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
@@ -45,7 +45,7 @@ func main() {
 	spew.Dump(data)
 
 	//  all rules with Action "Deny" (all ACLs)
-	data, err = sw.ACLGetIPv4NamedAdvanceRules([]comware.XMLFilter{{Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false}})
+	data, err = sw.ACLIPv4NamedAdvanceRulesGet([]comware.XMLFilter{{Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false}})
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
@@ -53,7 +53,7 @@ func main() {
 	spew.Dump(data)
 
 	//  all rules with ProtocolType "ICMP" and Action "Deny" for acl named testACL
-	data, err = sw.ACLGetIPv4NamedAdvanceRules(
+	data, err = sw.ACLIPv4NamedAdvanceRulesGet(
 		[]comware.XMLFilter{
 			{Key: "GroupIndex", Value: "testACL", IsRegExp: false},
 			{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false},
@@ -65,4 +65,3 @@ func main() {
 
 	spew.Dump(data)
 }
-

@@ -12,6 +12,7 @@ import (
 
 func main() {
 	netconf.LogLevel.Verbose()
+
 	targetDevice := &netconf.TargetDevice{
 		IP:   "10.10.10.10",
 		Port: 830,
@@ -19,8 +20,8 @@ func main() {
 			Config: ssh.Config{
 				Ciphers: []string{"aes128-cbc", "hmac-sha1"},
 			},
-			User:            "netconf",
-			Auth:            []ssh.AuthMethod{ssh.Password("netconf")},
+			User:            "netconf-user",
+			Auth:            []ssh.AuthMethod{ssh.Password("netconf-password")},
 			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 			Timeout:         30 * time.Second},
 	}
@@ -35,5 +36,4 @@ func main() {
 	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XMLHello))
 	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(rawxml.XMLMessagesHPE["GetDeviceBaseHostname"]))
 	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XMLClose))
-
 }

@@ -37,7 +37,7 @@ type ACL struct {
 	/* top level
 	   ACL
 	     Base
-	     Capability
+	     Capability                     ***ReadOnly***
 	     Groups
 	       []Group
 	     IPv4AdvanceRules
@@ -54,6 +54,8 @@ type ACL struct {
 	       []IPv6BasicRule
 	     MACRules
 	       []MACRule
+	     PfilterDefAction
+	     PfilterIgnoreAction
 	*/
 	Groups                *Groups                `xml:"Groups"`
 	NamedGroups           *NamedGroups           `xml:"NamedGroups"`
@@ -211,7 +213,7 @@ type IPv4NamedAdvanceRule struct {
 	RuleID int `xml:"RuleID"`
 	// Action on packets matching the rule.
 	// Action: 1 - Deny, 2 - Permit
-	Action int `xml:"Action"`
+	Action int `xml:"Action,omitempty"`
 	// Protocol type.
 	// Value range: 0 to 256. The value 256 represents all IPv4 protocols.
 	ProtocolType int      `xml:"ProtocolType,omitempty"`

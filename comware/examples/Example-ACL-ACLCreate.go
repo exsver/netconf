@@ -113,7 +113,7 @@ func main() {
 		},
 	}
 
-	err = sw.ACLAddIPv4NamedAdvanceRules(&rules)
+	err = sw.ACLIPv4NamedAdvanceRulesAdd(&rules)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}

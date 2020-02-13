@@ -15,13 +15,9 @@ Ethernet frame header ACLs    4000 to 4999        Layer 2 header fields, such as
 */
 
 func (targetDevice *TargetDevice) GetDataACL() (*ACL, error) {
-	request := netconf.RPCMessage{InnerXML: []byte(`
-      <get>
-        <filter type="subtree">
-          <top xmlns="http://www.hp.com/netconf/data:1.0"><ACL/></top>
-        </filter>
-      </get>`),
-		Xmlns: []string{netconf.BaseURI},
+	request := netconf.RPCMessage{
+		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><ACL/></top></filter></get>`),
+		Xmlns:    []string{netconf.BaseURI},
 	}
 
 	data, err := targetDevice.RetrieveData(request)
@@ -86,7 +82,7 @@ func (targetDevice *TargetDevice) ACLGetNamedGroups(filters []string) ([]NamedGr
 	return data.Top.ACL.NamedGroups.Groups, nil
 }
 
-// ACLGetIPv4NamedAdvanceRules returns ACL rules ([]IPv4NamedAdvanceRule) and error
+// ACLIPv4NamedAdvanceRulesGet returns ACL rules ([]IPv4NamedAdvanceRule) and error
 // Available filters are:
 //  - GroupIndex
 //  - RuleID
@@ -106,6 +102,7 @@ func (targetDevice *TargetDevice) ACLGetNamedGroups(filters []string) ([]NamedGr
 //  - DstPortOp
 //  - DstPortValue1
 //  - DstPortValue2
+//  - Comment
 // Filter examples:
 //  - all rules for acl named testACL                           []comware.XMLFilter{{Key: "GroupIndex", Value: "testACL", IsRegExp: false}}
 //  - all rules with ProtocolType "ICMP"					    []comware.XMLFilter{{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false}}
@@ -113,19 +110,10 @@ func (targetDevice *TargetDevice) ACLGetNamedGroups(filters []string) ([]NamedGr
 //  - all rules with ProtocolType "ICMP" and Action "Deny"      []comware.XMLFilter{{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false}, {Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false}}
 //  - all rules with DstIPv4Addr matches by regexp "^10.100"    []comware.XMLFilter{{Key: "DstIPv4Addr", Value: "^10.100", IsRegExp: true}}
 //  - all rules with Counting                                   []comware.XMLFilter{{Key: "Counting", Value: "true", IsRegExp: false}}
-func (targetDevice *TargetDevice) ACLGetIPv4NamedAdvanceRules(filters []XMLFilter) ([]IPv4NamedAdvanceRule, error) {
+func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesGet(filters []XMLFilter) ([]IPv4NamedAdvanceRule, error) {
 	request := netconf.RPCMessage{
-		InnerXML: []byte(`
-          <get>
-            <filter type="subtree">
-              <top xmlns="http://www.hp.com/netconf/data:1.0">
-                <ACL>
-                  <IPv4NamedAdvanceRules/>
-                </ACL>
-		      </top>
-            </filter>
-          </get>`),
-		Xmlns: []string{netconf.BaseURI},
+		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><ACL><IPv4NamedAdvanceRules/></ACL></top></filter></get>`),
+		Xmlns:    []string{netconf.BaseURI},
 	}
 
 	if filters != nil {
@@ -174,6 +162,32 @@ func (targetDevice *TargetDevice) ACLGetIPv4NamedAdvanceRules(filters []XMLFilte
           </get>`)
 
 		for _, filter := range filters {
+			if !((filter.Key == "GroupIndex") ||
+				(filter.Key == "RuleID") ||
+				(filter.Key == "Action") ||
+				(filter.Key == "ProtocolType") ||
+				(filter.Key == "Count") ||
+				(filter.Key == "Status") ||
+				(filter.Key == "Fragment") ||
+				(filter.Key == "Logging") ||
+				(filter.Key == "Counting") ||
+				(filter.Key == "SrcAny") ||
+				(filter.Key == "DstAny") ||
+				(filter.Key == "SrcIPv4Addr") ||
+				(filter.Key == "SrcIPv4Wildcard ") ||
+				(filter.Key == "DstIPv4Addr") ||
+				(filter.Key == "DstIPv4Wildcard") ||
+				(filter.Key == "SrcPortOp") ||
+				(filter.Key == "SrcPortValue1") ||
+				(filter.Key == "SrcPortValue2") ||
+				(filter.Key == "DstPortOp") ||
+				(filter.Key == "DstPortValue1") ||
+				(filter.Key == "DstPortValue2") ||
+				(filter.Key == "Comment")) {
+
+				return nil, fmt.Errorf("invalid filter: %s", filter)
+			}
+
 			request.InnerXML = bytes.Replace(request.InnerXML, []byte(fmt.Sprintf("<%s/>", filter.Key)), filter.convertToXML(), 1)
 		}
 	}
@@ -186,12 +200,31 @@ func (targetDevice *TargetDevice) ACLGetIPv4NamedAdvanceRules(filters []XMLFilte
 	return data.Top.ACL.IPv4NamedAdvanceRules.IPv4NamedAdvanceRules, nil
 }
 
-func (targetDevice *TargetDevice) ACLAddIPv4NamedAdvanceRules(rules *IPv4NamedAdvanceRules) error {
+func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesAdd(rules *IPv4NamedAdvanceRules) error {
 	return targetDevice.Configure(*rules.ConvertToTop(), "create")
 }
 
-func (targetDevice *TargetDevice) ACLRemoveIPv4NamedAdvanceRules(rules *IPv4NamedAdvanceRules) error {
-	return targetDevice.Configure(*rules.ConvertToTop(), "remove")
+func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesRemove(rules *IPv4NamedAdvanceRules) error {
+	removeRules := IPv4NamedAdvanceRules{
+		IPv4NamedAdvanceRules: make([]IPv4NamedAdvanceRule, 0, len(rules.IPv4NamedAdvanceRules)),
+	}
+
+	if rules.IPv4NamedAdvanceRules == nil {
+		return fmt.Errorf("rules slice is empty")
+	}
+
+	// When the delete or remove operation is issued, data cannot be assigned to non-index columns
+	// Index fields for IPv4NamedAdvanceRule struct are:
+	//  - GroupIndex
+	//  - RuleID
+	for _, rule := range rules.IPv4NamedAdvanceRules {
+		removeRules.IPv4NamedAdvanceRules = append(removeRules.IPv4NamedAdvanceRules, IPv4NamedAdvanceRule{
+			GroupIndex: rule.GroupIndex,
+			RuleID:     rule.RuleID,
+		})
+	}
+
+	return targetDevice.Configure(*removeRules.ConvertToTop(), "remove")
 }
 
 func (targetDevice *TargetDevice) PfilterApply(pfilter *Pfilter) error {
@@ -228,8 +261,9 @@ func (targetDevice *TargetDevice) GetACLConfig() (*ACL, error) {
         </source>
         <filter type="subtree">
           <top xmlns="http://www.hp.com/netconf/config:1.0">
-            <ACL>
-            </ACL>
+            <ACL><IPv4NamedAdvanceRules><Rule>
+				<ProtocolType>1</ProtocolType>
+            </Rule></IPv4NamedAdvanceRules></ACL>
           </top>
         </filter>
       </get-config>`),
