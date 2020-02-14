@@ -1,0 +1,453 @@
+package comware
+
+import "encoding/xml"
+
+type ACL struct {
+	/* top level
+	   ACL
+	     Base
+	     Capability                     ***ReadOnly***
+	     Groups
+	       []Group
+	     IPv4AdvanceRules
+	       []IPv4AdvanceRule
+	     IPv4BasicRules
+	       []IPv4BasicRules
+	     IPv4NamedAdvanceRules
+	       []IPv4NamedAdvanceRule
+	     IPv4NamedBasicRules
+	       []IPv4NamedBasicRule
+	     IPv6AdvanceRules
+	       []IPv6AdvanceRule
+	     IPv6BasicRules
+	       []IPv6BasicRule
+	     MACRules
+	       []MACRule
+	     PfilterDefAction
+	     PfilterIgnoreAction
+	*/
+	Groups                *Groups                `xml:"Groups"`
+	NamedGroups           *NamedGroups           `xml:"NamedGroups"`
+	IPv4AdvanceRules      *IPv4AdvanceRules      `xml:"IPv4AdvanceRules"`
+	IPv4NamedAdvanceRules *IPv4NamedAdvanceRules `xml:"IPv4NamedAdvanceRules"`
+	IPv4BasicRules        *IPv4BasicRules        `xml:"IPv4BasicRules"`
+	IPv4NamedBasicRules   *IPv4NamedBasicRules   `xml:"IPv4NamedBasicRules"`
+	IPv6AdvanceRules      *IPv6AdvanceRules      `xml:"IPv6AdvanceRules"`
+	IPv6BasicRules        *IPv6BasicRules        `xml:"IPv6BasicRules"`
+	MACRules              *MACRules              `xml:"MACRules"`
+	PfilterDefAction      *PfilterDefAction      `xml:"PfilterDefAction"`
+	PfilterApply          *PfilterApply          `xml:"PfilterApply"`
+	PfilterGroupRunInfo   *PfilterGroupRunInfo   `xml:"PfilterGroupRunInfo"`
+}
+
+// Groups table contains ACL information.
+type Groups struct {
+	XMLName xml.Name `xml:"Groups"`
+	Groups  []Group  `xml:"Group"`
+}
+
+// NamedGroups table contains named ACL information.
+type NamedGroups struct {
+	XMLName xml.Name     `xml:"NamedGroups"`
+	Groups  []NamedGroup `xml:"Group"`
+}
+
+type Group struct {
+	XMLName xml.Name `xml:"Group"`
+	// GroupType specifies the type of ACL:
+	// 1 - IPv4, 2 - IPv6, 3 - MAC, 4 - User-defined.
+	GroupType int `xml:"GroupType"`
+	// GroupID specifies the ACL number.
+	// The value range depends on the GroupType column.
+	// - 2000 to 5999 if GroupType is 1 (IPv4).
+	//    IPv4 basic ACL: 2000 to 2999.
+	//    IPv4 advanced ACL: 3000 to 3999.
+	//    Ethernet frame header ACL: 4000 to 4999.
+	//    User-defined ACL: 5000 to	5999.
+	// - 2000 to 3999 if GroupType is 2 (IPv6).
+	//    IPv6 basic ACL: 2000 to 2999.
+	//    IPv6 advanced ACL: 3000 to 3999.
+	GroupID int `xml:"GroupID"`
+	// Match order: 1 - config (Ascending order of rule IDs), 2 - auto (Depth-first order). Default: config.
+	// The match order can only be	modified for ACLs that do not contain any rules.
+	// The match order can only be config for user-defined ACLs.
+	MatchOrder int `xml:"MatchOrder,omitempty"`
+	// Step length, range from 1 to 20. Default: 5. The rule numbering step for user-defined ACLs can only be 5.
+	Step int `xml:"Step,omitempty"`
+	// Description of the ACL group, a case-sensitive string of 1 to 127 characters.
+	Description string `xml:"Description,omitempty"`
+	// The rules number of the ACL group. Range from 0 to 65535.
+	// ReadOnly
+	RuleNum int `xml:"RuleNum,omitempty"`
+}
+
+type NamedGroup struct {
+	XMLName xml.Name `xml:"Group"`
+	// GroupType specifies the type of ACL:
+	// 1 - IPv4, 2 - IPv6, 3 - MAC, 4 - User-defined.
+	GroupType int `xml:"GroupType"`
+	// GroupCategory specifies the category of ACL: 0 - invalid, 1 - basic, 2 - advanced.
+	// The value range depends on the GroupType column.
+	// - 1 to 2 if GroupType is 1 or 2.
+	//    basic ACL: 1.
+	//    advanced ACL: 2.
+	// - 0 if GroupType is 3 or 4.
+	GroupCategory int `xml:"GroupCategory"`
+	// GroupIndex specifies ACL name STRING<1-63> (case-insensitive string) or ACL index.
+	// Can't use 'all' as ACL name. If it's Index, range from 2000 to 5999.
+	GroupIndex string `xml:"GroupIndex"`
+	// Match order: 1 - config (Ascending order of rule IDs), 2 - auto (Depth-first order). Default: config.
+	// The match order can only be	modified for ACLs that do not contain any rules.
+	// The match order can only be config for user-defined ACLs.
+	MatchOrder int `xml:"MatchOrder,omitempty"`
+	// Step length, range from 1 to 20. Default: 5. The rule numbering step for user-defined ACLs can only be 5.
+	Step int `xml:"Step,omitempty"`
+	// Description of the ACL group, a case-sensitive string of 1 to 127 characters.
+	Description string `xml:"Description,omitempty"`
+	// The rules number of the ACL group. Range from 0 to 65535.
+	// ReadOnly
+	RuleNum int `xml:"RuleNum,omitempty"`
+}
+
+
+// IPv4AdvanceRules table contains IPv4 advanced ACL rule information.
+type IPv4AdvanceRules struct {
+	IPv4AdvanceRules []IPv4AdvanceRule `xml:"Rule"`
+}
+
+// IPv4NamedAdvanceRules table contains information about named IPv4 advanced ACL rules.
+type IPv4NamedAdvanceRules struct {
+	IPv4NamedAdvanceRules []IPv4NamedAdvanceRule `xml:"Rule"`
+}
+
+// IPv4BasicRules table contains information about IPv4 basic ACL rules.
+type IPv4BasicRules struct {
+	IPv4BasicRules []IPv4BasicRule `xml:"Rule"`
+}
+
+// IPv4NamedBasicRules table contains information about named IPv4 basic ACL rules.
+type IPv4NamedBasicRules struct {
+	IPv4NamedBasicRules []IPv4NamedBasicRule `xml:"Rule"`
+}
+
+// IPv6AdvanceRules table contains IPv6 advanced ACL rule information.
+type IPv6AdvanceRules struct {
+	IPv6AdvanceRules []IPv6AdvanceRule `xml:"Rule"`
+}
+
+// IPv6BasicRules table contains information about IPv6 basic ACL rules.
+type IPv6BasicRules struct {
+	IPv6BasicRules []IPv6BasicRule `xml:"Rule"`
+}
+
+// MACRules table contains Ethernet frame header ACL rule information.
+type MACRules struct {
+	MACRule []MACRule `xml:"Rule"`
+}
+
+
+type IPv4AdvanceRule struct {
+	XMLName xml.Name `xml:"Rule"`
+	GroupID int      `xml:"GroupID"`
+	// RuleID int in range 0-65534
+	RuleID int `xml:"RuleID"`
+	// Action: 1 - Deny, 2 - Permit
+	Action int `xml:"Action"`
+	// ProtocolType defines:
+	// Protocol number INTEGER<0-255>, 256 - any IP protocol
+	// 1 - ICMP
+	// 6 - TCP
+	// 17 - UDP
+	// ...
+	// https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
+	ProtocolType int      `xml:"ProtocolType,omitempty"`
+	Count        int      `xml:"Count,omitempty"`
+	Status       int      `xml:"Status,omitempty"`
+	Fragment     bool     `xml:"Fragment,omitempty"`
+	Logging      bool     `xml:"Logging,omitempty"`
+	Counting     bool     `xml:"Counting,omitempty"`
+	SrcAny       bool     `xml:"SrcAny,omitempty"`
+	DstAny       bool     `xml:"DstAny,omitempty"`
+	SrcIPv4      *SrcIPv4 `xml:"SrcIPv4,omitempty"`
+	DstIPv4      *DstIPv4 `xml:"DstIPv4,omitempty"`
+	SrcPort      *SrcPort `xml:"SrcPort,omitempty"`
+	DstPort      *DstPort `xml:"DstPort,omitempty"`
+}
+
+type IPv4NamedAdvanceRule struct {
+	XMLName xml.Name `xml:"Rule"`
+	// GroupIndex - ACL name, or ACL number.
+	// You must create an ACL first before you create, merge, or replace rules for it.
+	GroupIndex string `xml:"GroupIndex"`
+	// Value range: 0 to 65534.
+	// If you set this column to 65535, the system automatically assigns a new rule ID.
+	// This rule ID is the nearest higher multiple of the numbering step to the current highest rule ID, starting from 0.
+	RuleID int `xml:"RuleID"`
+	// Action on packets matching the rule.
+	// Action: 1 - Deny, 2 - Permit
+	Action int `xml:"Action,omitempty"`
+	// Protocol type.
+	// Value range: 0 to 256. The value 256 represents all IPv4 protocols.
+	ProtocolType int      `xml:"ProtocolType,omitempty"`
+	Count        int64    `xml:"Count,omitempty"`
+	// Rule status.
+	// Status: 1 - active, 2 - inactive.
+	Status       int      `xml:"Status,omitempty"`
+	// Fragment - the flag of matching fragmented packet.
+	// If an ACL is for QoS traffic classification or packet filtering do not specify the fragment.
+	Fragment     bool     `xml:"Fragment,omitempty"`
+	Logging      bool     `xml:"Logging,omitempty"`  // The logging takes effect only when the module (for example, packet filtering) that uses the ACL supports logging.
+	Counting     bool     `xml:"Counting,omitempty"` // Counts times the ACL rule has been matched.
+	SrcAny       *bool    `xml:"SrcAny,omitempty"`
+	DstAny       *bool    `xml:"DstAny,omitempty"`
+	SrcIPv4      *SrcIPv4 `xml:"SrcIPv4,omitempty"`
+	DstIPv4      *DstIPv4 `xml:"DstIPv4,omitempty"`
+	SrcPort      *SrcPort `xml:"SrcPort,omitempty"`
+	DstPort      *DstPort `xml:"DstPort,omitempty"`
+	// Rule comment,
+	// a case-sensitive string of 1 to 127 characters.
+	Comment string `xml:"Comment,omitempty"`
+}
+
+type IPv4BasicRule struct {
+	XMLName xml.Name `xml:"Rule"`
+	// Group ID. Range from 2000 to 2999.
+	GroupID int `xml:"GroupID"`
+	// Rule ID. Range from 0 to 65534
+	// If you set this column to 65535, the system automatically assigns a new rule ID.
+	RuleID int `xml:"RuleID"`
+	// Action on packets matching the rule.
+	// Action: 1 - Deny, 2 - Permit
+	Action int `xml:"Action,omitempty"`
+	// SrcAny - The flag of matching any IP address.
+	SrcAny bool `xml:"SrcAny,omitempty"`
+	// SrcIPv4 - Source IP address.
+	SrcIPv4 *SrcIPv4 `xml:"SrcIPv4,omitempty"`
+	// Fragment - the flag of matching fragmented packet.
+	//  false - the rule applies to all fragments and non-fragments,
+	//  true - the rule applies to only non-first fragments.
+	Fragment bool `xml:"Fragment,omitempty"`
+	Logging  bool `xml:"Logging,omitempty"`
+	// Counts times the ACL rule has been matched.
+	Counting bool `xml:"Counting,omitempty"`
+	// Rule comment,
+	// a case-sensitive string of 1 to 127 characters.
+	Comment string `xml:"Comment,omitempty"`
+	// Specifies a time range for the rule, a case-insensitive string of 1 to 32 characters.
+	// It must start with an English letter.
+	TimeRange string `xml:"TimeRange"`
+}
+
+type IPv4NamedBasicRule struct {
+	XMLName    xml.Name `xml:"Rule"`
+	GroupIndex string   `xml:"GroupIndex"`
+	RuleID     int      `xml:"RuleID"`
+	Action     int      `xml:"Action,omitempty"` //Action: 1 - Deny, 2 - Permit
+	SrcAny     bool     `xml:"SrcAny,omitempty"`
+	Fragment   bool     `xml:"Fragment,omitempty"`
+	Counting   bool     `xml:"Counting,omitempty"`
+	Logging    bool     `xml:"Logging,omitempty"`
+	Count      int      `xml:"Count,omitempty"`
+	Status     int      `xml:"Status,omitempty"`
+	SrcIPv4    *SrcIPv4 `xml:"SrcIPv4,omitempty"`
+	// Rule comment,
+	// a case-sensitive string of 1 to 127 characters.
+	Comment string `xml:"Comment,omitempty"`
+}
+
+
+type SrcIPv4 struct {
+	SrcIPv4Addr     string `xml:"SrcIPv4Addr"`
+	SrcIPv4Wildcard string `xml:"SrcIPv4Wildcard"`
+}
+
+type DstIPv4 struct {
+	DstIPv4Addr     string `xml:"DstIPv4Addr"`
+	DstIPv4Wildcard string `xml:"DstIPv4Wildcard"`
+}
+
+type SrcPort struct {
+	// SrcPortOp:
+	// 1 - lt    less than given port number
+	// 2 - eq    Equal to given port number
+	// 3 - gt    Greater than given port number
+	// 4 - neq   Not equal to given port number
+	// 5 - range Between two port numbers
+	SrcPortOp int `xml:"SrcPortOp"`
+	// SrcPortValue1 specify a source port
+	SrcPortValue1 int `xml:"SrcPortValue1"`
+	// SrcPortValue2 used only in range case
+	SrcPortValue2 int `xml:"SrcPortValue2,omitempty"`
+}
+
+type DstPort struct {
+	// DstPortOp:
+	// 1 - lt    less than given port number
+	// 2 - eq    Equal to given port number
+	// 3 - gt    Greater than given port number
+	// 4 - neq   Not equal to given port number
+	// 5 - range Between two port numbers
+	DstPortOp int `xml:"DstPortOp"`
+	// DstPortValue1 specify a destination port
+	DstPortValue1 int `xml:"DstPortValue1"`
+	// DstPortValue2 used only in range case
+	DstPortValue2 int `xml:"DstPortValue2,omitempty"`
+}
+
+type IPv6AdvanceRule struct {
+	XMLName        xml.Name `xml:"Rule"`
+	GroupID        int      `xml:"GroupID"`
+	RuleID         int      `xml:"RuleID"`
+	Action         int      `xml:"Action,omitempty"`
+	ProtocolType   int      `xml:"ProtocolType,omitempty"`
+	Fragment       bool     `xml:"Fragment,omitempty"`
+	RoutingTypeAny bool     `xml:"RoutingTypeAny,omitempty"`
+	HopTypeAny     bool     `xml:"HopTypeAny,omitempty"`
+	SrcAny         bool     `xml:"SrcAny,omitempty"`
+	DstAny         bool     `xml:"DstAny,omitempty"`
+	SrcIPv6        SrcIPv6  `xml:"SrcIPv6,omitempty"`
+	DstIPv6        DstIPv6  `xml:"DstIPv6,omitempty"`
+	SrcPort        SrcPort  `xml:"SrcPort,omitempty"`
+	DstPort        DstPort  `xml:"DstPort,omitempty"`
+	// Rule comment,
+	// a case-sensitive string of 1 to 127 characters.
+	Comment string `xml:"Comment,omitempty"`
+}
+
+type IPv6BasicRule struct {
+	XMLName xml.Name `xml:"Rule"`
+	// Group ID. Range from 2000 to 2999.
+	GroupID int `xml:"GroupID"`
+	// Rule ID. Range from 0 to 65534
+	// If you set this column to 65535, the system automatically assigns a new rule ID.
+	RuleID int `xml:"RuleID"`
+	// Action on packets matching the rule.
+	// Action: 1 - Deny, 2 - Permit
+	Action int `xml:"Action,omitempty"`
+	// SrcAn - the flag of matching any source IPv6 address.
+	SrcAny bool `xml:"SrcAny,omitempty"`
+	// Source IPv6, including SrcIPv6Address and SrcIPv6Prefix.
+	SrcIPv6 SrcIPv6 `xml:"SrcIPv6,omitempty"`
+	// RoutingTypeAny - the flag of matching any routing header type.
+	RoutingTypeAny bool `xml:"RoutingTypeAny,omitempty"`
+	// The value of routing header type.
+	// 0 .. 255
+	RoutingTypeValue int `xml:"RoutingTypeValue,omitempty"`
+	// Fragment - the flag of matching fragmented packet.
+	//  false - the rule applies to all fragments and non-fragments,
+	//  true - the rule applies to only non-first fragments.
+	Fragment bool `xml:"Fragment,omitempty"`
+	Logging  bool `xml:"Logging,omitempty"`
+	// Counts times the ACL rule has been matched.
+	Counting bool `xml:"Counting,omitempty"`
+	// Rule comment,
+	// a case-sensitive string of 1 to 127 characters.
+	Comment string `xml:"Comment,omitempty"`
+	// Rule status.
+	// Status: 1 - active, 2 - inactive.
+	Status  int    `xml:"Status,omitempty"`
+	Count   int64  `xml:"Count,omitempty"`
+}
+
+type SrcIPv6 struct {
+	SrcIPv6Addr   string `xml:"SrcIPv6Addr"`
+	SrcIPv6Prefix string `xml:"SrcIPv6Prefix"`
+}
+
+type DstIPv6 struct {
+	DstIPv6Addr   string `xml:"DstIPv6Addr"`
+	DstIPv6Prefix string `xml:"DstIPv6Prefix"`
+}
+
+type MACRule struct {
+	XMLName    xml.Name   `xml:"Rule"`
+	GroupID    int        `xml:"GroupID"`
+	RuleID     int        `xml:"RuleID"`
+	Action     int        `xml:"Action,omitempty"`
+	SrcMACAddr SrcMACAddr `xml:"SrcMACAddr,omitempty"`
+	DstMACAddr DstMACAddr `xml:"DstMACAddr,omitempty"`
+	Protocol   Protocol   `xml:"Protocol,omitempty"`
+}
+
+type SrcMACAddr struct {
+	SrcMACAddress string `xml:"SrcMACAddress"`
+	//SrcMACMask represents 48-bit hardware address mask
+	// ffff-ffff-ffff - one MAC
+	// 0000-0000-0000 - all MAC
+	SrcMACMask string `xml:"SrcMACMask"`
+}
+
+type DstMACAddr struct {
+	DstMACAddress string `xml:"DstMACAddress"`
+	DstMACMask    string `xml:"DstMACMask"`
+}
+
+//Protocol Represents EtherType
+// https://tools.ietf.org/html/rfc7042#appendix-B
+// For example:
+// 0800  IPv4
+// 86DD  IPv6
+// 0806  ARP
+type Protocol struct {
+	ProtocolType     string `xml:"ProtocolType"`
+	ProtocolTypeMask string `xml:"ProtocolTypeMask"`
+}
+
+type TCPFlag struct {
+	XMLName xml.Name `xml:"TcpFlag"`
+	SYN     int      `xml:"SYN,omitempty"`
+	ACK     int      `xml:"ACK,omitempty"`
+	FIN     int      `xml:"FIN,omitempty"`
+	RST     int      `xml:"RST,omitempty"`
+	PSH     int      `xml:"PSH,omitempty"`
+	URG     int      `xml:"URG,omitempty"`
+}
+
+type ICMP struct {
+	XMLName  xml.Name `xml:"ICMP"`
+	ICMPType int      `xml:"ICMPType,omitempty"`
+	ICMPCode int      `xml:"ICMPCode,omitempty"`
+}
+
+type PfilterDefAction struct {
+	XMLName       xml.Name `xml:"PfilterDefAction"`
+	DefaultAction int      `xml:"DefaultAction"` // ACL Default Action. 1:Permit, 2:Deny.
+}
+
+// PfilterApply table contains information about packet filter application.
+type PfilterApply struct {
+	XMLName  xml.Name  `xml:"PfilterApply"`
+	Pfilters []Pfilter `xml:"Pfilter"`
+}
+
+type Pfilter struct {
+	XMLName      xml.Name `xml:"Pfilter"`
+	AppObjType   int      `xml:"AppObjType"`            // Object type: 1 - interface, 2 - vlan, 3 - global.
+	AppObjIndex  int      `xml:"AppObjIndex"`           // Object Index.
+	AppDirection int      `xml:"AppDirection"`          // Apply Direction: 1 - inbound, 2 - outbound.
+	AppACLType   int      `xml:"AppAclType"`            // ACL Group type: 1 - IPv4, 2 - IPv6, 3 - MAC, 4 - User-defined, 5 - default.
+	AppACLGroup  string   `xml:"AppAclGroup"`           // ACL Name or Index
+	HardCount    int      `xml:"HardCount,omitempty"`   // Hardware count flag: 1 - true, 2 - false. Default:false
+	AppSequence  int      `xml:"AppSequence,omitempty"` // 1-4294967295
+}
+
+// PfilterGroupRunInfo table contains running information about packet filter ACLs on application objects.
+type PfilterGroupRunInfo struct {
+	XMLName       xml.Name       `xml:"PfilterGroupRunInfo"`
+	GroupsRunInfo []GroupRunInfo `xml:"GroupRunInfo"`
+}
+
+type GroupRunInfo struct {
+	XMLName             xml.Name `xml:"GroupRunInfo"`
+	AppObjType          int      `xml:"AppObjType"`          // Object type: 1 - interface, 2 - vlan, 3 - global.
+	AppObjIndex         int      `xml:"AppObjIndex"`         // Object Index.
+	AppDirection        int      `xml:"AppDirection"`        // Apply Direction: 1 - inbound, 2 - outbound.
+	AppACLType          int      `xml:"AppAclType"`          // ACL Group type: 1 - IPv4, 2 - IPv6, 3 - MAC, 4 - User-defined, 5 - default.
+	AppACLGroup         string   `xml:"AppAclGroup"`         // ACL Name or Index.
+	ACLGroupStatus      int      `xml:"AclGroupStatus"`      // The status of ACL group applied: 1 - success, 2 - failed, 3 - partialSuccess.
+	ACLGroupCountStatus int      `xml:"AclGroupCountStatus"` // The status of enabling hardware count: 1 - success, 2 - failed, 3 - partialSuccess.
+	ACLGroupPermitPkts  int      `xml:"AclGroupPermitPkts"`  // The number of packets permitted.
+	ACLGroupPermitBytes int      `xml:"AclGroupPermitBytes"` // The number of bytes permitted.
+	ACLGroupDenyPkts    int      `xml:"AclGroupDenyPkts"`    // The number of packets denied.
+	ACLGroupDenyBytes   int      `xml:"AclGroupDenyBytes"`   // The number of bytes denied.
+}
