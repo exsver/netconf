@@ -7,6 +7,8 @@ import (
 	"github.com/exsver/netconf/netconf"
 )
 
+// Run ./Example-ACL-ACLCreate.go first
+
 func main() {
 	netconf.LogLevel.Verbose()
 

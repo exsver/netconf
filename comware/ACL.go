@@ -184,8 +184,7 @@ func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesGet(filters []XMLFilte
 				(filter.Key == "DstPortValue1") ||
 				(filter.Key == "DstPortValue2") ||
 				(filter.Key == "Comment")) {
-
-				return nil, fmt.Errorf("invalid filter: %s", filter)
+				return nil, fmt.Errorf("invalid filter: %s", filter.Key)
 			}
 
 			request.InnerXML = bytes.Replace(request.InnerXML, []byte(fmt.Sprintf("<%s/>", filter.Key)), filter.convertToXML(), 1)

@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/exsver/netconf/comware"
 	"github.com/exsver/netconf/netconf"
@@ -24,12 +25,19 @@ acl advanced name testACL
 */
 
 func main() {
-	netconf.LogLevel.Verbose()
+	netconf.LogLevel.Messages()
 
 	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
+	// Use one netconf session for all operations
+	err = sw.Connect(time.Minute * 5)
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+	defer sw.Disconnect()
 
 	// CLI equivalent:
 	// acl advanced name testACL

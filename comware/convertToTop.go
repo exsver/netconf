@@ -150,11 +150,11 @@ func (acl *Group) ConvertToTop() *Top {
 	}
 }
 
-func (acl *NamedGroup) ConvertToTop() *Top {
+func (namedGroup *NamedGroup) ConvertToTop() *Top {
 	return &Top{
 		ACL: &ACL{
 			NamedGroups: &NamedGroups{
-				Groups: []NamedGroup{*acl},
+				Groups: []NamedGroup{*namedGroup},
 			},
 		},
 	}
@@ -172,7 +172,7 @@ func (rule *IPv4NamedAdvanceRule) ConvertToTop() *Top {
 	return &Top{
 		ACL: &ACL{
 			IPv4NamedAdvanceRules: &IPv4NamedAdvanceRules{
-				IPv4NamedAdvanceRules:[]IPv4NamedAdvanceRule{*rule},
+				IPv4NamedAdvanceRules: []IPv4NamedAdvanceRule{*rule},
 			},
 		},
 	}
@@ -182,7 +182,7 @@ func (rule *IPv4NamedBasicRule) ConvertToTop() *Top {
 	return &Top{
 		ACL: &ACL{
 			IPv4NamedBasicRules: &IPv4NamedBasicRules{
-				IPv4NamedBasicRules:[]IPv4NamedBasicRule{*rule},
+				IPv4NamedBasicRules: []IPv4NamedBasicRule{*rule},
 			},
 		},
 	}

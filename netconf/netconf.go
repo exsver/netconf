@@ -40,8 +40,8 @@ func (netconfSession *NetconfSession) Send(data []byte) error {
 
 	// Pad to make sure the msgSeparator isn't sent across a 4096-byte boundary
 	if (n+len(messageSeparator))%4096 < len(messageSeparator) {
-		padding := make([]byte, len(messageSeparator), len(messageSeparator))
-		_, err := w.Write(padding)
+		padding := make([]byte, len(messageSeparator))
+		_, err = w.Write(padding)
 
 		if err != nil {
 			return err
@@ -71,26 +71,21 @@ func (netconfSession *NetconfSession) Send(data []byte) error {
 func (netconfSession *NetconfSession) Receive() ([]byte, error) {
 	r := bufio.NewReader(netconfSession.Reader)
 
-	var (
-		err error
-		bts = make([]byte, 0)
-	)
+	var out = make([]byte, 0)
 
 	//	time.Sleep(time.Millisecond * 100)
 	for {
 		b, err := r.ReadByte()
-		bts = append(bts, b)
+		out = append(out, b)
 
-		if bytes.HasSuffix(bts, []byte(messageSeparator)) {
-			return bytes.TrimSpace(bytes.TrimSuffix(bts, []byte(messageSeparator))), nil
+		if bytes.HasSuffix(out, []byte(messageSeparator)) {
+			return bytes.TrimSpace(bytes.TrimSuffix(out, []byte(messageSeparator))), nil
 		}
 
 		if err != nil {
-			return bytes.TrimSpace(bytes.TrimSuffix(bts, []byte(messageSeparator))), err
+			return bytes.TrimSpace(bytes.TrimSuffix(out, []byte(messageSeparator))), err
 		}
 	}
-
-	return nil, err
 }
 
 func (netconfSession *NetconfSession) SendAndReceive(data []byte) ([]byte, error) {
@@ -107,7 +102,7 @@ func (netconfSession *NetconfSession) SendAndReceive(data []byte) ([]byte, error
 	LogLevel.Info.Printf("Payload send.\n")
 	LogLevel.Info.Printf("Receiving payload...\n")
 
-	rcv := []byte{}
+	var rcv []byte
 
 	for {
 		rcv, err = netconfSession.Receive()
@@ -398,13 +393,25 @@ func (targetDevice *TargetDevice) Connect(timeout time.Duration) (err error) {
 }
 
 // Disconnect request graceful termination of a NETCONF session and ssh connection.
-func (targetDevice *TargetDevice) Disconnect() (err error) {
+func (targetDevice *TargetDevice) Disconnect() error {
 	if targetDevice.NetconfSession == nil {
 		return errors.New("netconf session is not exist")
 	}
+
 	targetDevice.NetconfSession.lastMessageID++
-	targetDevice.NetconfSession.CloseSession(strconv.Itoa(targetDevice.NetconfSession.lastMessageID))
-	targetDevice.NetconfSession.SessionTransport.Close()
+
+	// Closing netconf session
+	err := targetDevice.NetconfSession.CloseSession(strconv.Itoa(targetDevice.NetconfSession.lastMessageID))
+	if err != nil {
+		LogLevel.Info.Printf("error while trying to close netconf session: %s /n", err.Error())
+	}
+
+	// Terminating ssh connection
+	err = targetDevice.NetconfSession.SessionTransport.Close()
+	if err != nil {
+		LogLevel.Info.Printf("error while trying to terminate ssh connection: %s /n", err.Error())
+	}
+
 	targetDevice.NetconfSession = nil
 
 	return err

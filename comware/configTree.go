@@ -32,4 +32,3 @@ type Top struct {
 	VLAN            *VLAN            `xml:"VLAN"`
 	IRF             *IRF             `xml:"IRF"`
 }
-

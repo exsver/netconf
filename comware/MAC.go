@@ -45,7 +45,7 @@ func (targetDevice *TargetDevice) GetMacTable(filters []XMLFilter) ([]MacTableEn
 
 	for _, filter := range filters {
 		if !((filter.Key == "VLANID") || (filter.Key == "MacAddress") || (filter.Key == "PortIndex") || (filter.Key == "Status") || (filter.Key == "Aging")) {
-			return nil, fmt.Errorf("invalid filter: %s. Valid filters are: VLANID,  MacAddress, PortIndex, Status, Aging", filter)
+			return nil, fmt.Errorf("invalid filter: %s. Valid filters are: VLANID,  MacAddress, PortIndex, Status, Aging", filter.Key)
 		}
 
 		request.InnerXML = bytes.Replace(request.InnerXML, []byte(fmt.Sprintf("<%s/>", filter.Key)), filter.convertToXML(), 1)

@@ -109,7 +109,6 @@ type NamedGroup struct {
 	RuleNum int `xml:"RuleNum,omitempty"`
 }
 
-
 // IPv4AdvanceRules table contains IPv4 advanced ACL rule information.
 type IPv4AdvanceRules struct {
 	IPv4AdvanceRules []IPv4AdvanceRule `xml:"Rule"`
@@ -144,7 +143,6 @@ type IPv6BasicRules struct {
 type MACRules struct {
 	MACRule []MACRule `xml:"Rule"`
 }
-
 
 type IPv4AdvanceRule struct {
 	XMLName xml.Name `xml:"Rule"`
@@ -188,22 +186,22 @@ type IPv4NamedAdvanceRule struct {
 	Action int `xml:"Action,omitempty"`
 	// Protocol type.
 	// Value range: 0 to 256. The value 256 represents all IPv4 protocols.
-	ProtocolType int      `xml:"ProtocolType,omitempty"`
-	Count        int64    `xml:"Count,omitempty"`
+	ProtocolType int   `xml:"ProtocolType,omitempty"`
+	Count        int64 `xml:"Count,omitempty"`
 	// Rule status.
 	// Status: 1 - active, 2 - inactive.
-	Status       int      `xml:"Status,omitempty"`
+	Status int `xml:"Status,omitempty"`
 	// Fragment - the flag of matching fragmented packet.
 	// If an ACL is for QoS traffic classification or packet filtering do not specify the fragment.
-	Fragment     bool     `xml:"Fragment,omitempty"`
-	Logging      bool     `xml:"Logging,omitempty"`  // The logging takes effect only when the module (for example, packet filtering) that uses the ACL supports logging.
-	Counting     bool     `xml:"Counting,omitempty"` // Counts times the ACL rule has been matched.
-	SrcAny       *bool    `xml:"SrcAny,omitempty"`
-	DstAny       *bool    `xml:"DstAny,omitempty"`
-	SrcIPv4      *SrcIPv4 `xml:"SrcIPv4,omitempty"`
-	DstIPv4      *DstIPv4 `xml:"DstIPv4,omitempty"`
-	SrcPort      *SrcPort `xml:"SrcPort,omitempty"`
-	DstPort      *DstPort `xml:"DstPort,omitempty"`
+	Fragment bool     `xml:"Fragment,omitempty"`
+	Logging  bool     `xml:"Logging,omitempty"`  // The logging takes effect only when the module (for example, packet filtering) that uses the ACL supports logging.
+	Counting bool     `xml:"Counting,omitempty"` // Counts times the ACL rule has been matched.
+	SrcAny   *bool    `xml:"SrcAny,omitempty"`
+	DstAny   *bool    `xml:"DstAny,omitempty"`
+	SrcIPv4  *SrcIPv4 `xml:"SrcIPv4,omitempty"`
+	DstIPv4  *DstIPv4 `xml:"DstIPv4,omitempty"`
+	SrcPort  *SrcPort `xml:"SrcPort,omitempty"`
+	DstPort  *DstPort `xml:"DstPort,omitempty"`
 	// Rule comment,
 	// a case-sensitive string of 1 to 127 characters.
 	Comment string `xml:"Comment,omitempty"`
@@ -219,10 +217,6 @@ type IPv4BasicRule struct {
 	// Action on packets matching the rule.
 	// Action: 1 - Deny, 2 - Permit
 	Action int `xml:"Action,omitempty"`
-	// SrcAny - The flag of matching any IP address.
-	SrcAny bool `xml:"SrcAny,omitempty"`
-	// SrcIPv4 - Source IP address.
-	SrcIPv4 *SrcIPv4 `xml:"SrcIPv4,omitempty"`
 	// Fragment - the flag of matching fragmented packet.
 	//  false - the rule applies to all fragments and non-fragments,
 	//  true - the rule applies to only non-first fragments.
@@ -230,6 +224,10 @@ type IPv4BasicRule struct {
 	Logging  bool `xml:"Logging,omitempty"`
 	// Counts times the ACL rule has been matched.
 	Counting bool `xml:"Counting,omitempty"`
+	// SrcAny - The flag of matching any IP address.
+	SrcAny bool `xml:"SrcAny,omitempty"`
+	// SrcIPv4 - Source IP address.
+	SrcIPv4 *SrcIPv4 `xml:"SrcIPv4,omitempty"`
 	// Rule comment,
 	// a case-sensitive string of 1 to 127 characters.
 	Comment string `xml:"Comment,omitempty"`
@@ -254,7 +252,6 @@ type IPv4NamedBasicRule struct {
 	// a case-sensitive string of 1 to 127 characters.
 	Comment string `xml:"Comment,omitempty"`
 }
-
 
 type SrcIPv4 struct {
 	SrcIPv4Addr     string `xml:"SrcIPv4Addr"`
@@ -324,15 +321,15 @@ type IPv6BasicRule struct {
 	// Action on packets matching the rule.
 	// Action: 1 - Deny, 2 - Permit
 	Action int `xml:"Action,omitempty"`
-	// SrcAn - the flag of matching any source IPv6 address.
-	SrcAny bool `xml:"SrcAny,omitempty"`
-	// Source IPv6, including SrcIPv6Address and SrcIPv6Prefix.
-	SrcIPv6 SrcIPv6 `xml:"SrcIPv6,omitempty"`
-	// RoutingTypeAny - the flag of matching any routing header type.
-	RoutingTypeAny bool `xml:"RoutingTypeAny,omitempty"`
+	// Rule status.
+	// Status: 1 - active, 2 - inactive.
+	Status int   `xml:"Status,omitempty"`
+	Count  int64 `xml:"Count,omitempty"`
 	// The value of routing header type.
 	// 0 .. 255
 	RoutingTypeValue int `xml:"RoutingTypeValue,omitempty"`
+	// RoutingTypeAny - the flag of matching any routing header type.
+	RoutingTypeAny bool `xml:"RoutingTypeAny,omitempty"`
 	// Fragment - the flag of matching fragmented packet.
 	//  false - the rule applies to all fragments and non-fragments,
 	//  true - the rule applies to only non-first fragments.
@@ -340,13 +337,13 @@ type IPv6BasicRule struct {
 	Logging  bool `xml:"Logging,omitempty"`
 	// Counts times the ACL rule has been matched.
 	Counting bool `xml:"Counting,omitempty"`
+	// SrcAn - the flag of matching any source IPv6 address.
+	SrcAny bool `xml:"SrcAny,omitempty"`
+	// Source IPv6, including SrcIPv6Address and SrcIPv6Prefix.
+	SrcIPv6 SrcIPv6 `xml:"SrcIPv6,omitempty"`
 	// Rule comment,
 	// a case-sensitive string of 1 to 127 characters.
 	Comment string `xml:"Comment,omitempty"`
-	// Rule status.
-	// Status: 1 - active, 2 - inactive.
-	Status  int    `xml:"Status,omitempty"`
-	Count   int64  `xml:"Count,omitempty"`
 }
 
 type SrcIPv6 struct {
