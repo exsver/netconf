@@ -24,5 +24,5 @@ type Configuration struct {
 	RoutingOptions    *RoutingOptions    `xml:"routing-options"`
 	Protocols         *Protocols         `xml:"protocols"`
 	Vlans             *Vlans             `xml:"vlans"`
-	Firewall  *Firewall  `xml:"firewall"`
+	Firewall          *Firewall          `xml:"firewall"`
 }
