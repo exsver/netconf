@@ -15,13 +15,16 @@ type ConfigurationInformation struct {
 }
 
 func main() {
-
 	sw, err := junos.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	reply, _ := sw.RunCLICommand("show configuration vlans")
+	reply, err := sw.RunCLICommand("show configuration interfaces")
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+
 	var configurationInformation ConfigurationInformation
 	xml.Unmarshal(reply, &configurationInformation)
 	fmt.Printf("%s", configurationInformation.Response)

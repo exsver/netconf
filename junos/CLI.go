@@ -2,11 +2,16 @@ package junos
 
 import (
 	"bytes"
+	"fmt"
 
 	"github.com/exsver/netconf/netconf"
 )
 
 func (targetDevice *TargetDevice) RunCLICommand(command string) ([]byte, error) {
+	if len(command) == 0 {
+		return nil, fmt.Errorf("empty command not alloved")
+	}
+
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<command format="text">cmd_line</command>`),
 		Xmlns:    []string{netconf.BaseURI},

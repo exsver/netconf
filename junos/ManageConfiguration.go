@@ -131,16 +131,16 @@ func (targetDevice *TargetDevice) GetConfiguration(format string) ([]byte, error
 	case "json":
 		request.InnerXML = bytes.Replace(request.InnerXML, []byte("text"), []byte("json"), 1)
 	default:
-		return []byte{}, errors.New("wrong format string. Allowed formats are: text | set | xml | json ")
+		return nil, errors.New("wrong format string. Allowed formats are: text | set | xml | json ")
 	}
 
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
 
 	if rpcReply.Error() != nil {
-		return []byte{}, rpcReply.Error()
+		return nil, rpcReply.Error()
 	}
 
 	if format == "xml" || format == "json" {
