@@ -20,9 +20,12 @@ type Configuration struct {
 	System            *System            `xml:"system"`
 	Chassis           *Chassis           `xml:"chassis"`
 	Interfaces        *Interfaces        `xml:"interfaces"`
+	SNMP              *SNMP              `xml:"snmp"`
 	ForwardingOptions *ForwardingOptions `xml:"forwarding-options"`
 	RoutingOptions    *RoutingOptions    `xml:"routing-options"`
 	Protocols         *Protocols         `xml:"protocols"`
-	Vlans             *Vlans             `xml:"vlans"`
+	PolicyOptions     *PolicyOptions     `xml:"policy-options"`
 	Firewall          *Firewall          `xml:"firewall"`
+	RoutingInstances  *RoutingInstances  `xml:"routing-instances"`
+	Vlans             *Vlans             `xml:"vlans"`
 }

@@ -10,12 +10,12 @@ import (
 	"github.com/exsver/netconf/netconf"
 )
 
-//Operations:
-// merge:
+// Operations:
+//  merge:
 //    The device merges new configuration data into the existing configuration data. This is the default.
-// replace:
+//  replace:
 //    The device replaces existing configuration data with the new configuration data.
-// none:
+//  none:
 //    The device does not change the existing configuration unless the new configuration element includes an operation attribute.
 func (targetDevice *TargetDevice) EditConfig(config Config, operation string) error {
 	configXML, err := xml.Marshal(config)
@@ -58,8 +58,22 @@ func (targetDevice *TargetDevice) EditConfig(config Config, operation string) er
 }
 
 // CLI equivalent: show configuration *subtree*
-// source:             running | candidate
-// subtree examples:   system | interfaces | forwarding-options | routing-options | routing-options/static | protocols | protocols/bgp | vlans  ...
+// Source:
+//  - "running"
+//  - "candidate"
+// Subtree examples:
+//  - ""
+//  - "system"
+//  - "interfaces"
+//  - "snmp"
+//  - "forwarding-options"
+//  - "routing-options"
+//  - "routing-options/static"
+//  - "policy-options"
+//  - "protocols"
+//  - "protocols/bgp"
+//  - "vlans"
+//  - "firewall"
 func (targetDevice *TargetDevice) GetConfig(source string, subtree string) (*Configuration, error) {
 	request := netconf.RPCMessage{Xmlns: []string{netconf.BaseURI}}
 	if subtree == "" {

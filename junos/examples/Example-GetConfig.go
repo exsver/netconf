@@ -17,8 +17,22 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 
-	// Source: running | candidate
-	// Subtree: system | interfaces | forwarding-options | routing-options | routing-options/static | protocols | protocols/bgp | vlans | firewall | ...
+	// Source:
+	//  - "running"
+	//  - "candidate"
+	// Subtree examples:
+	//  - ""
+	//  - "system"
+	//  - "interfaces"
+	//  - "snmp"
+	//  - "forwarding-options"
+	//  - "routing-options"
+	//  - "routing-options/static"
+	//  - "policy-options"
+	//  - "protocols"
+	//  - "protocols/bgp"
+	//  - "vlans"
+	//  - "firewall"
 	data, err := sw.GetConfig("candidate", "")
 	if err != nil {
 		log.Fatalf("%s", err)
