@@ -18,10 +18,10 @@ func main() {
 		Port: 830,
 		SSHConfig: ssh.ClientConfig{
 			Config: ssh.Config{
-				Ciphers: []string{"aes128-ctr", "hmac-sha1"}, //aes128-cbc for HP5940  aes128-ctr for QFX5100
+				Ciphers: []string{"aes128-ctr", "hmac-sha1"}, //aes128-cbc for HP5940  aes128-ctr for juniper QFX5100 or juniper MX
 			},
-			User:            "root",
-			Auth:            []ssh.AuthMethod{ssh.Password("passwd")},
+			User:            "netconf-user",
+			Auth:            []ssh.AuthMethod{ssh.Password("netconf-password")},
 			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 			Timeout:         30 * time.Second,
 		},
@@ -32,9 +32,8 @@ func main() {
 		fmt.Printf("%s\n", err.Error())
 	}
 
-	defer targetDevice.NetconfSession.Close()
+	defer targetDevice.Disconnect()
 
-	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XMLHello))
 	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(rawxml.XMLMessagesJunOS["GetChassisInventory"]))
-	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XMLClose))
+
 }

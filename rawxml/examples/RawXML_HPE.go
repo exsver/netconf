@@ -23,7 +23,8 @@ func main() {
 			User:            "netconf-user",
 			Auth:            []ssh.AuthMethod{ssh.Password("netconf-password")},
 			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-			Timeout:         30 * time.Second},
+			Timeout:         30 * time.Second,
+		},
 	}
 
 	err := targetDevice.Connect(300 * time.Second)
@@ -31,9 +32,7 @@ func main() {
 		log.Printf("%s\n", err.Error())
 	}
 
-	defer targetDevice.NetconfSession.Close()
+	defer targetDevice.Disconnect()
 
-	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XMLHello))
 	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(rawxml.XMLMessagesHPE["GetDeviceBaseHostname"]))
-	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(netconf.XMLClose))
 }
