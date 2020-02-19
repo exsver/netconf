@@ -62,6 +62,13 @@ func ConvertToPairedTags(in []byte) []byte {
 	return bytes.Join(tags, []byte{})
 }
 
+func ConvertToSelfClosingTag(in []byte) []byte {
+	re := regexp.MustCompile(`>true</.*?>`)
+	out := re.ReplaceAll(in, []byte(`/>`))
+
+	return out
+}
+
 //Convert:
 //  level1/level2/level3
 //to (without spaces):

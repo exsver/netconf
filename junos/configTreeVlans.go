@@ -14,3 +14,13 @@ type Vlan struct {
 	VlanID      int      `xml:"vlan-id"`
 	L3Interface string   `xml:"l3-interface,omitempty"`
 }
+
+func (vlan *Vlan) ConvertToConfig() *Config {
+	return &Config{
+		Configuration: &Configuration{
+			Vlans: &Vlans{
+				Vlans: []Vlan{*vlan},
+			},
+		},
+	}
+}

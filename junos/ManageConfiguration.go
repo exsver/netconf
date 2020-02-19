@@ -17,11 +17,17 @@ import (
 //    The device replaces existing configuration data with the new configuration data.
 //  none:
 //    The device does not change the existing configuration unless the new configuration element includes an operation attribute.
-func (targetDevice *TargetDevice) EditConfig(config Config, operation string) error {
+func (targetDevice *TargetDevice) EditConfig(config *Config, operation string) error {
+	if config == nil {
+		return fmt.Errorf("nothing to configure")
+	}
+
 	configXML, err := xml.Marshal(config)
 	if err != nil {
 		return err
 	}
+
+	configXML = netconf.ConvertToSelfClosingTag(configXML)
 
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<edit-config><target><candidate/></target><default-operation>merge</default-operation><configuration/></edit-config>`),
@@ -114,6 +120,8 @@ func (targetDevice *TargetDevice) GetConfig(source string, subtree string) (*Con
 	}
 
 	var data Data
+
+	rpcReply.Content = netconf.ConvertToPairedTags(rpcReply.Content)
 
 	err = xml.Unmarshal(rpcReply.Content, &data)
 	if err != nil {
