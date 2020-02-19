@@ -223,9 +223,18 @@ func (targetDevice *TargetDevice) LoadConfigurationRolback(rollback int) error {
 
 // format attribute value json added in Junos OS Release 16.1.
 // load-configuration capability URI: http://xml.juniper.net/netconf/junos/1.0
-func (targetDevice *TargetDevice) LoadConfigurationText(configuration string, action string) error {
-	request := netconf.RPCMessage{
-		InnerXML: []byte(`<load-configuration action="merge" format="text"><configuration-text>conf_text</configuration-text></load-configuration>`),
+func (targetDevice *TargetDevice) LoadConfiguration(format, configuration, action string) (*LoadConfigurationResults, error) {
+	request := netconf.RPCMessage{}
+
+	switch format {
+	case "xml":
+		request.InnerXML = []byte(`<load-configuration action="merge" format="xml"><configuration>conf_text</configuration></load-configuration>`)
+	case "text":
+		request.InnerXML = []byte(`<load-configuration action="merge" format="text"><configuration-text>conf_text</configuration-text></load-configuration>`)
+	case "json":
+		request.InnerXML = []byte(`<load-configuration action="merge" format="json"><configuration-json>conf_text</configuration-json></load-configuration>`)
+	default:
+		return nil, errors.New("wrong format string. Allowed formats are: xml | text | json")
 	}
 
 	switch action {
@@ -236,19 +245,21 @@ func (targetDevice *TargetDevice) LoadConfigurationText(configuration string, ac
 		request.InnerXML = bytes.Replace(request.InnerXML, []byte("merge"), []byte("override"), 1)
 	case "replace":
 		request.InnerXML = bytes.Replace(request.InnerXML, []byte("merge"), []byte("replace"), 1)
+	case "set":
+		request.InnerXML = []byte(`<load-configuration action="set" format="text"><configuration-set>conf_text</configuration-set></load-configuration>`)
 	default:
-		return errors.New("wrong action string. Allowed actions are: merge | override | replace | update")
+		return nil, errors.New("wrong action string. Allowed actions are: merge | override | replace | update | set")
 	}
 
 	request.InnerXML = bytes.Replace(request.InnerXML, []byte("conf_text"), []byte(configuration), 1)
 
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if rpcReply.Error() != nil {
-		return rpcReply.Error()
+		return nil, rpcReply.Error()
 	}
 
 	var loadConfigurationResults LoadConfigurationResults
@@ -257,16 +268,8 @@ func (targetDevice *TargetDevice) LoadConfigurationText(configuration string, ac
 
 	err = xml.Unmarshal(rpcReply.Content, &loadConfigurationResults)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if loadConfigurationResults.Error.Error() != nil {
-		return loadConfigurationResults.Error.Error()
-	}
-
-	if !loadConfigurationResults.OK {
-		return errors.New("LoadConfiguration: Unknown status")
-	}
-
-	return nil
+	return &loadConfigurationResults, nil
 }

@@ -103,6 +103,7 @@ type FilterThen struct {
 	Policer         string                     `xml:"policer,omitempty"`
 	DontFragment    string                     `xml:"dont-fragment,omitempty"` // set | clear
 	Next            string                     `xml:"next,omitempty"`          // term
+	Count           string                     `xml:"count,omitempty"`         // counter name
 	Discard         *FilterThenDiscard         `xml:"discard"`
 	Reject          *FilterThenReject          `xml:"reject"`
 	RoutingInstance *FilterThenRoutingInstance `xml:"routing-instance"`
