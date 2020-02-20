@@ -16,10 +16,13 @@ type Filter struct {
 }
 
 type Term struct {
-	XMLName xml.Name    `xml:"term"`
-	Name    string      `xml:"name"`
-	From    *FilterFrom `xml:"from"`
-	Then    *FilterThen `xml:"then"`
+	XMLName            xml.Name    `xml:"term"`
+	InsertPosition     string      `xml:"insert,attr,omitempty"` // "first" | "after" | "before"
+	InsertPositionName string      `xml:"name,attr,omitempty"`   // referent-value for InsertPosition
+	Name               string      `xml:"name"`
+	Filter             string      `xml:"filter,omitempty"` // filter to include
+	From               *FilterFrom `xml:"from"`             // match criteria
+	Then               *FilterThen `xml:"then"`             // action
 }
 
 type FilterFrom struct {
@@ -166,6 +169,7 @@ type FilterFamilyInet6 struct {
 	Filters []Filter `xml:"filter,omitempty"`
 }
 
+// family: ""|"inet"|"inet6"
 func (filter *Filter) ConvertToConfig(family string) *Config {
 	var conf Config
 
@@ -204,5 +208,60 @@ func (filter *Filter) ConvertToConfig(family string) *Config {
 		}
 	}
 
+	return &conf
+}
+
+// family: ""|"inet"|"inet6"
+func (term *Term) ConvertToConfig(family, filterName string) *Config {
+	var conf Config
+	switch family {
+	case "inet":
+		conf = Config{
+			Configuration: &Configuration{
+				Firewall: &Firewall{
+					Family: &FilterFamily{
+						Inet: &FilterFamilyInet{
+							Filters: []Filter{
+								{
+									Name:  filterName,
+									Terms: []Term{*term},
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+	case "inet6":
+		conf = Config{
+			Configuration: &Configuration{
+				Firewall: &Firewall{
+					Family: &FilterFamily{
+						Inet6: &FilterFamilyInet6{
+							Filters: []Filter{
+								{
+									Name:  filterName,
+									Terms: []Term{*term},
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+	default:
+		conf = Config{
+			Configuration: &Configuration{
+				Firewall: &Firewall{
+					Filters: []Filter{
+						{
+							Name:  filterName,
+							Terms: []Term{*term},
+						},
+					},
+				},
+			},
+		}
+	}
 	return &conf
 }
