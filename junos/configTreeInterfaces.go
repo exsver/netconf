@@ -20,24 +20,116 @@ type Iface struct {
 }
 
 type Unit struct {
-	XMLName xml.Name `xml:"unit"`
-	Name    int      `xml:"name"`
+	XMLName xml.Name    `xml:"unit"`
+	Name    int         `xml:"name"`
+	Family  *UnitFamily `xml:"family"`
+}
+
+type UnitFamily struct {
+	XMLName xml.Name        `xml:"family"`
+	Inet    *UnitFamilyInet `xml:"inet"`
+}
+
+type UnitFamilyInet struct {
+	XMLName xml.Name               `xml:"inet"`
+	Address *UnitFamilyInetAddress `xml:"address"`
+}
+
+type UnitFamilyInetAddress struct {
+	XMLName   xml.Name                   `xml:"address"`
+	Name      string                     `xml:"name"`
+	Broadcast string                     `xml:"broadcast,omitempty"`
+	Primary   bool                       `xml:"primary,omitempty"`
+	Preferred bool                       `xml:"preferred,omitempty"`
+	ARP       []UnitFamilyInetAddressARP `xml:"arp,omitempty"`
+	VRRPGroup []VRRPGroup                `xml:"vrrp-group,omitempty"`
+}
+
+type UnitFamilyInetAddressARP struct {
+	XMLName      xml.Name `xml:"arp"`
+	Name         string   `xml:"name"`
+	MAC          string   `xml:"mac,omitempty"`
+	MulticastMAC string   `xml:"multicast-mac,omitempty"`
+	Publish      bool     `xml:"publish,omitempty"`
+}
+
+type VRRPGroup struct {
+	XMLName            xml.Name          `xml:"vrrp-group"`
+	Name               string            `xml:"name"`
+	AuthenticationType string            `xml:"authentication-type,omitempty"`
+	AuthenticationKey  string            `xml:"authentication-key,omitempty"`
+	VirtualAddress     []string          `xml:"virtual-address,omitempty"`
+	Priority           int               `xml:"priority,omitempty"`      // Virtual router election priority (0..255)
+	FastInterval       int               `xml:"fast-interval,omitempty"` // Fast advertisement interval (10..40950 milliseconds)
+	AcceptData         bool              `xml:"accept-data,omitempty"`
+	NoAcceptData       bool              `xml:"no-accept-data,omitempty"`
+	NoPreempt          bool              `xml:"no-preempt,omitempty"`
+	Preempt            *VRRPGroupPreempt `xml:"preempt"`
+}
+
+type VRRPGroupPreempt struct {
+	XMLName  xml.Name `xml:"preempt"`
+	HoldTime int      `xml:"hold-time"` // Preemption hold time (0..3600 seconds)
 }
 
 type AggregatedEtherOptions struct {
-	XMLName      xml.Name `xml:"aggregated-ether-options"`
-	MinimumLinks int      `xml:"minimum-links,omitempty"` // Minimum number of aggregated links (1..64)
-	LinkSpeed    string   `xml:"link-speed,omitempty"`
-	Lacp         *LACP    `xml:"lacp"`
+	XMLName                           xml.Name                    `xml:"aggregated-ether-options"`
+	MinimumLinks                      int                         `xml:"minimum-links,omitempty"` // Minimum number of aggregated links (1..64)
+	LinkSpeed                         string                      `xml:"link-speed,omitempty"`
+	LACP                              *AggregatedEtherOptionsLACP `xml:"lacp"`
+	Loopback                          bool                        `xml:"loopback,omitempty"`
+	NoLoopback                        bool                        `xml:"no-loopback,omitempty"`
+	FlowControl                       bool                        `xml:"flow-control,omitempty"`
+	NoFlowControl                     bool                        `xml:"no-flow-control,omitempty"`
+	NoSourceFiltering                 bool                        `xml:"no-source-filtering,omitempty"`
+	PadToMinimumFrameSize             bool                        `xml:"pad-to-minimum-frame-size,omitempty"`
+	LogicalInterfaceChassisRedundancy bool                        `xml:"logical-interface-chassis-redundancy,omitempty"`
+	LogicalInterfaceFpcRedundancy     bool                        `xml:"logical-interface-fpc-redundancy,omitempty"`
 }
 
-type LACP struct {
-	XMLName  xml.Name `xml:"lacp"`
-	Periodic string   `xml:"periodic,omitempty"`
+type AggregatedEtherOptionsLACP struct {
+	XMLName      xml.Name `xml:"lacp"`
+	Periodic     string   `xml:"periodic,omitempty"`   // "fast"
+	SyncReset    string   `xml:"sync-reset,omitempty"` // "enable" | "disable"
+	Active       bool     `xml:"active,omitempty"`
+	Passive      bool     `xml:"passive,omitempty"`
+	AcceptData   bool     `xml:"accept-data,omitempty"`
+	FastFailover bool     `xml:"fast-failover,omitempty"`
+	ForceUp      bool     `xml:"force-up,omitempty"`
 }
 
 type GigetherOptions struct {
-	XMLName xml.Name `xml:"gigether-options"`
+	XMLName                  xml.Name                        `xml:"gigether-options"`
+	Options8023ad            *GigetherOptionsIEEE8023ad      `xml:"ieee-802.3ad"`
+	AutoNegotiation          *GigetherOptionsAutoNegotiation `xml:"auto-negotiation"`
+	IgnoreL3Incompletes      bool                            `xml:"ignore-l3-incompletes,omitempty"`
+	AsynchronousNotification bool                            `xml:"asynchronous-notification,omitempty"`
+	Loopback                 bool                            `xml:"loopback,omitempty"`
+	NoLoopback               bool                            `xml:"no-loopback,omitempty"`
+	NoFlowControl            bool                            `xml:"no-flow-control,omitempty"`
+	NoSourceFiltering        bool                            `xml:"no-source-filtering,omitempty"`
+	NoAutoNegotiation        bool                            `xml:"no-auto-negotiation,omitempty"`
+	NoAutoMdix               bool                            `xml:"no-auto-mdix,omitempty"`
+	PadToMinimumFrameSize    bool                            `xml:"pad-to-minimum-frame-size,omitempty"`
+}
+
+type GigetherOptionsIEEE8023ad struct {
+	XMLName   xml.Name             `xml:"ieee-802.3ad"`
+	Bundle    string               `xml:"bundle,omitempty"`
+	LinkIndex int                  `xml:"link-index,omitempty"` // Desired child link index within the Aggregated Interface (0..63)
+	Primary   bool                 `xml:"primary,omitempty"`
+	Backup    bool                 `xml:"backup,omitempty"`
+	LACP      *GigetherOptionsLACP `xml:"lacp"`
+}
+
+type GigetherOptionsLACP struct {
+	XMLName      xml.Name `xml:"lacp"`
+	PortPriority int      `xml:"port-priority,omitempty"` // Priority of the port (0 ... 65535)
+}
+
+type GigetherOptionsAutoNegotiation struct {
+	XMLName     xml.Name `xml:"auto-negotiation"`
+	RemoteFault string   `xml:"remote-fault,omitempty"` // "local-interface-online" | "local-interface-offline"
 }
 
 type OpticsOptions struct {

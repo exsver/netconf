@@ -6,6 +6,7 @@ type Chassis struct {
 	XMLName           xml.Name           `xml:"chassis"`
 	AggregatedDevices *AggregatedDevices `xml:"aggregated-devices,omitempty"`
 	Alarm             *Alarm             `xml:"alarm,omitempty"`
+	NetworkServices   string             `xml:"network-services,omitempty"`
 }
 
 type AggregatedDevices struct {
@@ -19,11 +20,17 @@ type Ethernet struct {
 }
 
 type Alarm struct {
-	XMLName            xml.Name            `xml:"alarm"`
-	ManagementEthernet *ManagementEthernet `xml:"management-ethernet"`
+	XMLName            xml.Name                 `xml:"alarm"`
+	ManagementEthernet *AlarmManagementEthernet `xml:"management-ethernet"`
+	Ethernet           *AlarmEthernet           `xml:"ethernet"`
 }
 
-type ManagementEthernet struct {
+type AlarmManagementEthernet struct {
 	XMLName  xml.Name `xml:"management-ethernet"`
-	LinkDown string   `xml:"link-down"` // <link-down>ignore</link-down>
+	LinkDown string   `xml:"link-down"` // ignore | red | yellow
+}
+
+type AlarmEthernet struct {
+	XMLName  xml.Name `xml:"ethernet"`
+	LinkDown string   `xml:"link-down"` // ignore | red | yellow
 }
