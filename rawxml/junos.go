@@ -10,6 +10,7 @@ var XMLMessagesJunOS = map[string]string{
 	"GetInterfacesInformation": `<rpc><get-interface-information><terse/></get-interface-information></rpc>`,
 	"GetVRRPInformation":       `<rpc><get-vrrp-information/></rpc>`,
 	"GetARP":                   `<rpc><get-arp-table-information/></rpc>`,
+	"ClearARP":                 `<rpc><clear-arp-table><hostname>10.0.0.100</hostname></clear-arp-table></rpc>`, // run clear arp hostname 10.0.0.100
 	"Commit":                   `<rpc><commit/></rpc>`,
 	"Reboot":                   `<rpc><request-reboot/></rpc>`,
 	"GetRunningConfig": `<rpc>
@@ -101,9 +102,8 @@ var XMLMessagesJunOS = map[string]string{
                           </get-config>
                          </rpc>`,
 	"GetConfiguration": `<rpc>
-                   <get-configuration format="set" inherit="defaults">
-                    </get-configuration>
-                 </rpc>`, //format="( json | set | text | xml )"
+                           <get-configuration format="set" inherit="defaults"></get-configuration>
+                         </rpc>`, //format="( json | set | text | xml )"
 	"LoadConfigurationText": `<rpc>
                            <load-configuration action="merge" format="text">
                              <configuration-text>

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"strings"
 
 	"github.com/exsver/netconf/junos"
 	"github.com/exsver/netconf/netconf"
@@ -24,7 +23,7 @@ func main() {
 	}
 
 	for _, ARP := range ARPTable.ARPTableEntries {
-		fmt.Printf("%s %s %s\n", strings.TrimSpace(ARP.MACAddress), strings.TrimSpace(ARP.IPAddress), strings.TrimSpace(ARP.InterfaceName))
+		fmt.Printf("%s %s %s\n", ARP.MACAddress, ARP.IPAddress, ARP.InterfaceName)
 	}
 
 	fmt.Printf("Total entries: %v", ARPTable.ARPEntryCount)

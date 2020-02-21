@@ -17,9 +17,9 @@ type RPCReply struct {
 
 type RPCError struct {
 	XMLName       xml.Name     `xml:"rpc-error"`
-	ErrorType     string       `xml:"error-type"` //RFC6241: transport|rpc|protocol|application
+	ErrorType     string       `xml:"error-type"` // RFC6241: transport|rpc|protocol|application
 	ErrorTag      string       `xml:"error-tag"`
-	ErrorSeverity string       `xml:"error-severity"` //RFC6241: error|warning
+	ErrorSeverity string       `xml:"error-severity"` // RFC6241: error|warning
 	ErrorAppTag   string       `xml:"error-app-tag"`
 	ErrorPath     string       `xml:"error-path"`
 	ErrorMessage  string       `xml:"error-message"`
