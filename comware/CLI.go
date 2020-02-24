@@ -38,8 +38,8 @@ func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMod
 		return nil, err
 	}
 
-	if rpcReply.Error() != nil {
-		return nil, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return nil, rpcReply.GetErrors()
 	}
 
 	var cliResponse CLIResponse

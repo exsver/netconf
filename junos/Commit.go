@@ -30,8 +30,8 @@ func (targetDevice *TargetDevice) GetSystemCommit() ([]CommitHistoryItem, error)
 		return []CommitHistoryItem{}, err
 	}
 
-	if rpcReply.Error() != nil {
-		return []CommitHistoryItem{}, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return []CommitHistoryItem{}, rpcReply.GetErrors()
 	}
 
 	var history CommitHistory
@@ -68,8 +68,8 @@ func (targetDevice *TargetDevice) CommitCheck() (CommitResult, error) {
 		return CommitResult{}, err
 	}
 
-	if rpcReply.Error() != nil {
-		return CommitResult{}, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return CommitResult{}, rpcReply.GetErrors()
 	}
 
 	rpcReply.Content = netconf.ConvertToPairedTags(rpcReply.Content)
@@ -93,8 +93,8 @@ func (targetDevice *TargetDevice) Commit() (CommitResult, error) {
 		return CommitResult{}, err
 	}
 
-	if rpcReply.Error() != nil {
-		return CommitResult{}, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return CommitResult{}, rpcReply.GetErrors()
 	}
 
 	rpcReply.Content = netconf.ConvertToPairedTags(rpcReply.Content)

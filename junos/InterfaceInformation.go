@@ -57,8 +57,8 @@ func (targetDevice *TargetDevice) GetInterfaceInformation() ([]PhysicalInterface
 		return []PhysicalInterface{}, err
 	}
 
-	if rpcReply.Error() != nil {
-		return []PhysicalInterface{}, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return []PhysicalInterface{}, rpcReply.GetErrors()
 	}
 
 	rpcReply.Content = netconf.Normalize(rpcReply.Content)
@@ -175,8 +175,8 @@ func (targetDevice *TargetDevice) GetDiagnosticsOptics() ([]OpticsDiagnostics, e
 		return []OpticsDiagnostics{}, err
 	}
 
-	if rpcReply.Error() != nil {
-		return []OpticsDiagnostics{}, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return []OpticsDiagnostics{}, rpcReply.GetErrors()
 	}
 
 	rpcReply.Content = netconf.Normalize(rpcReply.Content)

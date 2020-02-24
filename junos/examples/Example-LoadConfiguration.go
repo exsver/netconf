@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/exsver/netconf/netconf"
 	"log"
 
 	"github.com/exsver/netconf/junos"
@@ -35,12 +36,33 @@ interfaces {
 */
 
 func main() {
-	sw, err := junos.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
+	netconf.LogLevel.Messages()
+
+	device, err := junos.NewTargetDevice("172.21.1.250", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	// Format Set
+	LoadConfiguarationSet(device)
+	LoadConfiguarationFormatXML(device)
+	LoadConfiguarationFormatText(device)
+}
+
+/*
+interfaces {
+    ae1 {
+        description testIface1;
+        vlan-tagging;
+        unit 101 {
+            vlan-id 101;
+            family inet {
+                address 10.100.1.1/24;
+            }
+        }
+    }
+}
+*/
+func LoadConfiguarationSet(device *junos.TargetDevice) {
 	configSet := `
 set interfaces ae1 description testIface1
 set interfaces ae1 vlan-tagging
@@ -48,22 +70,31 @@ set interfaces ae1 unit 101 vlan-id 101
 set interfaces ae1 unit 101 family inet address 10.100.1.1/24
 `
 
-	loadConfigurationResults, err := sw.LoadConfiguration("text", configSet, "set")
+	loadConfigurationResults, err := device.LoadConfiguration("text", configSet, "set")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	if loadConfigurationResults.Error.Error() != nil {
-		log.Fatalf("%s", loadConfigurationResults.Error.Error())
-	}
-
-	if !loadConfigurationResults.OK {
-		log.Fatalf("Format Set: Unknown status")
+	if loadConfigurationResults.GetErrors() != nil {
+		log.Fatalf("%s", loadConfigurationResults.GetErrors().Error())
 	}
 
 	fmt.Println("Format Set: load configuration successfully")
+}
 
-	// Format XML
+/*
+interfaces {
+    ae1 {
+        unit 102 {
+            vlan-id 102;
+            family inet {
+                address 10.100.2.1/24;
+            }
+        }
+    }
+}
+*/
+func LoadConfiguarationFormatXML(device *junos.TargetDevice) {
 	configXML := `
 <interfaces>
 	<interface>
@@ -82,23 +113,31 @@ set interfaces ae1 unit 101 family inet address 10.100.1.1/24
 	</interface>
 </interfaces>`
 
-	loadConfigurationResults, err = sw.LoadConfiguration("xml", configXML, "merge")
+	loadConfigurationResults, err := device.LoadConfiguration("xml", configXML, "merge")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	if loadConfigurationResults.Error.Error() != nil {
-		log.Fatalf("%s", loadConfigurationResults.Error.Error())
-	}
-
-	if !loadConfigurationResults.OK {
-		log.Fatalf("Format XML: Unknown status")
+	if loadConfigurationResults.GetErrors() != nil {
+		log.Fatalf("%s", loadConfigurationResults.GetErrors().Error())
 	}
 
 	fmt.Println("Format XML: load configuration successfully")
+}
 
-
-	// Format Text
+/*
+interfaces {
+    ae1 {
+        unit 103 {
+            vlan-id 103;
+            family inet {
+                address 10.100.3.1/24;
+            }
+        }
+    }
+}
+*/
+func LoadConfiguarationFormatText(device *junos.TargetDevice) {
 	configText := `
 interfaces {
     ae1 {
@@ -110,17 +149,13 @@ interfaces {
         }
     }
 }`
-	loadConfigurationResults, err = sw.LoadConfiguration("text", configText, "merge")
+	loadConfigurationResults, err := device.LoadConfiguration("text", configText, "merge")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	if loadConfigurationResults.Error.Error() != nil {
-		log.Fatalf("%s", loadConfigurationResults.Error.Error())
-	}
-
-	if !loadConfigurationResults.OK {
-		log.Fatalf("Format Text: Unknown status")
+	if loadConfigurationResults.GetErrors() != nil {
+		log.Fatalf("%s", loadConfigurationResults.GetErrors().Error())
 	}
 
 	fmt.Println("Format Text: load configuration successfully")

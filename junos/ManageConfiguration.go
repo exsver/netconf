@@ -52,8 +52,8 @@ func (targetDevice *TargetDevice) EditConfig(config *Config, operation string) e
 		return err
 	}
 
-	if rpcReply.Error() != nil {
-		return rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return rpcReply.GetErrors()
 	}
 
 	if !rpcReply.OK {
@@ -115,8 +115,8 @@ func (targetDevice *TargetDevice) GetConfig(source string, subtree string) (*Con
 		return nil, err
 	}
 
-	if rpcReply.Error() != nil {
-		return nil, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return nil, rpcReply.GetErrors()
 	}
 
 	var data Data
@@ -161,8 +161,8 @@ func (targetDevice *TargetDevice) GetConfiguration(format string) ([]byte, error
 		return nil, err
 	}
 
-	if rpcReply.Error() != nil {
-		return nil, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return nil, rpcReply.GetErrors()
 	}
 
 	if format == "xml" || format == "json" {
@@ -180,9 +180,27 @@ func (targetDevice *TargetDevice) GetConfiguration(format string) ([]byte, error
 }
 
 type LoadConfigurationResults struct {
-	XMLName xml.Name         `xml:"load-configuration-results"`
-	OK      bool             `xml:"ok"`
-	Error   netconf.RPCError `xml:"rpc-error"`
+	XMLName xml.Name           `xml:"load-configuration-results"`
+	OK      bool               `xml:"ok"`
+	Errors  []netconf.RPCError `xml:"rpc-error"`
+}
+
+func (results *LoadConfigurationResults) GetErrors() error {
+	if results.Errors == nil {
+		if !results.OK {  // OK not found in reply
+			return fmt.Errorf("unknown status: neither OK neither Errors not found in the reply")
+		}
+
+		return nil
+	}
+
+	var errString string
+
+	for _, rpcErr := range results.Errors {
+		errString = fmt.Sprintf("%s%s\n", errString, rpcErr.Error())
+	}
+
+	return fmt.Errorf("%s", errString)
 }
 
 // CLI equivalent:  rollback [0..49]
@@ -197,8 +215,8 @@ func (targetDevice *TargetDevice) LoadConfigurationRolback(rollback int) error {
 		return err
 	}
 
-	if rpcReply.Error() != nil {
-		return rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return rpcReply.GetErrors()
 	}
 
 	var loadConfigurationResults LoadConfigurationResults
@@ -210,8 +228,8 @@ func (targetDevice *TargetDevice) LoadConfigurationRolback(rollback int) error {
 		return err
 	}
 
-	if loadConfigurationResults.Error.Error() != nil {
-		return loadConfigurationResults.Error.Error()
+	if loadConfigurationResults.Errors != nil {
+		return loadConfigurationResults.GetErrors()
 	}
 
 	if !loadConfigurationResults.OK {
@@ -258,8 +276,8 @@ func (targetDevice *TargetDevice) LoadConfiguration(format, configuration, actio
 		return nil, err
 	}
 
-	if rpcReply.Error() != nil {
-		return nil, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return nil, rpcReply.GetErrors()
 	}
 
 	var loadConfigurationResults LoadConfigurationResults

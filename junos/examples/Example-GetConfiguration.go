@@ -16,6 +16,6 @@ func main() {
 	}
 	//Format: text | set | xml | json
 	config, _ := sw.GetConfiguration("xml")
-	fmt.Printf("%s", config)
 
+	fmt.Printf("%s", config)
 }

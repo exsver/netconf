@@ -218,7 +218,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 	}
 }
 
-func TestRPCReply_Error(t *testing.T) {
+func TestRPCReply_GetErrors(t *testing.T) {
 	cases := []struct {
 		caseDescription string
 		rpcReply        RPCReply
@@ -238,7 +238,7 @@ func TestRPCReply_Error(t *testing.T) {
 					},
 				},
 			},
-			err: errors.New("ERROR-MESSAGE: Some error message \n"),
+			err: errors.New("error-message: Some error message \n"),
 		},
 		{
 			caseDescription: "3",
@@ -255,7 +255,7 @@ func TestRPCReply_Error(t *testing.T) {
 					},
 				},
 			},
-			err: errors.New("ERROR-TYPE: protocol ERROR-TAG: operation-failed ERROR-SEVERITY: error ERROR-PATH: [edit interfaces xe-0/0/1] ERROR-MESSAGE: VLAN-ID can only be specified on tagged ethernet interfaces ERROR-INFO: <bad-element>unit 0</bad-element> \n"),
+			err: errors.New("error-type: protocol error-tag: operation-failed error-severity: error error-path: [edit interfaces xe-0/0/1] error-message: VLAN-ID can only be specified on tagged ethernet interfaces error-info: <bad-element>unit 0</bad-element> \n"),
 		},
 		{
 			caseDescription: "4",
@@ -278,12 +278,12 @@ func TestRPCReply_Error(t *testing.T) {
 					},
 				},
 			},
-			err: errors.New("ERROR-TYPE: protocol ERROR-TAG: operation-failed ERROR-SEVERITY: error ERROR-PATH: [edit interfaces xe-0/0/1] ERROR-MESSAGE: VLAN-ID can only be specified on tagged ethernet interfaces ERROR-INFO: <bad-element>unit 0</bad-element> \n" +
-				"ERROR-TYPE: protocol ERROR-TAG: operation-failed ERROR-SEVERITY: error ERROR-MESSAGE: configuration check-out failed \n"),
+			err: errors.New("error-type: protocol error-tag: operation-failed error-severity: error error-path: [edit interfaces xe-0/0/1] error-message: VLAN-ID can only be specified on tagged ethernet interfaces error-info: <bad-element>unit 0</bad-element> \n" +
+				"error-type: protocol error-tag: operation-failed error-severity: error error-message: configuration check-out failed \n"),
 		},
 	}
 	for _, testCase := range cases {
-		out := testCase.rpcReply.Error()
+		out := testCase.rpcReply.GetErrors()
 		if out.Error() != testCase.err.Error() {
 			t.Errorf("CaseDescription: %s\n Got :\n %s\n Want:\n %s", testCase.caseDescription, []byte(out.Error()), []byte(testCase.err.Error()))
 		}

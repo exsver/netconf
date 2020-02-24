@@ -67,7 +67,7 @@ type ClearARPTableResult struct {
 	ClearSuccess bool     `xml:"clear-success"`
 }
 
-//
+// CLI equivalent: run clear arp hostname <hostname>
 func (targetDevice *TargetDevice) ClearARPHostname(hostname string) (ClearARPTableResults, error) {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(fmt.Sprintf("<clear-arp-table><hostname>%s</hostname></clear-arp-table>", hostname)),

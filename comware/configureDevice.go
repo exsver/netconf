@@ -62,8 +62,8 @@ func (targetDevice *TargetDevice) Configure(config Top, operation string) error 
 		return err
 	}
 
-	if rpcReply.Error() != nil {
-		return rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return rpcReply.GetErrors()
 	}
 
 	if !rpcReply.OK {
@@ -84,8 +84,8 @@ func (targetDevice *TargetDevice) RetrieveData(request netconf.RPCMessage) (data
 		return data, err
 	}
 
-	if rpcReply.Error() != nil {
-		return data, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return data, rpcReply.GetErrors()
 	}
 
 	err = xml.Unmarshal(rpcReply.Content, &data)
@@ -104,8 +104,8 @@ func (targetDevice *TargetDevice) PerformAction(request netconf.RPCMessage) erro
 		return err
 	}
 
-	if rpcReply.Error() != nil {
-		return rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return rpcReply.GetErrors()
 	}
 
 	return nil

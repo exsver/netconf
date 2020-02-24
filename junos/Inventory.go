@@ -65,8 +65,8 @@ func (targetDevice *TargetDevice) GetChassisHardware() (ChassisInventory, error)
 		return ChassisInventory{}, err
 	}
 
-	if rpcReply.Error() != nil {
-		return ChassisInventory{}, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return ChassisInventory{}, rpcReply.GetErrors()
 	}
 
 	var inventory ChassisInventory
@@ -117,8 +117,8 @@ func (targetDevice *TargetDevice) GetSystemInformation() (SystemInformation, err
 		return SystemInformation{}, err
 	}
 
-	if rpcReply.Error() != nil {
-		return SystemInformation{}, rpcReply.Error()
+	if rpcReply.GetErrors() != nil {
+		return SystemInformation{}, rpcReply.GetErrors()
 	}
 
 	var systemInformation SystemInformation

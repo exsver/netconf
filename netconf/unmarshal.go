@@ -3,7 +3,6 @@ package netconf
 import (
 	"bytes"
 	"encoding/xml"
-	"errors"
 	"fmt"
 )
 
@@ -17,9 +16,9 @@ type RPCReply struct {
 
 type RPCError struct {
 	XMLName       xml.Name     `xml:"rpc-error"`
-	ErrorType     string       `xml:"error-type"` // RFC6241: transport|rpc|protocol|application
-	ErrorTag      string       `xml:"error-tag"`
-	ErrorSeverity string       `xml:"error-severity"` // RFC6241: error|warning
+	ErrorType     string       `xml:"error-type"`     // RFC6241: "transport" | "rpc" | "protocol" | "application"
+	ErrorTag      string       `xml:"error-tag"`      // RFC6241: "in-use" | "invalid-value" | "bad-element" | ...   https://tools.ietf.org/html/rfc6241#appendix-A
+	ErrorSeverity string       `xml:"error-severity"` // RFC6241: "error" | "warning"
 	ErrorAppTag   string       `xml:"error-app-tag"`
 	ErrorPath     string       `xml:"error-path"`
 	ErrorMessage  string       `xml:"error-message"`
@@ -42,83 +41,51 @@ func UnmarshalRPCReply(raw []byte) (rpcReply *RPCReply, err error) {
 	return rpcReply, err
 }
 
-func (rpcReply *RPCReply) Error() error {
-	if len(rpcReply.Errors) != 0 {
-		errorString := ""
-
-		for _, v := range rpcReply.Errors {
-			if v.ErrorType != "" {
-				errorString = fmt.Sprintf("%sERROR-TYPE: %s ", errorString, v.ErrorType)
-			}
-
-			if v.ErrorTag != "" {
-				errorString = fmt.Sprintf("%sERROR-TAG: %s ", errorString, v.ErrorTag)
-			}
-
-			if v.ErrorSeverity != "" {
-				errorString = fmt.Sprintf("%sERROR-SEVERITY: %s ", errorString, v.ErrorSeverity)
-			}
-
-			if v.ErrorAppTag != "" {
-				errorString = fmt.Sprintf("%sERROR-APP-TAG: %s ", errorString, v.ErrorAppTag)
-			}
-
-			if v.ErrorPath != "" {
-				errorString = fmt.Sprintf("%sERROR-PATH: %s ", errorString, v.ErrorPath)
-			}
-
-			if v.ErrorMessage != "" {
-				errorString = fmt.Sprintf("%sERROR-MESSAGE: %s ", errorString, v.ErrorMessage)
-			}
-
-			if v.ErrorInfo.Info != nil {
-				errorString = fmt.Sprintf("%sERROR-INFO: %s ", errorString, v.ErrorInfo.Info)
-			}
-
-			errorString = fmt.Sprintf("%s\n", errorString)
-		}
-
-		return errors.New(errorString)
+func (rpcReply *RPCReply) GetErrors() error {
+	if rpcReply.Errors == nil {
+		return nil
 	}
 
-	return nil
+	var errString string
+
+	for _, rpcErr := range rpcReply.Errors {
+		errString = fmt.Sprintf("%s%s\n", errString, rpcErr.Error())
+	}
+
+	return fmt.Errorf("%s", errString)
 }
 
-func (rpcError *RPCError) Error() error {
+func (rpcError *RPCError) Error() string {
 	errorString := ""
 	if rpcError.ErrorType != "" {
-		errorString = fmt.Sprintf("%sERROR-TYPE: %s ", errorString, rpcError.ErrorType)
+		errorString = fmt.Sprintf("%serror-type: %s ", errorString, rpcError.ErrorType)
 	}
 
 	if rpcError.ErrorTag != "" {
-		errorString = fmt.Sprintf("%sERROR-TAG: %s ", errorString, rpcError.ErrorTag)
+		errorString = fmt.Sprintf("%serror-tag: %s ", errorString, rpcError.ErrorTag)
 	}
 
 	if rpcError.ErrorSeverity != "" {
-		errorString = fmt.Sprintf("%sERROR-SEVERITY: %s ", errorString, rpcError.ErrorSeverity)
+		errorString = fmt.Sprintf("%serror-severity: %s ", errorString, rpcError.ErrorSeverity)
 	}
 
 	if rpcError.ErrorAppTag != "" {
-		errorString = fmt.Sprintf("%sERROR-APP-TAG: %s ", errorString, rpcError.ErrorAppTag)
+		errorString = fmt.Sprintf("%serror-app-tag: %s ", errorString, rpcError.ErrorAppTag)
 	}
 
 	if rpcError.ErrorPath != "" {
-		errorString = fmt.Sprintf("%sERROR-PATH: %s ", errorString, rpcError.ErrorPath)
+		errorString = fmt.Sprintf("%serror-path: %s ", errorString, rpcError.ErrorPath)
 	}
 
 	if rpcError.ErrorMessage != "" {
-		errorString = fmt.Sprintf("%sERROR-MESSAGE: %s ", errorString, rpcError.ErrorMessage)
+		errorString = fmt.Sprintf("%serror-message: %s ", errorString, rpcError.ErrorMessage)
 	}
 
 	if rpcError.ErrorInfo.Info != nil {
-		errorString = fmt.Sprintf("%sERROR-INFO: %s ", errorString, rpcError.ErrorInfo.Info)
+		errorString = fmt.Sprintf("%serror-info: %s ", errorString, rpcError.ErrorInfo.Info)
 	}
 
-	if errorString != "" {
-		return errors.New(errorString)
-	}
-
-	return nil
+	return errorString
 }
 
 type hello struct {
