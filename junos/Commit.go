@@ -14,9 +14,9 @@ type CommitHistory struct {
 type CommitHistoryItem struct {
 	SequenceNumber int    `xml:"sequence-number"`
 	User           string `xml:"user"`
-	Client         string `xml:"client"` // cli|netconf|other
+	Client         string `xml:"client"` // "cli" | "netconf" | "other"
 	DateTime       string `xml:"date-time"`
-	Comment        string `xml:"comment"`
+	Log            string `xml:"log"` // comment
 }
 
 //CLI equivalent: show system commit
@@ -27,11 +27,11 @@ func (targetDevice *TargetDevice) GetSystemCommit() ([]CommitHistoryItem, error)
 
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
-		return []CommitHistoryItem{}, err
+		return nil, err
 	}
 
 	if rpcReply.GetErrors() != nil {
-		return []CommitHistoryItem{}, rpcReply.GetErrors()
+		return nil, rpcReply.GetErrors()
 	}
 
 	var history CommitHistory

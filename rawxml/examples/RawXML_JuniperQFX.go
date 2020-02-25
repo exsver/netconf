@@ -18,12 +18,12 @@ func main() {
 		Port: 830,
 		SSHConfig: ssh.ClientConfig{
 			Config: ssh.Config{
-				Ciphers: []string{"aes128-ctr", "hmac-sha1"}, //aes128-cbc for HP5940  aes128-ctr for juniper QFX5100 or juniper MX
+				Ciphers: []string{"aes128-ctr", "hmac-sha1"}, // aes128-cbc for HP5940  aes128-ctr for juniper QFX5100 or juniper MX
 			},
 			User:            "netconf-user",
 			Auth:            []ssh.AuthMethod{ssh.Password("netconf-password")},
 			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-			Timeout:         30 * time.Second,
+			Timeout:         120 * time.Second,
 		},
 	}
 

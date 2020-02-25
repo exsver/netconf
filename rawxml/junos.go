@@ -6,13 +6,17 @@ var XMLMessagesJunOS = map[string]string{
 	"GetChassisInventory":      `<rpc><get-chassis-inventory/></rpc>`,
 	"GetSoftwareInformation":   `<rpc><get-software-information/></rpc>`,
 	"GetSystemInformation":     `<rpc><get-system-information/></rpc>`,
+	"GetSystemStatistics":      `<rpc><get-statistics-information/></rpc>`,   // run show system statistics
+	"GetSystemUsers":           `<rpc><get-system-users-information/></rpc>`, // run show system users
+	"GetAlarmInformation":      `<rpc><get-alarm-information/></rpc>`,        // run show chassis alarm
 	"GetChassisMacAddresses":   `<rpc><get-chassis-mac-addresses/></rpc>`,
 	"GetInterfacesInformation": `<rpc><get-interface-information><terse/></get-interface-information></rpc>`,
 	"GetVRRPInformation":       `<rpc><get-vrrp-information/></rpc>`,
-	"GetARP":                   `<rpc><get-arp-table-information/></rpc>`,
+	"GetARPTable":              `<rpc><get-arp-table-information/></rpc>`,
 	"ClearARP":                 `<rpc><clear-arp-table><hostname>10.0.0.100</hostname></clear-arp-table></rpc>`, // run clear arp hostname 10.0.0.100
 	"Commit":                   `<rpc><commit/></rpc>`,
 	"Reboot":                   `<rpc><request-reboot/></rpc>`,
+	"OpenConfigurationPrivate": `<rpc><open-configuration><private/></open-configuration></rpc>`,
 	"GetRunningConfig": `<rpc>
                             <get-config>
                               <source>
@@ -149,6 +153,15 @@ vlans {
                                <interface-name>et-0/0/0</interface-name>
                              </get-interface-optics-diagnostics-information>
                            </rpc>`,
+	"GetFirewallCounter": `<rpc>
+		<get-firewall-counter-information>
+			<countername>udp-drop-counter</countername>
+			<filter>testFilter</filter>
+		</get-firewall-counter-information></rpc>`, // run show firewall counter udp-drop-counter filter testFilter
+	"GetFirewallFilterInformation": `<rpc>
+		<get-firewall-filter-information>
+			<filtername>testFilter</filtername>
+		</get-firewall-filter-information></rpc>`, // run show firewall filter testFilter
 	"Ping": `<rpc>
                <ping>
                  <host>8.8.8.8</host>
