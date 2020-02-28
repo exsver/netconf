@@ -12,7 +12,7 @@ import (
 func main() {
 	netconf.LogLevel.Messages()
 
-	device, err := junos.NewTargetDevice("172.21.1.250", "netconf-user", "netconf-password")
+	device, err := junos.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatal(err)
 	}

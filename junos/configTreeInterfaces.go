@@ -20,19 +20,30 @@ type Iface struct {
 }
 
 type Unit struct {
-	XMLName xml.Name    `xml:"unit"`
-	Name    int         `xml:"name"`
-	Family  *UnitFamily `xml:"family"`
+	XMLName           xml.Name    `xml:"unit"`
+	Name              string      `xml:"name"`
+	Description       string      `xml:"description,omitempty"`
+	Encapsulation     string      `xml:"encapsulation,omitempty"`
+	VlanIDList        string      `xml:"vlan-id-list,omitempty"`
+	VlanID            int         `xml:"vlan-id,omitempty"`
+	NativeInnerVlanID int         `xml:"native-inner-vlan-id,omitempty"`
+	Disable           bool        `xml:"disable,omitempty"`
+	Traps             bool        `xml:"traps,omitempty"`
+	NoTraps           bool        `xml:"no-traps,omitempty"`
+	Family            *UnitFamily `xml:"family"`
+	Filter            *UnitFilter `xml:"filter"` // Filters to apply to all families configured under this logical interface
 }
 
 type UnitFamily struct {
-	XMLName xml.Name        `xml:"family"`
-	Inet    *UnitFamilyInet `xml:"inet"`
+	XMLName xml.Name         `xml:"family"`
+	Inet    *UnitFamilyInet  `xml:"inet"`
+	Inet6   *UnitFamilyInet6 `xml:"inet6"`
 }
 
 type UnitFamilyInet struct {
-	XMLName xml.Name               `xml:"inet"`
-	Address *UnitFamilyInetAddress `xml:"address"`
+	XMLName xml.Name                `xml:"inet"`
+	Address []UnitFamilyInetAddress `xml:"address"`
+	Filter  *UnitFamilyFilter       `xml:"filter"`
 }
 
 type UnitFamilyInetAddress struct {
@@ -70,6 +81,50 @@ type VRRPGroup struct {
 type VRRPGroupPreempt struct {
 	XMLName  xml.Name `xml:"preempt"`
 	HoldTime int      `xml:"hold-time"` // Preemption hold time (0..3600 seconds)
+}
+
+type UnitFilter struct {
+	XMLName xml.Name `xml:"filter"`
+	Input   string   `xml:"input,omitempty"`  // Name of filter applied to received packets
+	Output  string   `xml:"output,omitempty"` // Name of filter applied to transmitted packets
+}
+
+type UnitFamilyFilter struct {
+	XMLName    xml.Name            `xml:"filter"`
+	InputList  []string            `xml:"input-list,omitempty"`
+	OutputList []string            `xml:"output-list,omitempty"`
+	Input      *FamilyFilterInput  `xml:"input"`
+	Output     *FamilyFilterOutput `xml:"output"`
+}
+
+type FamilyFilterInput struct {
+	XMLName    xml.Name `xml:"input"`
+	FilterName string   `xml:"filter-name,omitempty"`
+}
+
+type FamilyFilterOutput struct {
+	XMLName    xml.Name `xml:"output"`
+	FilterName string   `xml:"filter-name,omitempty"`
+}
+
+type UnitFamilyInet6 struct {
+	XMLName xml.Name                 `xml:"inet6"`
+	Address []UnitFamilyInet6Address `xml:"address"`
+}
+
+type UnitFamilyInet6Address struct {
+	XMLName   xml.Name         `xml:"address"`
+	Name      string           `xml:"name"`
+	VRRPGroup []VRRPInet6Group `xml:"vrrp-inet6-group,omitempty"`
+}
+
+type VRRPInet6Group struct {
+	XMLName                 xml.Name `xml:"vrrp-inet6-group"`
+	Name                    string   `xml:"name"`
+	VirtualLinkLocalAddress string   `xml:"virtual-link-local-address,omitempty"`
+	VirtualAddress          []string `xml:"virtual-inet6-address,omitempty"`
+	Priority                int      `xml:"priority,omitempty"`
+	AcceptData              bool     `xml:"accept-data,omitempty"`
 }
 
 type AggregatedEtherOptions struct {
@@ -134,4 +189,29 @@ type GigetherOptionsAutoNegotiation struct {
 
 type OpticsOptions struct {
 	XMLName xml.Name `xml:"optics-options"`
+}
+
+func (iface *Iface) ConvertToConfig() *Config {
+	return &Config{
+		Configuration: &Configuration{
+			Interfaces: &Interfaces{
+				Interfaces: []Iface{*iface},
+			},
+		},
+	}
+}
+
+func (unit *Unit) ConvertToConfig(ifaceName string) *Config {
+	return &Config{
+		Configuration: &Configuration{
+			Interfaces: &Interfaces{
+				Interfaces: []Iface{
+					{
+						Name:  ifaceName,
+						Units: []Unit{*unit},
+					},
+				},
+			},
+		},
+	}
 }
