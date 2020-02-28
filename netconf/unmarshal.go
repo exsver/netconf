@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
+	"strings"
 )
 
 type RPCReply struct {
@@ -52,7 +53,7 @@ func (rpcReply *RPCReply) GetErrors() error {
 		errString = fmt.Sprintf("%s%s\n", errString, rpcErr.Error())
 	}
 
-	return fmt.Errorf("%s", errString)
+	return fmt.Errorf("%s", strings.TrimSpace(errString))
 }
 
 func (rpcError *RPCError) Error() string {
@@ -86,6 +87,10 @@ func (rpcError *RPCError) Error() string {
 	}
 
 	return errorString
+}
+
+func (rpcError *RPCError) IsWarning() bool {
+	return strings.ToLower(rpcError.ErrorSeverity) == "warning"
 }
 
 type hello struct {

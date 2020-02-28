@@ -347,7 +347,9 @@ func TestConvertToSelfClosingTag(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
+	for _, testCase := range tests {
+		tt := testCase
+
 		t.Run(tt.name, func(t *testing.T) {
 			if got := ConvertToSelfClosingTag(tt.in); !reflect.DeepEqual(got, tt.out) {
 				t.Errorf("ConvertToSelfClosingTag() = %v, want %v", got, tt.out)

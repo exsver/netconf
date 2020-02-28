@@ -187,7 +187,7 @@ type LoadConfigurationResults struct {
 
 func (results *LoadConfigurationResults) GetErrors() error {
 	if results.Errors == nil {
-		if !results.OK {  // OK not found in reply
+		if !results.OK { // OK not found in reply
 			return fmt.Errorf("unknown status: neither OK neither Errors not found in the reply")
 		}
 
@@ -290,4 +290,36 @@ func (targetDevice *TargetDevice) LoadConfiguration(format, configuration, actio
 	}
 
 	return &loadConfigurationResults, nil
+}
+
+func (targetDevice *TargetDevice) OpenConfigurationPrivate() (string, error) {
+	return targetDevice.OpenConfiguration("private")
+}
+
+func (targetDevice *TargetDevice) OpenConfiguration(mode string) (string, error) {
+	request := netconf.RPCMessage{
+		InnerXML: []byte(fmt.Sprintf(`<open-configuration><%s/></open-configuration>`, mode)),
+	}
+
+	if targetDevice.NetconfSession == nil {
+		return "", fmt.Errorf("open-configuration: cannot execute RPC, you need to open a netconf session first")
+	}
+
+	rpcReply, err := targetDevice.Exec(request, "")
+	if err != nil {
+		return "", err
+	}
+
+	var openConfigurationString string
+
+	// loop for errors in rpcReply
+	for _, rpcError := range rpcReply.Errors {
+		if !rpcError.IsWarning() {
+			return "", rpcReply.GetErrors()
+		}
+
+		openConfigurationString = fmt.Sprintf("%s %s", openConfigurationString, rpcError.Error())
+	}
+
+	return openConfigurationString, nil
 }

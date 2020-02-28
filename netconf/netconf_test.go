@@ -238,7 +238,7 @@ func TestRPCReply_GetErrors(t *testing.T) {
 					},
 				},
 			},
-			err: errors.New("error-message: Some error message \n"),
+			err: errors.New("error-message: Some error message"),
 		},
 		{
 			caseDescription: "3",
@@ -255,7 +255,7 @@ func TestRPCReply_GetErrors(t *testing.T) {
 					},
 				},
 			},
-			err: errors.New("error-type: protocol error-tag: operation-failed error-severity: error error-path: [edit interfaces xe-0/0/1] error-message: VLAN-ID can only be specified on tagged ethernet interfaces error-info: <bad-element>unit 0</bad-element> \n"),
+			err: errors.New("error-type: protocol error-tag: operation-failed error-severity: error error-path: [edit interfaces xe-0/0/1] error-message: VLAN-ID can only be specified on tagged ethernet interfaces error-info: <bad-element>unit 0</bad-element>"),
 		},
 		{
 			caseDescription: "4",
@@ -279,7 +279,7 @@ func TestRPCReply_GetErrors(t *testing.T) {
 				},
 			},
 			err: errors.New("error-type: protocol error-tag: operation-failed error-severity: error error-path: [edit interfaces xe-0/0/1] error-message: VLAN-ID can only be specified on tagged ethernet interfaces error-info: <bad-element>unit 0</bad-element> \n" +
-				"error-type: protocol error-tag: operation-failed error-severity: error error-message: configuration check-out failed \n"),
+				"error-type: protocol error-tag: operation-failed error-severity: error error-message: configuration check-out failed"),
 		},
 	}
 	for _, testCase := range cases {
