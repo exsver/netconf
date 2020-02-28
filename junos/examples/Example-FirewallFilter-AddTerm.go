@@ -8,12 +8,12 @@ import (
 )
 
 /*
+set firewall family inet filter testFilterFamilyInet term accept then accept
+
 test-mx80# show firewall family inet filter testFilterFamilyInet
 term accept {
     then accept;
 }
-
-set firewall family inet filter testFilterFamilyInet term accept then accept
 */
 
 func main() {
