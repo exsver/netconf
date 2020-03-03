@@ -34,7 +34,7 @@ func main() {
 			},
 		},
 		Then: &junos.FilterThen{
-			Discard:&junos.FilterThenDiscard{},
+			Discard: &junos.FilterThenDiscard{},
 		},
 	}
 
@@ -50,8 +50,8 @@ func main() {
 	// edit firewall family inet filter testFilterFamilyInet
 	// insert term drop10 before term accept
 	term1 = junos.Term{
-		Name:           "drop10",
-		InsertPosition: "first",
+		Name:                  "drop10",
+		NetconfInsertPosition: "first",
 	}
 
 	err = device.EditConfig(term1.ConvertToConfig("inet", "testFilterFamilyInet"), "merge")
@@ -69,7 +69,7 @@ func main() {
 			},
 		},
 		Then: &junos.FilterThen{
-			Discard:&junos.FilterThenDiscard{},
+			Discard: &junos.FilterThenDiscard{},
 		},
 	}
 
@@ -81,9 +81,9 @@ func main() {
 	}
 
 	term2 = junos.Term{
-		Name: "drop172",
-		InsertPosition:"after",
-		InsertPositionName:"drop10",
+		Name:                      "drop172",
+		NetconfInsertPosition:     "after",
+		NetconfInsertPositionName: "drop10",
 	}
 
 	err = device.EditConfig(term2.ConvertToConfig("inet", "testFilterFamilyInet"), "merge")
@@ -92,29 +92,29 @@ func main() {
 	}
 
 	/*
-	test-mx80# show firewall family inet filter testFilterFamilyInet
-	term drop10 {
-	    from {
-	        destination-address {
-	            10.0.0.0/8;
-	        }
-	    }
-	    then {
-	        discard;
-	    }
-	}
-	term drop172 {
-	    from {
-	        destination-address {
-	            172.16.0.0/12;
-	        }
-	    }
-	    then {
-	        discard;
-	    }
-	}
-	term accept {
-	    then accept;
-	}
+		test-mx80# show firewall family inet filter testFilterFamilyInet
+		term drop10 {
+		    from {
+		        destination-address {
+		            10.0.0.0/8;
+		        }
+		    }
+		    then {
+		        discard;
+		    }
+		}
+		term drop172 {
+		    from {
+		        destination-address {
+		            172.16.0.0/12;
+		        }
+		    }
+		    then {
+		        discard;
+		    }
+		}
+		term accept {
+		    then accept;
+		}
 	*/
 }
