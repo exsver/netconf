@@ -9,6 +9,7 @@ type Interfaces struct {
 
 type Iface struct {
 	XMLName                xml.Name                `xml:"interface"`
+	NetconfConfigOperation string                  `xml:"operation,attr,omitempty"`
 	Name                   string                  `xml:"name"`
 	Description            string                  `xml:"description,omitempty"`
 	Encapsulation          string                  `xml:"encapsulation,omitempty"`
@@ -20,18 +21,19 @@ type Iface struct {
 }
 
 type Unit struct {
-	XMLName           xml.Name    `xml:"unit"`
-	Name              string      `xml:"name"`
-	Description       string      `xml:"description,omitempty"`
-	Encapsulation     string      `xml:"encapsulation,omitempty"`
-	VlanIDList        string      `xml:"vlan-id-list,omitempty"`
-	VlanID            int         `xml:"vlan-id,omitempty"`
-	NativeInnerVlanID int         `xml:"native-inner-vlan-id,omitempty"`
-	Disable           bool        `xml:"disable,omitempty"`
-	Traps             bool        `xml:"traps,omitempty"`
-	NoTraps           bool        `xml:"no-traps,omitempty"`
-	Family            *UnitFamily `xml:"family"`
-	Filter            *UnitFilter `xml:"filter"` // Filters to apply to all families configured under this logical interface
+	XMLName                xml.Name    `xml:"unit"`
+	NetconfConfigOperation string      `xml:"operation,attr,omitempty"`
+	Name                   string      `xml:"name"`
+	Description            string      `xml:"description,omitempty"`
+	Encapsulation          string      `xml:"encapsulation,omitempty"`
+	VlanIDList             string      `xml:"vlan-id-list,omitempty"`
+	VlanID                 int         `xml:"vlan-id,omitempty"`
+	NativeInnerVlanID      int         `xml:"native-inner-vlan-id,omitempty"`
+	Disable                bool        `xml:"disable,omitempty"`
+	Traps                  bool        `xml:"traps,omitempty"`
+	NoTraps                bool        `xml:"no-traps,omitempty"`
+	Family                 *UnitFamily `xml:"family"`
+	Filter                 *UnitFilter `xml:"filter"` // Filters to apply to all families configured under this logical interface
 }
 
 type UnitFamily struct {
@@ -47,13 +49,14 @@ type UnitFamilyInet struct {
 }
 
 type UnitFamilyInetAddress struct {
-	XMLName   xml.Name                   `xml:"address"`
-	Name      string                     `xml:"name"`
-	Broadcast string                     `xml:"broadcast,omitempty"`
-	Primary   bool                       `xml:"primary,omitempty"`
-	Preferred bool                       `xml:"preferred,omitempty"`
-	ARP       []UnitFamilyInetAddressARP `xml:"arp,omitempty"`
-	VRRPGroup []VRRPGroup                `xml:"vrrp-group,omitempty"`
+	XMLName                xml.Name                   `xml:"address"`
+	NetconfConfigOperation string                     `xml:"operation,attr,omitempty"`
+	Name                   string                     `xml:"name"`
+	Broadcast              string                     `xml:"broadcast,omitempty"`
+	Primary                bool                       `xml:"primary,omitempty"`
+	Preferred              bool                       `xml:"preferred,omitempty"`
+	ARP                    []UnitFamilyInetAddressARP `xml:"arp,omitempty"`
+	VRRPGroup              []VRRPGroup                `xml:"vrrp-group,omitempty"`
 }
 
 type UnitFamilyInetAddressARP struct {
