@@ -140,20 +140,12 @@ type ConfigurationBytes struct {
 // inherit: defaults | inherit
 // compare rollback [rollback="[0-49]"
 func (targetDevice *TargetDevice) GetConfiguration(format string) ([]byte, error) {
-	request := netconf.RPCMessage{
-		InnerXML: []byte(` <get-configuration format="text"/>`),
+	if !(format == "text" || format == "xml" || format == "set" || format == "json") {
+		return nil, fmt.Errorf("wrong format string: %s. Allowed formats are: text | set | xml | json", format)
 	}
 
-	switch format {
-	case "text":
-	case "set":
-		request.InnerXML = bytes.Replace(request.InnerXML, []byte("text"), []byte("set"), 1)
-	case "xml":
-		request.InnerXML = bytes.Replace(request.InnerXML, []byte("text"), []byte("xml"), 1)
-	case "json":
-		request.InnerXML = bytes.Replace(request.InnerXML, []byte("text"), []byte("json"), 1)
-	default:
-		return nil, errors.New("wrong format string. Allowed formats are: text | set | xml | json ")
+	request := netconf.RPCMessage{
+		InnerXML: []byte(fmt.Sprintf(`<get-configuration format="%s"/>`, format)),
 	}
 
 	rpcReply, err := targetDevice.Action(request, "")
@@ -201,6 +193,50 @@ func (results *LoadConfigurationResults) GetErrors() error {
 	}
 
 	return fmt.Errorf("%s", errString)
+}
+
+type ConfigurationInformation struct {
+	ConfigurationOutput ConfigurationOutput `xml:"configuration-output"`
+}
+
+type ConfigurationOutput struct {
+	Data []byte `xml:",innerxml"`
+}
+
+func (targetDevice *TargetDevice) CompareConfigurationRollback(rollback int, format string) ([]byte, error) {
+	if rollback < 0 || rollback > 49 {
+		return nil, fmt.Errorf("invalid rollback-number")
+	}
+
+	if !(format == "text" || format == "xml" || format == "set" || format == "json") {
+		return nil, fmt.Errorf("wrong format string: %s. Allowed formats are: text | set | xml | json", format)
+	}
+
+	request := netconf.RPCMessage{
+		InnerXML: []byte(fmt.Sprintf(`<get-configuration compare="rollback" rollback="%v" format="%s"/>`, rollback, format)),
+	}
+
+	rpcReply, err := targetDevice.Action(request, "")
+	if err != nil {
+		return nil, err
+	}
+
+	if rpcReply.GetErrors() != nil {
+		return nil, rpcReply.GetErrors()
+	}
+
+	if format == "xml" || format == "json" {
+		return rpcReply.Content, nil
+	}
+
+	var configuration ConfigurationInformation
+
+	err = xml.Unmarshal(rpcReply.Content, &configuration)
+	if err != nil {
+		return configuration.ConfigurationOutput.Data, err
+	}
+
+	return configuration.ConfigurationOutput.Data, nil
 }
 
 // CLI equivalent:  rollback [0..49]
@@ -322,4 +358,42 @@ func (targetDevice *TargetDevice) OpenConfiguration(mode string) (string, error)
 	}
 
 	return openConfigurationString, nil
+}
+
+type DatabaseStatusInformation struct {
+	XMLName        xml.Name         `xml:"database-status-information"`
+	DatabaseStatus []DatabaseStatus `xml:"database-status"`
+}
+
+type DatabaseStatus struct {
+	XMLName   xml.Name `xml:"database-status"`
+	User      string   `xml:"user"`
+	Terminal  string   `xml:"terminal"`
+	PID       string   `xml:"pid"`
+	StartTime string   `xml:"start-time"`
+	IdleTime  string   `xml:"idle-time"`
+	EditPath  string   `xml:"edit-path"`
+}
+
+func (targetDevice *TargetDevice) GetDatabaseStatusInformation() (*DatabaseStatusInformation, error) {
+	request := netconf.RPCMessage{
+		InnerXML: []byte(`<get-database-status-information/>`),
+	}
+
+	rpcReply, err := targetDevice.Action(request, "")
+	if err != nil {
+		return nil, err
+	}
+
+	if rpcReply.GetErrors() != nil {
+		return nil, rpcReply.GetErrors()
+	}
+
+	var out DatabaseStatusInformation
+
+	rpcReply.Content = netconf.ConvertToPairedTags(rpcReply.Content)
+
+	err = xml.Unmarshal(rpcReply.Content, &out)
+
+	return &out, err
 }

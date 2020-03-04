@@ -1,23 +1,25 @@
 package rawxml
 
 var XMLMessagesJunOS = map[string]string{
-	"Get":                        `<rpc><get/></rpc>`,
-	"CLI":                        `<rpc><command format=\"text\">show configuration vlans</command></rpc>`,
-	"GetChassisInventory":        `<rpc><get-chassis-inventory/></rpc>`,
-	"GetSoftwareInformation":     `<rpc><get-software-information/></rpc>`,
-	"GetSystemInformation":       `<rpc><get-system-information/></rpc>`,
-	"GetSystemStatistics":        `<rpc><get-statistics-information/></rpc>`,   // run show system statistics
-	"GetSystemUsers":             `<rpc><get-system-users-information/></rpc>`, // run show system users
-	"GetAlarmInformation":        `<rpc><get-alarm-information/></rpc>`,        // run show chassis alarm
-	"GetChassisMacAddresses":     `<rpc><get-chassis-mac-addresses/></rpc>`,
-	"GetInterfacesInformation":   `<rpc><get-interface-information><terse/></get-interface-information></rpc>`,
-	"GetVRRPInformation":         `<rpc><get-vrrp-information/></rpc>`,
-	"GetARPTable":                `<rpc><get-arp-table-information/></rpc>`,
-	"ClearARP":                   `<rpc><clear-arp-table><hostname>10.0.0.100</hostname></clear-arp-table></rpc>`, // run clear arp hostname 10.0.0.100
-	"Commit":                     `<rpc><commit/></rpc>`,
-	"Reboot":                     `<rpc><request-reboot/></rpc>`,
-	"OpenConfigurationPrivate":   `<rpc><open-configuration><private/></open-configuration></rpc>`,   // configure private
-	"OpenConfigurationExclusive": `<rpc><open-configuration><exclusive/></open-configuration></rpc>`, // configure exclusive
+	"Get":                          `<rpc><get/></rpc>`,
+	"CLI":                          `<rpc><command format=\"text\">show configuration vlans</command></rpc>`,
+	"GetChassisInventory":          `<rpc><get-chassis-inventory/></rpc>`,
+	"GetSoftwareInformation":       `<rpc><get-software-information/></rpc>`,
+	"GetSystemInformation":         `<rpc><get-system-information/></rpc>`,
+	"GetSystemStatistics":          `<rpc><get-statistics-information/></rpc>`,   // run show system statistics
+	"GetSystemUsers":               `<rpc><get-system-users-information/></rpc>`, // run show system users
+	"GetAlarmInformation":          `<rpc><get-alarm-information/></rpc>`,        // run show chassis alarm
+	"GetChassisMacAddresses":       `<rpc><get-chassis-mac-addresses/></rpc>`,
+	"GetInterfacesInformation":     `<rpc><get-interface-information><terse/></get-interface-information></rpc>`,
+	"GetVRRPInformation":           `<rpc><get-vrrp-information/></rpc>`,
+	"GetARPTable":                  `<rpc><get-arp-table-information/></rpc>`,
+	"ClearARP":                     `<rpc><clear-arp-table><hostname>10.0.0.100</hostname></clear-arp-table></rpc>`, // run clear arp hostname 10.0.0.100
+	"Commit":                       `<rpc><commit/></rpc>`,
+	"ShowCompare":                  `<rpc><get-configuration compare="rollback" rollback="0" format="text"/></rpc>`,
+	"Reboot":                       `<rpc><request-reboot/></rpc>`,
+	"OpenConfigurationPrivate":     `<rpc><open-configuration><private/></open-configuration></rpc>`,   // configure private
+	"OpenConfigurationExclusive":   `<rpc><open-configuration><exclusive/></open-configuration></rpc>`, // configure exclusive
+	"GetDatabaseStatusInformation": `<rpc><get-database-status-information/></rpc>`,
 	"GetRunningConfig": `<rpc>
                             <get-config>
                               <source>
