@@ -38,7 +38,7 @@ func main() {
 		},
 	}
 
-	err = device.EditConfig(filter.ConvertToConfig(""), "merge")
+	err = device.EditConfig(filter.ConvertToConfig(false), "merge")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}

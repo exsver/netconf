@@ -39,7 +39,7 @@ func main() {
 		},
 	}
 
-	err = device.EditConfig(term.ConvertToConfig("inet", "testFilterCounter"), "merge")
+	err = device.EditConfig(term.ConvertToConfig(true, "testFilterCounter"), "merge")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}

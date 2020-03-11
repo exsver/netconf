@@ -269,13 +269,9 @@ type Policer struct {
 	Name                   string   `xml:"name"`
 }
 
-// family: ""|"inet"
-func (filter *Filter) ConvertToConfig(family string) *Config {
-	var conf Config
-
-	switch family {
-	case "inet":
-		conf = Config{
+func (filter *Filter) ConvertToConfig(isFamilyInet bool) *Config {
+	if isFamilyInet {
+		return &Config{
 			Configuration: &Configuration{
 				Firewall: &Firewall{
 					Family: &FilterFamily{
@@ -286,17 +282,15 @@ func (filter *Filter) ConvertToConfig(family string) *Config {
 				},
 			},
 		}
-	default:
-		conf = Config{
-			Configuration: &Configuration{
-				Firewall: &Firewall{
-					Filters: []Filter{*filter},
-				},
-			},
-		}
 	}
 
-	return &conf
+	return &Config{
+		Configuration: &Configuration{
+			Firewall: &Firewall{
+				Filters: []Filter{*filter},
+			},
+		},
+	}
 }
 
 func (filter *FilterInet6) ConvertToConfig() *Config {
@@ -314,11 +308,9 @@ func (filter *FilterInet6) ConvertToConfig() *Config {
 }
 
 // family: ""|"inet"
-func (term *Term) ConvertToConfig(family, filterName string) *Config {
-	var conf Config
-	switch family {
-	case "inet":
-		conf = Config{
+func (term *Term) ConvertToConfig(isFamilyInet bool, filterName string) *Config {
+	if isFamilyInet {
+		return &Config{
 			Configuration: &Configuration{
 				Firewall: &Firewall{
 					Family: &FilterFamily{
@@ -334,21 +326,20 @@ func (term *Term) ConvertToConfig(family, filterName string) *Config {
 				},
 			},
 		}
-	default:
-		conf = Config{
-			Configuration: &Configuration{
-				Firewall: &Firewall{
-					Filters: []Filter{
-						{
-							Name:  filterName,
-							Terms: []Term{*term},
-						},
+	}
+
+	return &Config{
+		Configuration: &Configuration{
+			Firewall: &Firewall{
+				Filters: []Filter{
+					{
+						Name:  filterName,
+						Terms: []Term{*term},
 					},
 				},
 			},
-		}
+		},
 	}
-	return &conf
 }
 
 func (term *TermInet6) ConvertToConfig(filterName string) *Config {
@@ -368,4 +359,40 @@ func (term *TermInet6) ConvertToConfig(filterName string) *Config {
 			},
 		},
 	}
+}
+
+func (filter *Filter) AppendToConfig(isFamilyInet bool, config *Config) *Config {
+	if config.Configuration == nil {
+		config.Configuration = &Configuration{}
+	}
+
+	if config.Configuration.Firewall == nil {
+		config.Configuration.Firewall = &Firewall{}
+	}
+
+	if isFamilyInet {
+		if config.Configuration.Firewall.Family == nil {
+			config.Configuration.Firewall.Family = &FilterFamily{}
+		}
+
+		if config.Configuration.Firewall.Family.Inet == nil {
+			config.Configuration.Firewall.Family.Inet = &FilterFamilyInet{}
+		}
+
+		if config.Configuration.Firewall.Family.Inet.Filters == nil {
+			config.Configuration.Firewall.Family.Inet.Filters = make([]Filter, 0, 1)
+		}
+
+		config.Configuration.Firewall.Family.Inet.Filters = append(config.Configuration.Firewall.Family.Inet.Filters, *filter)
+
+		return config
+	}
+
+	if config.Configuration.Firewall.Filters == nil {
+		config.Configuration.Firewall.Filters = make([]Filter, 0, 1)
+	}
+
+	config.Configuration.Firewall.Filters = append(config.Configuration.Firewall.Filters, *filter)
+
+	return config
 }

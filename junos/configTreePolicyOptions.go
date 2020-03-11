@@ -113,3 +113,21 @@ func (asPath *ASPath) ConvertToConfig(asPathGroup string) *Config {
 		},
 	}
 }
+
+func (prefixList *PrefixList) AppendToConfig(config *Config) *Config {
+	if config.Configuration == nil {
+		config.Configuration = &Configuration{}
+	}
+
+	if config.Configuration.PolicyOptions == nil {
+		config.Configuration.PolicyOptions = &PolicyOptions{}
+	}
+
+	if config.Configuration.PolicyOptions.PrefixLists == nil {
+		config.Configuration.PolicyOptions.PrefixLists = make([]PrefixList, 0, 1)
+	}
+
+	config.Configuration.PolicyOptions.PrefixLists = append(config.Configuration.PolicyOptions.PrefixLists, *prefixList)
+
+	return config
+}

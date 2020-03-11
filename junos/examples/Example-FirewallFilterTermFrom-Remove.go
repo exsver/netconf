@@ -29,7 +29,7 @@ func main() {
 		},
 	}
 
-	err = device.EditConfig(term.ConvertToConfig("inet", "testFilterCounter"), "none")
+	err = device.EditConfig(term.ConvertToConfig(true, "testFilterCounter"), "none")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}

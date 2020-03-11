@@ -42,7 +42,7 @@ func main() {
 	// operations:
 	//  "merge" -  The device merges new configuration data into the existing configuration data. This is the default.
 	//  "replace" - The device replaces existing configuration data with the new configuration data.
-	err = device.EditConfig(term1.ConvertToConfig("inet", "testFilterFamilyInet"), "merge")
+	err = device.EditConfig(term1.ConvertToConfig(true, "testFilterFamilyInet"), "merge")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
@@ -54,7 +54,7 @@ func main() {
 		NetconfInsertPosition: "first",
 	}
 
-	err = device.EditConfig(term1.ConvertToConfig("inet", "testFilterFamilyInet"), "merge")
+	err = device.EditConfig(term1.ConvertToConfig(true, "testFilterFamilyInet"), "merge")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
@@ -75,7 +75,7 @@ func main() {
 
 	// edit firewall family inet filter testFilterFamilyInet
 	// insert term drop172 after term drop10
-	err = device.EditConfig(term2.ConvertToConfig("inet", "testFilterFamilyInet"), "merge")
+	err = device.EditConfig(term2.ConvertToConfig(true, "testFilterFamilyInet"), "merge")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
@@ -86,7 +86,7 @@ func main() {
 		NetconfInsertPositionName: "drop10",
 	}
 
-	err = device.EditConfig(term2.ConvertToConfig("inet", "testFilterFamilyInet"), "merge")
+	err = device.EditConfig(term2.ConvertToConfig(true, "testFilterFamilyInet"), "merge")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}

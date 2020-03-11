@@ -50,7 +50,7 @@ func main() {
 		Name:                   "drop10",
 	}
 
-	err = device.EditConfig(term.ConvertToConfig("inet", "testFilterFamilyInet"), "none")
+	err = device.EditConfig(term.ConvertToConfig(true, "testFilterFamilyInet"), "none")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
