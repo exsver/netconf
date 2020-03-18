@@ -200,16 +200,24 @@ func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesGet(filters []XMLFilte
 }
 
 func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesAdd(rules *IPv4NamedAdvanceRules) error {
+	if rules == nil {
+		return fmt.Errorf("IPv4NamedAdvanceRules is nil")
+	}
+
 	return targetDevice.Configure(*rules.ConvertToTop(), "create")
 }
 
 func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesRemove(rules *IPv4NamedAdvanceRules) error {
-	removeRules := IPv4NamedAdvanceRules{
-		IPv4NamedAdvanceRules: make([]IPv4NamedAdvanceRule, 0, len(rules.IPv4NamedAdvanceRules)),
+	if rules == nil {
+		return fmt.Errorf("IPv4NamedAdvanceRules is nil")
 	}
 
 	if rules.IPv4NamedAdvanceRules == nil {
-		return fmt.Errorf("rules slice is empty")
+		return fmt.Errorf("IPv4NamedAdvanceRules slice is nil")
+	}
+
+	removeRules := IPv4NamedAdvanceRules{
+		IPv4NamedAdvanceRules: make([]IPv4NamedAdvanceRule, 0, len(rules.IPv4NamedAdvanceRules)),
 	}
 
 	// When the delete or remove operation is issued, data cannot be assigned to non-index columns
@@ -227,10 +235,18 @@ func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesRemove(rules *IPv4Name
 }
 
 func (targetDevice *TargetDevice) PfilterApply(pfilter *Pfilter) error {
+	if pfilter == nil {
+		return fmt.Errorf("Pfilter is nil")
+	}
+
 	return targetDevice.Configure(*pfilter.ConvertToTop(), "merge")
 }
 
 func (targetDevice *TargetDevice) PfilterRemove(pfilter *Pfilter) error {
+	if pfilter == nil {
+		return fmt.Errorf("Pfilter is nil")
+	}
+
 	return targetDevice.Configure(*pfilter.ConvertToTop(), "remove")
 }
 
@@ -245,10 +261,18 @@ func (namedGroup *NamedGroup) NewPfilter(applyObjectType, applyObjectIndex, appl
 }
 
 func (targetDevice *TargetDevice) ACLCreate(acl *NamedGroup) error {
+	if acl == nil {
+		return fmt.Errorf("NamedGroup is nil")
+	}
+
 	return targetDevice.Configure(*acl.ConvertToTop(), "create")
 }
 
 func (targetDevice *TargetDevice) ACLRemove(acl *NamedGroup) error {
+	if acl == nil {
+		return fmt.Errorf("NamedGroup is nil")
+	}
+
 	return targetDevice.Configure(*acl.ConvertToTop(), "remove")
 }
 
