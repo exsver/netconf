@@ -56,6 +56,7 @@ func (targetDevice *TargetDevice) GetMacTable(filters []XMLFilter) ([]MacTableEn
 		return nil, err
 	}
 
+	// nothing found
 	if data.Top == nil {
 		return nil, nil
 	}

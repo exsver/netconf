@@ -196,6 +196,11 @@ func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesGet(filters []XMLFilte
 		return nil, err
 	}
 
+	// nothing found
+	if data.Top == nil {
+		return nil, nil
+	}
+
 	return data.Top.ACL.IPv4NamedAdvanceRules.IPv4NamedAdvanceRules, nil
 }
 

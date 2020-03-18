@@ -54,6 +54,11 @@ func (targetDevice *TargetDevice) GetPortsRegExp(regExp string) ([]Port, error) 
 		return nil, err
 	}
 
+	// nothing found
+	if data.Top == nil {
+		return nil, nil
+	}
+
 	return data.Top.Ifmgr.Ports.Ports, nil
 }
 
@@ -124,6 +129,11 @@ func (targetDevice *TargetDevice) GetInterfacesInfo(filters []string) ([]Interfa
 	data, err := targetDevice.RetrieveData(request)
 	if err != nil {
 		return nil, err
+	}
+
+	// nothing found
+	if data.Top == nil {
+		return nil, nil
 	}
 
 	return data.Top.Ifmgr.Interfaces.Interfaces, nil
