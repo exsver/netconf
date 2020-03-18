@@ -307,7 +307,6 @@ func (filter *FilterInet6) ConvertToConfig() *Config {
 	}
 }
 
-// family: ""|"inet"
 func (term *Term) ConvertToConfig(isFamilyInet bool, filterName string) *Config {
 	if isFamilyInet {
 		return &Config{
