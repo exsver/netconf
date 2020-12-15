@@ -21,6 +21,13 @@ Partial tested with:
 * HPE FF 5130-48G-4SFP+ EI (JG934A) HPE Comware Software, Version 7.1.070, Releases: 3208P03/3208P08/3208P10
 * HPE FF 5940 48SFP+ 6QSFP+ (JH395A) HPE Comware Software, Version 7.1.070, Release 2609
 
+### Contribute
+Welcomes any kind of contribution, please follow the next steps:
+* Fork the project on github.com.
+* Create a new branch.
+* Commit changes to the new branch.
+* Send a pull request.
+
 ### Authors and Contributors
 * [exsver <exsver@gmail.com>](https://github.com/exsver)
 * [s3rj1k <evasive.gyron@gmail.com>](https://github.com/s3rj1k)
