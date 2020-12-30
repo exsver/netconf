@@ -13,4 +13,4 @@ lint:
 	golangci-lint run ./junos/*.go
 	revive -config revive.toml ./netconf/*.go
 	revive -config revive.toml ./comware/*.go
-	revive -config revive.toml ./junos/*.goq
+	revive -config revive.toml ./junos/*.go
