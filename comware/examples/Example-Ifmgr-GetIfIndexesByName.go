@@ -12,10 +12,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	ifIndexes, err := sw.GetIfIndexesByName("Bridge", true)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	if len(ifIndexes) == 0 {
 		fmt.Println("No interfaces found")
 	} else {

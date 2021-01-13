@@ -1,6 +1,29 @@
 package comware
 
 const (
+	// Interface administration status
+	InterfaceAdminStatusUP   = 1 // Admin Up
+	InterfaceAdminStatusDown = 2 // Admin Down
+
+	// Interface Speed
+	InterfaceSpeedAuto = 1
+	InterfaceSpeed10M  = 2
+	InterfaceSpeed100M = 4
+	InterfaceSpeed1G   = 32
+	InterfaceSpeed10G  = 1024
+	InterfaceSpeed40G  = 8192
+	InterfaceSpeed100G = 16384
+
+	// Interface Duplex
+	InterfaceDuplexFull = 1 // Full Duplex
+	InterfaceDuplexHalf = 2 // Half Duplex
+	InterfaceDuplexAuto = 3 // Duplex Auto
+
+	// Interface Link Type (VLAN type of an interface)
+	InterfaceLinkTypeAccess = 1
+	InterfaceLinkTypeTrunk  = 2
+	InterfaceLinkTypeHybrid = 3
+
 	// Protocols
 	ProtocolICMP = 1
 	ProtocolTCP  = 6

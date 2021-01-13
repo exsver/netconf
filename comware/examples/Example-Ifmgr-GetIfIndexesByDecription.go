@@ -12,6 +12,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	ifIndexes, err := sw.GetIfIndexesByDecription("Uplink", false)
 	if err != nil {
 		log.Fatalf("%s", err)

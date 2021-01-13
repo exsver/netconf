@@ -13,9 +13,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	data, err := sw.GetDataMGROUP()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	spew.Dump(data)
 }

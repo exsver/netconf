@@ -8,13 +8,15 @@ import (
 )
 
 func main() {
-	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf", "netconf")
+	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	dhcpInfo, err := sw.GetDataDHCPServer()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	spew.Dump(dhcpInfo)
 }

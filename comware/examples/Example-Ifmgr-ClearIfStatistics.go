@@ -10,10 +10,12 @@ import (
 
 func main() {
 	netconf.LogLevel.Verbose()
-	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf", "netconf")
+
+	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	err = sw.ClearIfStatistics(1)
 	if err != nil {
 		fmt.Printf("%s", err)

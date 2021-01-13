@@ -88,45 +88,48 @@ type Interface struct {
 	IfIndex             int      `xml:"IfIndex"`
 	PortIndex           int      `xml:"PortIndex,omitempty"`
 	IfTypeExt           int      `xml:"ifTypeExt,omitempty"`
-	//IfType - Interface type, according to IANAifType
+	// IfType - Interface type, according to IANAifType
 	//  https://www.iana.org/assignments/ianaiftype-mib/ianaiftype-mib
-	//Examples
+	// Examples:
 	//  6-Physical ethernet Interface,
 	//  161-Bridge-Aggregation,
 	//  136-Vlan-interface
 	IfType      int    `xml:"ifType,omitempty"`
 	Description string `xml:"Description,omitempty"`
-	//AdminStatus - Interface administration status
-	// 1 - Admin Up  	2 - Admin Down
+	// AdminStatus - Interface administration status
+	//  1 - Admin Up
+	//  2 - Admin Down
 	AdminStatus int `xml:"AdminStatus,omitempty"`
-	//OperStatus - Interface operation status
-	// 1 - up
-	// 2 - down
-	// 3 - testing
-	// 4 - unknown
-	// 5 - dormant
-	// 6 - notPresent
-	// 7 - lowerLayerDown
-	OperStatus int `xml:"OperStatus,omitempty"` //1-UP, 2-DOWN
-	//Configured speed of an interface
-	// 1 - auto					8 - 155Mbps
-	// 2 - 10Mbps				16 - 622Mbps
-	// 4 - 100M                 64 - 2Gbps
-	// 32 - 1Gbps               128 - 2.5Gbps
-	// 1024 - 10Gbps            256 - 4Gbps
-	// 8192 - 40Gbps            512 - 8Gbps
-	// 16384 - 100Gbps          2048 - 16Gbps
+	// OperStatus - Interface operation status
+	//  1 - up
+	//  2 - down
+	//  3 - testing
+	//  4 - unknown
+	//  5 - dormant
+	//  6 - notPresent
+	//  7 - lowerLayerDown
+	OperStatus int `xml:"OperStatus,omitempty"`
+	// Configured speed of an interface
+	//  1 - auto				8 - 155Mbps
+	//  2 - 10Mbps				16 - 622Mbps
+	//  4 - 100Mbps             64 - 2Gbps
+	//  32 - 1Gbps              128 - 2.5Gbps
+	//  1024 - 10Gbps           256 - 4Gbps
+	//  8192 - 40Gbps           512 - 8Gbps
+	//  16384 - 100Gbps         2048 - 16Gbps
 	//                          4096 - 20Gbps
 	//                          32768 - 5Gbps
 	//
-	// Example: 37—Auto-negotiation 	mode, and negotiation values are 100Mbps and 1000Mbps.
+	// Example: 37 - Auto-negotiation mode, and negotiation values are 100Mbps and 1000Mbps.
 	ConfigSpeed  int `xml:"ConfigSpeed,omitempty"`
 	ActualSpeed  int `xml:"ActualSpeed,omitempty"`
-	ConfigDuplex int `xml:"ConfigDuplex,omitempty"` //1-full, 2-half, 3-auto
-	ActualDuplex int `xml:"ActualDuplex,omitempty"` //1-full, 2-half, 3-auto
+	ConfigDuplex int `xml:"ConfigDuplex,omitempty"` // 1-full, 2-half, 3-auto
+	ActualDuplex int `xml:"ActualDuplex,omitempty"` // 1-full, 2-half, 3-auto
 	PortLayer    int `xml:"PortLayer,omitempty"`
 	// LinkType - VLAN type of an interface:
-	// 1 - Access,   2 - Trunk,   3 - Hybrid
+	//  1 - Access
+	//  2 - Trunk
+	//  3 - Hybrid
 	LinkType             int `xml:"LinkType,omitempty"`
 	PVID                 int `xml:"PVID,omitempty"`
 	PhysicalIndex        int `xml:"PhysicalIndex,omitempty"`
@@ -134,10 +137,10 @@ type Interface struct {
 	ConfigMTU            int `xml:"ConfigMTU,omitempty"`
 	ActualMTU            int `xml:"ActualMTU,omitempty"`
 	Loopback             int `xml:"Loopback,omitempty"`
-	//MDI mode of an interface
-	// 1 - MDI-II (straight-through cable)
-	// 2 - MDI-X (crossover cable)
-	// 3 - MDI-AUTO (auto-sensing)
+	// MDI mode of an interface
+	//  1 - MDI-II (straight-through cable)
+	//  2 - MDI-X (crossover cable)
+	//  3 - MDI-AUTO (auto-sensing)
 	MDI               int  `xml:"MDI,omitempty"`
 	ActualBandwidth   int  `xml:"ActualBandwidth,omitempty"`
 	Interval          int  `xml:"Interval,omitempty"`          //absent in HP5130

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/davecgh/go-spew/spew"
 
@@ -11,11 +11,12 @@ import (
 
 func main() {
 	netconf.LogLevel.Verbose()
-	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf", "netconf")
+
+	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
-		fmt.Printf("%s", err)
-	} else {
-		data, err := sw.GetDataARP()
-		spew.Dump(data, err)
+		log.Fatalf("%s", err)
 	}
+
+	data, err := sw.GetDataARP()
+	spew.Dump(data, err)
 }

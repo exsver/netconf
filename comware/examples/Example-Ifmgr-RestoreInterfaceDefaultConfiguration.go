@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/exsver/netconf/comware"
 	"github.com/exsver/netconf/netconf"
@@ -9,13 +10,14 @@ import (
 
 func main() {
 	netconf.LogLevel.Verbose()
+
 	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf", "netconf")
 	if err != nil {
+		log.Fatalf("%s", err)
+	}
+
+	err = sw.RestoreInterfaceDefaultConfiguration(10)
+	if err != nil {
 		fmt.Printf("%s", err)
-	} else {
-		err := sw.RestoreInterfaceDefaultConfiguration(10)
-		if err != nil {
-			fmt.Printf("%s", err)
-		}
 	}
 }

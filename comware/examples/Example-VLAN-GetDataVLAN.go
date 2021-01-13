@@ -1,18 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"github.com/davecgh/go-spew/spew"
+	"log"
 
 	"github.com/exsver/netconf/comware"
 )
 
 func main() {
-	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf", "netconf")
+	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
-		fmt.Printf("%s", err)
-	} else {
-		data, err := sw.GetDataVLAN()
-		spew.Dump(data, err)
+		log.Fatalf("%s", err)
 	}
+
+	data, err := sw.GetDataVLAN()
+	spew.Dump(data, err)
 }
