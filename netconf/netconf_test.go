@@ -32,10 +32,10 @@ func TestMarshalRPCMessage(t *testing.T) {
 func TestUnmarshalRpcReply(t *testing.T) {
 	cases := []struct {
 		rawRPCReply []byte
-		rpcReply    RPCReply //result
-		err         error    //result
+		rpcReply    RPCReply // result
+		err         error    // result
 	}{
-		{ //GetHostame
+		{ // GetHostame
 			rawRPCReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="101"><data><top xmlns="http://www.hp.com/netconf/config:1.0"><Device><Base><HostName>hp-5940-1</HostName></Base></Device></top></data></rpc-reply>`),
 			rpcReply: RPCReply{
 				XMLName:   xml.Name{Local: "rpc-reply", Space: "urn:ietf:params:xml:ns:netconf:base:1.0"},
@@ -43,7 +43,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 				Content:   []byte(`<data><top xmlns="http://www.hp.com/netconf/config:1.0"><Device><Base><HostName>hp-5940-1</HostName></Base></Device></top></data>`)},
 			err: nil,
 		},
-		{ //GetSessions
+		{ // GetSessions
 			rawRPCReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="102"><get-sessions><Session><SessionID>1</SessionID><Line>vty2</Line><UserName>s3rj1k</UserName><Since>2018-05-05T14:19:45</Since><LockHeld>false</LockHeld></Session></get-sessions></rpc-reply>`),
 			rpcReply: RPCReply{
 				XMLName:   xml.Name{Local: "rpc-reply", Space: "urn:ietf:params:xml:ns:netconf:base:1.0"},
@@ -51,7 +51,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 				Content:   []byte(`<get-sessions><Session><SessionID>1</SessionID><Line>vty2</Line><UserName>s3rj1k</UserName><Since>2018-05-05T14:19:45</Since><LockHeld>false</LockHeld></Session></get-sessions>`)},
 			err: nil,
 		},
-		{ //OK-message test1
+		{ // OK-message test1
 			rawRPCReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="2"><ok/></rpc-reply>`),
 			rpcReply: RPCReply{
 				XMLName:   xml.Name{Local: "rpc-reply", Space: "urn:ietf:params:xml:ns:netconf:base:1.0"},
@@ -60,7 +60,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 				OK:        true},
 			err: nil,
 		},
-		{ //OK-message test2
+		{ // OK-message test2
 			rawRPCReply: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="5"><some-tag/></rpc-reply>`),
 			rpcReply: RPCReply{
 				XMLName:   xml.Name{Local: "rpc-reply", Space: "urn:ietf:params:xml:ns:netconf:base:1.0"},
@@ -69,7 +69,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 				OK:        false},
 			err: nil,
 		},
-		{ //OK-message test3 (ok with vertical tabs - juniper)
+		{ // OK-message test3 (ok with vertical tabs - juniper)
 			rawRPCReply: []byte{
 				0x3c, 0x72, 0x70, 0x63, 0x2d, 0x72, 0x65, 0x70, 0x6c, 0x79, 0x20, 0x78, 0x6d, 0x6c, 0x6e, 0x73, //|<rpc-reply xmlns|
 				0x3a, 0x6a, 0x75, 0x6e, 0x6f, 0x73, 0x3d, 0x22, 0x68, 0x74, 0x74, 0x70, 0x3a, 0x2f, 0x2f, 0x78, //|:junos="http://x|
@@ -88,7 +88,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 				OK:        true},
 			err: nil,
 		},
-		{ //CDATA CLI
+		{ // CDATA CLI
 			//<?xml version="1.0" encoding="UTF-8"?>
 			//  <rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="109">
 			//    <CLI>
@@ -138,7 +138,7 @@ func TestUnmarshalRpcReply(t *testing.T) {
 				}},
 			err: nil,
 		},
-		{ //HPE RPC Error:
+		{ // HPE RPC Error:
 			//<?xml version="1.0" encoding="UTF-8"?>
 			//<rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="102">
 			//  <rpc-error xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
