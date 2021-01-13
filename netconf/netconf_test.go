@@ -10,15 +10,61 @@ import (
 func TestMarshalRPCMessage(t *testing.T) {
 	cases := []struct {
 		rpcStruct RPCMessage
-		rpc       []byte //result
-		err       error  //result
+		rpc       []byte // result
+		err       error  // result
 	}{
-		{rpcStruct: RPCMessage{InnerXML: []byte("<get-sessions/>")}, rpc: []byte(`<rpc><get-sessions/></rpc>`), err: nil},
-		{rpcStruct: RPCMessage{InnerXML: []byte("<get-sessions/>"), MessageID: "10"}, rpc: []byte(`<rpc message-id="10"><get-sessions/></rpc>`), err: nil},
-		{rpcStruct: RPCMessage{InnerXML: []byte("<get-sessions/>"), MessageID: "10", CustomAttrs: []string{`xmlns:hp="http://www.hp.com/netconf/base:1.0"`}}, rpc: []byte(`<rpc xmlns:hp="http://www.hp.com/netconf/base:1.0" message-id="10"><get-sessions/></rpc>`), err: nil},
-		{rpcStruct: RPCMessage{InnerXML: []byte("<get-sessions/>"), MessageID: "10", CustomAttrs: []string{`xmlns:data="http://www.hp.com/netconf/data:1.0"`, `xmlns:config="http://www.hp.com/netconf/config:1.0"`}}, rpc: []byte(`<rpc xmlns:data="http://www.hp.com/netconf/data:1.0" xmlns:config="http://www.hp.com/netconf/config:1.0" message-id="10"><get-sessions/></rpc>`), err: nil},
-		{rpcStruct: RPCMessage{InnerXML: []byte("<get-sessions/>"), MessageID: "10", CustomAttrs: []string{`xmlns:data="http://www.hp.com/netconf/data:1.0"`, `xmlns:config="http://www.hp.com/netconf/config:1.0"`}, Xmlns: []string{BaseURI}}, rpc: []byte(`<rpc xmlns:data="http://www.hp.com/netconf/data:1.0" xmlns:config="http://www.hp.com/netconf/config:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="10"><get-sessions/></rpc>`), err: nil},
-		{rpcStruct: RPCMessage{InnerXML: []byte("<get-sessions/>"), MessageID: "10", AppendXMLHeader: true}, rpc: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc message-id="10"><get-sessions/></rpc>`), err: nil},
+		{
+			rpcStruct: RPCMessage{
+				InnerXML: []byte("<get-sessions/>"),
+			},
+			rpc: []byte(`<rpc><get-sessions/></rpc>`),
+			err: nil,
+		},
+		{
+			rpcStruct: RPCMessage{
+				InnerXML:  []byte("<get-sessions/>"),
+				MessageID: "10",
+			},
+			rpc: []byte(`<rpc message-id="10"><get-sessions/></rpc>`),
+			err: nil,
+		},
+		{
+			rpcStruct: RPCMessage{
+				InnerXML:    []byte("<get-sessions/>"),
+				MessageID:   "10",
+				CustomAttrs: []string{`xmlns:hp="http://www.hp.com/netconf/base:1.0"`},
+			},
+			rpc: []byte(`<rpc xmlns:hp="http://www.hp.com/netconf/base:1.0" message-id="10"><get-sessions/></rpc>`),
+			err: nil,
+		},
+		{
+			rpcStruct: RPCMessage{
+				InnerXML:    []byte("<get-sessions/>"),
+				MessageID:   "10",
+				CustomAttrs: []string{`xmlns:data="http://www.hp.com/netconf/data:1.0"`, `xmlns:config="http://www.hp.com/netconf/config:1.0"`},
+			},
+			rpc: []byte(`<rpc xmlns:data="http://www.hp.com/netconf/data:1.0" xmlns:config="http://www.hp.com/netconf/config:1.0" message-id="10"><get-sessions/></rpc>`),
+			err: nil,
+		},
+		{
+			rpcStruct: RPCMessage{
+				InnerXML:    []byte("<get-sessions/>"),
+				MessageID:   "10",
+				CustomAttrs: []string{`xmlns:data="http://www.hp.com/netconf/data:1.0"`, `xmlns:config="http://www.hp.com/netconf/config:1.0"`},
+				Xmlns:       []string{BaseURI},
+			},
+			rpc: []byte(`<rpc xmlns:data="http://www.hp.com/netconf/data:1.0" xmlns:config="http://www.hp.com/netconf/config:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="10"><get-sessions/></rpc>`),
+			err: nil,
+		},
+		{
+			rpcStruct: RPCMessage{
+				InnerXML:        []byte("<get-sessions/>"),
+				MessageID:       "10",
+				AppendXMLHeader: true,
+			},
+			rpc: []byte(`<?xml version="1.0" encoding="UTF-8"?><rpc message-id="10"><get-sessions/></rpc>`),
+			err: nil,
+		},
 	}
 
 	for _, testCase := range cases {

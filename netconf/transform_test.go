@@ -12,7 +12,7 @@ func TestCorrectBackspaces(t *testing.T) {
 		in              []byte
 		out             []byte
 	}{
-		{ //2 backspaces
+		{ // 2 backspaces
 			caseDescription: "1",
 			in:              []byte{0x53, 0x53, 0x8, 0x53, 0x53, 0x53, 0x53, 0x53, 0x8, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53},
 			out:             []byte{0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53},
@@ -201,35 +201,35 @@ func TestConvertToPairedTags(t *testing.T) {
 		out             []byte
 	}{
 		{
-			caseDescription: "1", //simple changes
+			caseDescription: "1 - simple changes",
 			in:              []byte("<if-device-flags><ifdf-present/><ifdf-running/></if-device-flags><if-config-flags><iff-snmp-traps/></if-config-flags>"),
 			out:             []byte("<if-device-flags><ifdf-present>true</ifdf-present><ifdf-running>true</ifdf-running></if-device-flags><if-config-flags><iff-snmp-traps>true</iff-snmp-traps></if-config-flags>"),
 		},
 		{
-			caseDescription: "2", //simple changes #2
+			caseDescription: "2 - simple changes",
 			in: []byte(`
-									<arp-table-entry>
-    									<mac-address>d8:50:e6:ae:67:28</mac-address>
-    									<ip-address>172.21.1.128</ip-address>
-										<hostname>172.21.1.128</hostname>
-										<interface-name>em0.0</interface-name>
-    									<arp-table-entry-flags>
-        									<none/>
-    									</arp-table-entry-flags>
-									</arp-table-entry>`),
+						<arp-table-entry>
+    						<mac-address>d8:50:e6:ae:67:28</mac-address>
+    						<ip-address>172.21.1.128</ip-address>
+							<hostname>172.21.1.128</hostname>
+							<interface-name>em0.0</interface-name>
+    						<arp-table-entry-flags>
+        						<none/>
+    						</arp-table-entry-flags>
+						</arp-table-entry>`),
 			out: []byte(`
-									<arp-table-entry>
-    									<mac-address>d8:50:e6:ae:67:28</mac-address>
-    									<ip-address>172.21.1.128</ip-address>
-										<hostname>172.21.1.128</hostname>
-										<interface-name>em0.0</interface-name>
-    									<arp-table-entry-flags>
-        									<none>true</none>
-    									</arp-table-entry-flags>
-									</arp-table-entry>`),
+						<arp-table-entry>
+    						<mac-address>d8:50:e6:ae:67:28</mac-address>
+    						<ip-address>172.21.1.128</ip-address>
+							<hostname>172.21.1.128</hostname>
+							<interface-name>em0.0</interface-name>
+    						<arp-table-entry-flags>
+        						<none>true</none>
+    						</arp-table-entry-flags>
+						</arp-table-entry>`),
 		},
 		{
-			caseDescription: "3", //No change
+			caseDescription: "3 - No change",
 			in: []byte(`<rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns:junos="http://xml.juniper.net/junos/15.1X53/junos">
                                        <system-information>
                                          <hardware-model>qfx5200-32c-32q</hardware-model>
@@ -250,7 +250,7 @@ func TestConvertToPairedTags(t *testing.T) {
                                      </rpc-reply>`),
 		},
 		{
-			caseDescription: "4", //Multilevel
+			caseDescription: "4 - Multilevel",
 			in: []byte(`<level1>
                                        <tagA/>
                                        <tagB/>
