@@ -79,22 +79,37 @@ type Interfaces struct {
 }
 
 type Interface struct {
-	XMLName             xml.Name `xml:"Interface"`
-	Name                string   `xml:"Name,omitempty"`
-	AbbreviatedName     string   `xml:"AbbreviatedName,omitempty"`
-	InetAddressIPV4     string   `xml:"InetAddressIPV4,omitempty"`
-	InetAddressIPV4Mask string   `xml:"InetAddressIPV4Mask,omitempty"`
-	MAC                 string   `xml:"MAC,omitempty"`
-	IfIndex             int      `xml:"IfIndex"`
-	PortIndex           int      `xml:"PortIndex,omitempty"`
-	IfTypeExt           int      `xml:"ifTypeExt,omitempty"`
+	XMLName xml.Name `xml:"Interface"`
+	// Name - Full name of an interface.
+	// Examples:
+	//  GigabitEthernet1/0/1
+	//  Ten-GigabitEthernet1/0/25
+	//  Bridge-Aggregation1
+	//  Vlan-interface99
+	Name string `xml:"Name,omitempty"`
+	// AbbreviatedName - Abbreviated name of an interface.
+	// Examples:
+	//  GE1/0/1
+	//  XGE1/0/25
+	//  BAGG1
+	//  Vlan99
+	AbbreviatedName     string `xml:"AbbreviatedName,omitempty"`
+	InetAddressIPV4     string `xml:"InetAddressIPV4,omitempty"`
+	InetAddressIPV4Mask string `xml:"InetAddressIPV4Mask,omitempty"`
+	// MAC - MAC address of an interface.
+	MAC       string `xml:"MAC,omitempty"`
+	IfIndex   int    `xml:"IfIndex"`
+	PortIndex int    `xml:"PortIndex,omitempty"`
+	IfTypeExt int    `xml:"ifTypeExt,omitempty"`
 	// IfType - Interface type, according to IANAifType
 	//  https://www.iana.org/assignments/ianaiftype-mib/ianaiftype-mib
 	// Examples:
-	//  6-Physical ethernet Interface,
-	//  161-Bridge-Aggregation,
-	//  136-Vlan-interface
-	IfType      int    `xml:"ifType,omitempty"`
+	//  6 - Physical ethernet Interface,
+	//  161 - Bridge-Aggregation,
+	//  136 - Vlan-interface
+	IfType int `xml:"ifType,omitempty"`
+	// Description - Interface description.
+	// String length constraints must be in range(0..255).
 	Description string `xml:"Description,omitempty"`
 	// AdminStatus - Interface administration status
 	//  1 - Admin Up
@@ -125,7 +140,10 @@ type Interface struct {
 	ActualSpeed  int `xml:"ActualSpeed,omitempty"`
 	ConfigDuplex int `xml:"ConfigDuplex,omitempty"` // 1-full, 2-half, 3-auto
 	ActualDuplex int `xml:"ActualDuplex,omitempty"` // 1-full, 2-half, 3-auto
-	PortLayer    int `xml:"PortLayer,omitempty"`
+	// PortLayer - Port layer of an interface as follows:
+	//  1 - Layer 2
+	//  2 - Layer 3
+	PortLayer int `xml:"PortLayer,omitempty"`
 	// LinkType - VLAN type of an interface:
 	//  1 - Access
 	//  2 - Trunk
@@ -143,8 +161,8 @@ type Interface struct {
 	//  3 - MDI-AUTO (auto-sensing)
 	MDI               int  `xml:"MDI,omitempty"`
 	ActualBandwidth   int  `xml:"ActualBandwidth,omitempty"`
-	Interval          int  `xml:"Interval,omitempty"`          //absent in HP5130
-	Actual64Bandwidth int  `xml:"Actual64Bandwidth,omitempty"` //absent in HP5130
+	Interval          int  `xml:"Interval,omitempty"`          // absent in HP5130
+	Actual64Bandwidth int  `xml:"Actual64Bandwidth,omitempty"` // absent in HP5130
 	ForceUP           bool `xml:"ForceUP,omitempty"`
 	SubPort           bool `xml:"SubPort,omitempty"`
 }
@@ -161,6 +179,7 @@ type Port struct {
 	IfIndex   int      `xml:"IfIndex,omitempty"`
 }
 
+// Statistics table contains interface statistics.
 type Statistics struct {
 	Interfaces []InterfaceStatistics `xml:"Interface"`
 }
@@ -184,7 +203,8 @@ type InterfaceStatistics struct {
 	OutDiscards     uint64   `xml:"OutDiscards"`
 	OutErrors       uint64   `xml:"OutErrors"`
 	OutRate         uint64   `xml:"OutRate"`
-	LastClear       string   `xml:"LastClear"`
+	// LastClear - Local time when the statistics on an interface were cleared most recently.
+	LastClear string `xml:"LastClear"`
 }
 
 type TrafficStatistics struct {
@@ -222,7 +242,7 @@ type InterfaceEthPortStatistics struct {
 	InUcastPkts     uint64 `xml:"InUcastPkts"`
 	InBrdcastPkts   uint64 `xml:"InBrdcastPkts"`
 	InMulticastPkts uint64 `xml:"InMulticastPkts"`
-	//InPauses - Number of inbound pause frames on an interface.
+	// InPauses - Number of inbound pause frames on an interface.
 	InPauses               uint64 `xml:"InPauses"`
 	InNormalUnicastBytes   uint64 `xml:"InNormalUnicastBytes"`
 	InNormalBrdcastBytes   uint64 `xml:"InNormalBrdcastBytes"`
