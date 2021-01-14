@@ -26,6 +26,7 @@ type Top struct {
 	Ifmgr           *Ifmgr           `xml:"Ifmgr"`
 	MAC             *MAC             `xml:"MAC"`
 	MGROUP          *MGROUP          `xml:"MGROUP"`
+	PortSecurity    *PortSecurity    `xml:"PortSecurity"`
 	ResourceMonitor *ResourceMonitor `xml:"ResourceMonitor"`
 	STP             *STP             `xml:"STP"`
 	Syslog          *Syslog          `xml:"Syslog"`
