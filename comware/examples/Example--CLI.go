@@ -8,14 +8,13 @@ import (
 )
 
 func main() {
-
-	// Creating new device
-	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf", "netconf")
+	// Creating a new device
+	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	// Preparing set of commands
+	// Preparing a set of commands
 	commands := `
 interface GigabitEthernet1/0/3
  default

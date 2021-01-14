@@ -4,6 +4,20 @@ import (
 	"github.com/exsver/netconf/netconf"
 )
 
+func (targetDevice *TargetDevice) GetDataIPCIM() (*IPCIM, error) {
+	request := netconf.RPCMessage{
+		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><IPCIM/></top></filter></get>`),
+		Xmlns:    []string{netconf.BaseURI},
+	}
+
+	data, err := targetDevice.RetrieveData(request)
+	if err != nil {
+		return nil, err
+	}
+
+	return data.Top.IPCIM, nil
+}
+
 func (targetDevice *TargetDevice) GetIPSourceBindings() ([]SourceBinding, error) {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`
