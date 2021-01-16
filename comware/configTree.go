@@ -24,6 +24,8 @@ type Top struct {
 	DHCPSP          *DHCPSP          `xml:"DHCPSP"`
 	IPCIM           *IPCIM           `xml:"IPCIM"`
 	Ifmgr           *Ifmgr           `xml:"Ifmgr"`
+	IRF             *IRF             `xml:"IRF"`
+	LAGG            *LAGG            `xml:"LAGG"`
 	MAC             *MAC             `xml:"MAC"`
 	MGROUP          *MGROUP          `xml:"MGROUP"`
 	PortSecurity    *PortSecurity    `xml:"PortSecurity"`
@@ -31,5 +33,4 @@ type Top struct {
 	STP             *STP             `xml:"STP"`
 	Syslog          *Syslog          `xml:"Syslog"`
 	VLAN            *VLAN            `xml:"VLAN"`
-	IRF             *IRF             `xml:"IRF"`
 }

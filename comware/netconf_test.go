@@ -10,8 +10,8 @@ func TestVlanListToIntSlice(t *testing.T) {
 	cases := []struct {
 		caseDescription string
 		in              string
-		out             []int //result
-		err             error //result
+		out             []int // result
+		err             error // result
 	}{
 		{
 			caseDescription: "1",
@@ -68,6 +68,7 @@ func TestVlanListToIntSlice(t *testing.T) {
 			err:             errors.New(`error while trying to convert a string into a int slice: strconv.Atoi: parsing "ttt": invalid syntax`),
 		},
 	}
+
 	for _, testCase := range cases {
 		out, err := VlanListToIntSlice(testCase.in)
 		if !reflect.DeepEqual(out, testCase.out) || !reflect.DeepEqual(err, testCase.err) {
@@ -149,6 +150,7 @@ interface GE1/0/10
 			out: []int{302},
 		},
 	}
+
 	for _, testCase := range cases {
 		out := ParseVlansFromConfigString(testCase.in)
 		if !reflect.DeepEqual(out, testCase.out) {
