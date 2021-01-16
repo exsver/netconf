@@ -30,6 +30,8 @@ type Top struct {
 	MGROUP          *MGROUP          `xml:"MGROUP"`
 	PortSecurity    *PortSecurity    `xml:"PortSecurity"`
 	ResourceMonitor *ResourceMonitor `xml:"ResourceMonitor"`
+	Route           *Route           `xml:"Route"`
+	StaticRoute     *StaticRoute     `xml:"StaticRoute"`
 	STP             *STP             `xml:"STP"`
 	Syslog          *Syslog          `xml:"Syslog"`
 	VLAN            *VLAN            `xml:"VLAN"`
