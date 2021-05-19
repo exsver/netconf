@@ -31,6 +31,7 @@ type Top struct {
 	PortSecurity    *PortSecurity    `xml:"PortSecurity"`
 	ResourceMonitor *ResourceMonitor `xml:"ResourceMonitor"`
 	Route           *Route           `xml:"Route"`
+	SNMP            *SNMP            `xml:"SNMP"`
 	StaticRoute     *StaticRoute     `xml:"StaticRoute"`
 	STP             *STP             `xml:"STP"`
 	Syslog          *Syslog          `xml:"Syslog"`
