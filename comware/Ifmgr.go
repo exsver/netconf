@@ -433,7 +433,7 @@ func (targetDevice *TargetDevice) GetIfIndexesByName(ifName string, isRegExp boo
 	return targetDevice.GetIfIndexes(filters)
 }
 
-func (targetDevice *TargetDevice) GetIfIndexesByDecription(description string, isRegExp bool) (ifIndexes []int, err error) {
+func (targetDevice *TargetDevice) GetIfIndexesByDescription(description string, isRegExp bool) (ifIndexes []int, err error) {
 	var filters []XMLFilter
 	if isRegExp {
 		filters = []XMLFilter{

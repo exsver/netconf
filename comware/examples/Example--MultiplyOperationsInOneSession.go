@@ -47,10 +47,11 @@ func checkIsVlanInTrunk(sw *comware.TargetDevice, ifName string, vlan int) error
 
 func main() {
 	netconf.LogLevel.Messages()
-	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf", "netconf")
+	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	err = sw.Connect(time.Minute * 10)
 	if err != nil {
 		log.Fatalf("%s", err)
@@ -61,6 +62,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
+
 	err = checkIsVlanInTrunk(sw, "GigabitEthernet1/0/10", 300)
 	if err != nil {
 		log.Fatalf("%s", err)

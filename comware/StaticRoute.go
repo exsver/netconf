@@ -15,3 +15,11 @@ func (targetDevice *TargetDevice) GetDataStaticRoute() (*StaticRoute, error) {
 
 	return data.Top.StaticRoute, nil
 }
+
+func (targetDevice *TargetDevice) AddIPv4StaticRoute(routeEntry *IPv4StaticRoute) error {
+	return targetDevice.Configure(*routeEntry.ConvertToTop(), "merge")
+}
+
+func (targetDevice *TargetDevice) AddIPv6StaticRoute(routeEntry *IPv6StaticRoute) error {
+	return targetDevice.Configure(*routeEntry.ConvertToTop(), "merge")
+}

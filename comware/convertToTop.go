@@ -302,21 +302,21 @@ func (member *LAGGMember) ConvertToTop() *Top {
 	}
 }
 
-func (route *IPv4RouteEntry) ConvertToTop() *Top {
+func (route *IPv4StaticRoute) ConvertToTop() *Top {
 	return &Top{
 		StaticRoute: &StaticRoute{
 			Ipv4StaticRouteConfigurations: &Ipv4StaticRouteConfigurations{
-				[]IPv4RouteEntry{*route},
+				[]IPv4StaticRoute{*route},
 			},
 		},
 	}
 }
 
-func (route *IPv6RouteEntry) ConvertToTop() *Top {
+func (route *IPv6StaticRoute) ConvertToTop() *Top {
 	return &Top{
 		StaticRoute: &StaticRoute{
 			Ipv6StaticRouteConfigurations: &Ipv6StaticRouteConfigurations{
-				[]IPv6RouteEntry{*route},
+				[]IPv6StaticRoute{*route},
 			},
 		},
 	}

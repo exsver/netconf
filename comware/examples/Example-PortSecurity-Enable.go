@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// Creating a new device.
-	sw, err := comware.NewTargetDevice("172.21.1.249", "netconf-user", "netconf-password")
+	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
