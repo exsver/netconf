@@ -22,6 +22,7 @@ type Top struct {
 	Device          *Device          `xml:"Device"`
 	DHCP            *DHCP            `xml:"DHCP"`
 	DHCPSP          *DHCPSP          `xml:"DHCPSP"`
+	DNS             *DNS             `xml:"DNS"`
 	FileSystem      *FileSystem      `xml:"FileSystem"`
 	IPCIM           *IPCIM           `xml:"IPCIM"`
 	Ifmgr           *Ifmgr           `xml:"Ifmgr"`
