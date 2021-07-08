@@ -24,12 +24,13 @@ type Top struct {
 	DHCPSP          *DHCPSP          `xml:"DHCPSP"`
 	DNS             *DNS             `xml:"DNS"`
 	FileSystem      *FileSystem      `xml:"FileSystem"`
-	IPCIM           *IPCIM           `xml:"IPCIM"`
-	Ifmgr           *Ifmgr           `xml:"Ifmgr"`
+	IPCIM           *IPCIM           `xml:"IPCIM"` // IP Source Guard
+	Ifmgr           *Ifmgr           `xml:"Ifmgr"` // Interfaces
 	IRF             *IRF             `xml:"IRF"`
-	LAGG            *LAGG            `xml:"LAGG"`
+	LAGG            *LAGG            `xml:"LAGG"` // Link Aggregation
+	LR              *LR              `xml:"LR"`   // Interface Rate Limit
 	MAC             *MAC             `xml:"MAC"`
-	MGROUP          *MGROUP          `xml:"MGROUP"`
+	MGROUP          *MGROUP          `xml:"MGROUP"` // Port Mirroring
 	PortSecurity    *PortSecurity    `xml:"PortSecurity"`
 	ResourceMonitor *ResourceMonitor `xml:"ResourceMonitor"`
 	Route           *Route           `xml:"Route"`
