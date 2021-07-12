@@ -40,9 +40,9 @@ type Device struct {
 
 type Base struct {
 	XMLName         xml.Name `xml:"Base"`
-	Uptime          uint64   `xml:"Uptime,omitempty"`          //Time that elapsed after the device started up(units:second)
-	HostName        string   `xml:"HostName,omitempty"`        //Device name. String length constraints must be in range(0..64). String must not begin and end with space character
-	HostDescription string   `xml:"HostDescription,omitempty"` //Device description.String length constraints must be in range(0..255).
+	Uptime          uint64   `xml:"Uptime,omitempty"`          // Time that elapsed after the device started up(units:second)
+	HostName        string   `xml:"HostName,omitempty"`        // Device name. String length constraints must be in range(0..64). String must not begin and end with space character
+	HostDescription string   `xml:"HostDescription,omitempty"` // Device description.String length constraints must be in range(0..255).
 	LocalTime       string   `xml:"LocalTime,omitempty"`
 	BridgeMAC       string   `xml:"BridgeMAC,omitempty"`
 	LocalBridgeMAC  string   `xml:"LocalBridgeMAC,omitempty"`
@@ -64,8 +64,18 @@ type Board struct {
 	XMLName       xml.Name    `xml:"Board"`
 	DeviceNode    *DeviceNode `xml:"DeviceNode"`
 	PhysicalIndex int         `xml:"PhysicalIndex"`
-	Status        int         `xml:"Status"` //Status of the device node: 1 Absent, 2 Normal, 3 Fault
-	Role          int         `xml:"Role"`   //Role of the device node: 1 - Unknown, 2 - ActiveMPU, 3 - StandbyMPU, 4 - LPU. Role is Unknown when status is Absent or Fault.
+	// Status of the device node:
+	//  1 - Absent,
+	//  2 - Normal,
+	//  3 - Fault.
+	Status int `xml:"Status"`
+	// Role of the device node:
+	//  1 - Unknown,
+	//  2 - ActiveMPU,
+	//  3 - StandbyMPU,
+	//  4 - LPU.
+	// Role is Unknown when status is Absent or Fault.
+	Role int `xml:"Role"`
 }
 
 type CPUs struct {
@@ -89,7 +99,7 @@ type PhysicalEntities struct {
 	PhysicalEntities []PhysicalEntity `xml:"Entity"`
 }
 
-//ReadOnly struct
+// ReadOnly struct
 type PhysicalEntity struct {
 	XMLName       xml.Name `xml:"Entity"`
 	PhysicalIndex int      `xml:"PhysicalIndex"`
@@ -99,20 +109,28 @@ type PhysicalEntity struct {
 	Description   string   `xml:"Description"`
 	VendorType    string   `xml:"VendorType"`
 	ContainedIn   int      `xml:"ContainedIn"`
-	Class         int      `xml:"Class"` //3 - physical node (slot),  6 - PSU,  7 - FAN UNIT, 8 - Sensor, 9 - Board, SubBoard, 10 - Interfaces
-	ParentRelPos  int      `xml:"ParentRelPos"`
-	Name          string   `xml:"Name"`
-	HardwareRev   string   `xml:"HardwareRev"`
-	FirmwareRev   string   `xml:"FirmwareRev"`
-	SoftwareRev   string   `xml:"SoftwareRev"`
-	SerialNumber  string   `xml:"SerialNumber"`
-	MfgName       string   `xml:"MfgName"`
-	Model         string   `xml:"Model"`
-	Alias         string   `xml:"Alias"`
-	AssetID       string   `xml:"AssetID"`
-	FRU           bool     `xml:"FRU"`
-	MfgDate       string   `xml:"MfgDate"`
-	Uris          string   `xml:"Uris"`
+	// Class - Entity type:
+	//  3 - physical node (slot),
+	//  6 - PSU,
+	//  7 - FAN UNIT,
+	//  8 - Sensor,
+	//  9 - Board, SubBoard,
+	//  10 - Interfaces
+	Class        int    `xml:"Class"`
+	ParentRelPos int    `xml:"ParentRelPos"`
+	Name         string `xml:"Name"`
+	HardwareRev  string `xml:"HardwareRev"`
+	FirmwareRev  string `xml:"FirmwareRev"`
+	SoftwareRev  string `xml:"SoftwareRev"`
+	SerialNumber string `xml:"SerialNumber"`
+	MfgName      string `xml:"MfgName"`
+	Model        string `xml:"Model"`
+	Alias        string `xml:"Alias"`
+	AssetID      string `xml:"AssetID"`
+	FRU          bool   `xml:"FRU"`
+	MfgDate      string `xml:"MfgDate"`
+	// Uris - CLEI code. String length constraints must be in range(0..32).
+	Uris string `xml:"Uris"`
 }
 
 // ExtPhysicalEntities table contains extended information about an entity.
@@ -124,26 +142,26 @@ type ExtPhysicalEntities struct {
 type ExtPhysicalEntity struct {
 	XMLName                      xml.Name `xml:"Entity"`
 	PhysicalIndex                int      `xml:"PhysicalIndex"`
-	Uptime                       int      `xml:"Uptime"`                       //Time that elapsed after the entity started up (units:seconds)
-	AdminState                   int      `xml:"AdminState"`                   //1 - Unsupported, 2 - Disabled, 3 - Shut down, 4 - Enabled
-	OperState                    int      `xml:"OperState"`                    //1 - Unsupported, 2 - Unusable, 3 - Usable, 4 - Dangerous, cannot be used
-	StandbyState                 int      `xml:"StandbyState"`                 //1 - Unsupported, 2 - Hot standby, 3 - Cold standby, 4 - In service
-	AlarmLight                   int      `xml:"AlarmLight"`                   //Alarm LED status
-	CPUUsage                     int      `xml:"CpuUsage"`                     //CPU use ratio (percentage)
-	CPUMaxUsage                  int      `xml:"CpuMaxUsage"`                  //Maximum CPU use ratio (percentage)
-	CPUAvgUsage                  int      `xml:"CpuAvgUsage"`                  //Average CPU usage (percentage)
-	CPUUsageThreshold            int      `xml:"CpuUsageThreshold"`            //CPU use ratio threshold (percentage)
-	MemUsage                     int      `xml:"MemUsage"`                     //Memory use ratio (percentage)
-	MemAvgUsage                  int      `xml:"MemAvgUsage"`                  //Average memory usage (percentage)
-	MemUsageThreshold            int      `xml:"MemUsageThreshold"`            //Memory use ratio threshold (percentage)
-	MemSize                      int      `xml:"MemSize"`                      //Memory size (units: bytes)
-	PhyMemSize                   int      `xml:"PhyMemSize"`                   //Physical memory size (units: bytes)
-	Temperature                  int      `xml:"Temperature"`                  //Temperature of the entity (units: C)
-	TemperatureThreshold         int      `xml:"TemperatureThreshold"`         //High-temperature threshold (units: C)
-	TemperatureCriticalThreshold int      `xml:"TemperatureCriticalThreshold"` //Critical high-voltage threshold (units: C)
-	TemperatureLowThreshold      int      `xml:"TemperatureLowThreshold"`      //Low temperature threshold (units: C)
-	TemperatureShutdownThreshold int      `xml:"TemperatureShutdownThreshold"` //Shutdown temperature threshold (units: C)
-	ErrorStatus                  int      `xml:"ErrorStatus"`                  //Error status of the entity. Numerial value must be more than 0
+	Uptime                       int      `xml:"Uptime"`                       // Time that elapsed after the entity started up (units:seconds)
+	AdminState                   int      `xml:"AdminState"`                   // 1 - Unsupported, 2 - Disabled, 3 - Shut down, 4 - Enabled
+	OperState                    int      `xml:"OperState"`                    // 1 - Unsupported, 2 - Unusable, 3 - Usable, 4 - Dangerous, cannot be used
+	StandbyState                 int      `xml:"StandbyState"`                 // 1 - Unsupported, 2 - Hot standby, 3 - Cold standby, 4 - In service
+	AlarmLight                   int      `xml:"AlarmLight"`                   // Alarm LED status
+	CPUUsage                     int      `xml:"CpuUsage"`                     // CPU use ratio (percentage)
+	CPUMaxUsage                  int      `xml:"CpuMaxUsage"`                  // Maximum CPU use ratio (percentage)
+	CPUAvgUsage                  int      `xml:"CpuAvgUsage"`                  // Average CPU usage (percentage)
+	CPUUsageThreshold            int      `xml:"CpuUsageThreshold"`            // CPU use ratio threshold (percentage)
+	MemUsage                     int      `xml:"MemUsage"`                     // Memory use ratio (percentage)
+	MemAvgUsage                  int      `xml:"MemAvgUsage"`                  // Average memory usage (percentage)
+	MemUsageThreshold            int      `xml:"MemUsageThreshold"`            // Memory use ratio threshold (percentage)
+	MemSize                      int      `xml:"MemSize"`                      // Memory size (units: bytes)
+	PhyMemSize                   int      `xml:"PhyMemSize"`                   // Physical memory size (units: bytes)
+	Temperature                  int      `xml:"Temperature"`                  // Temperature of the entity (units: C)
+	TemperatureThreshold         int      `xml:"TemperatureThreshold"`         // High-temperature threshold (units: C)
+	TemperatureCriticalThreshold int      `xml:"TemperatureCriticalThreshold"` // Critical high-voltage threshold (units: C)
+	TemperatureLowThreshold      int      `xml:"TemperatureLowThreshold"`      // Low temperature threshold (units: C)
+	TemperatureShutdownThreshold int      `xml:"TemperatureShutdownThreshold"` // Shutdown temperature threshold (units: C)
+	ErrorStatus                  int      `xml:"ErrorStatus"`                  // Error status of the entity. Numerial value must be more than 0
 	MAC                          string   `xml:"MAC"`
 }
 

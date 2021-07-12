@@ -44,7 +44,7 @@ type LRInterfaces struct {
 type LRInterface struct {
 	XMLName        xml.Name `xml:"Interface"`
 	IfIndex        int      `xml:"IfIndex"`
-	Direction      int      `xml:"Direction"`
+	Direction      int      `xml:"Direction"` // 0 - inbound, 1 - outbound
 	CIR            int      `xml:"CIR"`
 	CBS            int      `xml:"CBS"`
 	PassedPkts     int      `xml:"PassedPkts"`
