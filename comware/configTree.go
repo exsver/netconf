@@ -22,6 +22,7 @@ type Top struct {
 	Device          *Device          `xml:"Device"`
 	DHCP            *DHCP            `xml:"DHCP"`
 	DHCPSP          *DHCPSP          `xml:"DHCPSP"`
+	Diagnostic      *Diagnostic      `xml:"Diagnostic"`
 	DNS             *DNS             `xml:"DNS"`
 	FileSystem      *FileSystem      `xml:"FileSystem"`
 	IPCIM           *IPCIM           `xml:"IPCIM"` // IP Source Guard
