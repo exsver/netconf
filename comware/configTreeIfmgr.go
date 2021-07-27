@@ -5,6 +5,16 @@ import "encoding/xml"
 type Ifmgr struct {
 	/* top level
 	   Ifmgr
+	     DataBuffer
+	       IfBuffer
+	         []Interface
+	     DeviceCapabilities
+	     EthInterfaceCapabilities
+	       []Interface
+	     InterfaceCapabilities
+	       []Interface
+	     TypeCapabilities
+	       []Capability
 	     EthInterfaces
 	       []EthInterface
 	     Interfaces
@@ -15,6 +25,10 @@ type Ifmgr struct {
 	         []Interface
 	     Ports                                     ***ReadOnly***
 	       []Port                                  ***ReadOnly***
+	     PortIsolation
+	       Capabilities
+	       Interfaces
+	         []Interface
 	     StormConstrain
 	       Interfaces
 	         []Interface
