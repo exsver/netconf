@@ -32,6 +32,7 @@ type Top struct {
 	LR              *LR              `xml:"LR"`   // Interface Rate Limit
 	MAC             *MAC             `xml:"MAC"`
 	MGROUP          *MGROUP          `xml:"MGROUP"` // Port Mirroring
+	PoE             *PoE             `xml:"PoE"`
 	PortSecurity    *PortSecurity    `xml:"PortSecurity"`
 	ResourceMonitor *ResourceMonitor `xml:"ResourceMonitor"`
 	Route           *Route           `xml:"Route"`
