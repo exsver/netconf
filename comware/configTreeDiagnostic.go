@@ -13,11 +13,14 @@ type Diagnostic struct {
 	    []Memory
 	  CPUHistory
 	    []CPU
+	  ProcessesCPUHistory
+	    []Processes
 	*/
-	CPUAlert     *DiagnosticCPUAlerts    `xml:"CPUAlert"`
-	MemoryAlert  *DiagnosticMemoryAlerts `xml:"MemoryAlert"`
-	Memories     *DiagnosticMemories     `xml:"Memories"`
-	CPUHistories *DiagnosticCPUHistories `xml:"CPUHistory"`
+	CPUAlert            *DiagnosticCPUAlerts    `xml:"CPUAlert"`
+	MemoryAlert         *DiagnosticMemoryAlerts `xml:"MemoryAlert"`
+	Memories            *DiagnosticMemories     `xml:"Memories"`
+	CPUHistories        *DiagnosticCPUHistories `xml:"CPUHistory"`
+	ProcessesCPUHistory *ProcessesCPUHistory    `xml:"ProcessesCPUHistory"`
 }
 
 // DiagnosticCPUAlerts table contains warning threshold information about the logical CPUs.
@@ -127,4 +130,21 @@ type DiagnosticCPUHistory struct {
 	HistroyCycleInSecond int      `xml:"HistroyCycleInSecond"`
 	CPUUsageLimit        int      `xml:"CPUUsageLimit"`
 	CPUHistory           string   `xml:"CPUHistory"`
+}
+
+// ProcessesCPUHistory table contains historical CPU usage statistics by process ID.
+type ProcessesCPUHistory struct {
+	XMLName   xml.Name            `xml:"ProcessesCPUHistory"`
+	Processes []ProcessCPUHistory `xml:"Process"`
+}
+
+type ProcessCPUHistory struct {
+	XMLName xml.Name `xml:"Process"`
+	Chassis int      `xml:"Chassis"`
+	Slot    int      `xml:"Slot"`
+	CPUID   int      `xml:"CPUID"`
+	// ProcessJobID - Process ID
+	ProcessJobID      int    `xml:"ProcessJobID"`
+	ProcessName       string `xml:"ProcessName"`
+	CPUHistoryProcess string `xml:"CPUHistoryProcess"`
 }
