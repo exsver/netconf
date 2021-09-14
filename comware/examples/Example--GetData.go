@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Setting the Log Level for netconf lib.
-	// one of:
+	// One of:
 	//   netconf.LogLevel.Silent()
 	//   netconf.LogLevel.Default() - default
 	//   netconf.LogLevel.Messages()
