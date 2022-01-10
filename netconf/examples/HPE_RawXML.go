@@ -1,15 +1,51 @@
-package rawxml
+package main
 
-var XMLMessagesHPE = map[string]string{
+import (
+	"log"
+	"time"
+
+	"github.com/exsver/netconf/netconf"
+	"golang.org/x/crypto/ssh"
+)
+
+func main() {
+	netconf.LogLevel.Verbose()
+
+	targetDevice := &netconf.TargetDevice{
+		IP:   "10.10.10.10",
+		Port: 830,
+		SSHConfig: ssh.ClientConfig{
+			Config: ssh.Config{
+				Ciphers: []string{"aes128-cbc", "hmac-sha1"},
+			},
+			User:            "netconf-user",
+			Auth:            []ssh.AuthMethod{ssh.Password("netconf-password")},
+			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+			Timeout:         30 * time.Second,
+		},
+	}
+
+	err := targetDevice.Connect(300 * time.Second)
+	if err != nil {
+		log.Printf("%s\n", err.Error())
+	}
+
+	defer targetDevice.Disconnect()
+
+	_, _ = targetDevice.NetconfSession.SendAndReceive([]byte(xmlMessagesHPE["GetDeviceBaseHostname"]))
+}
+
+// xmlMessagesHPE provides a few raw xml examples (for comware)
+var xmlMessagesHPE = map[string]string{
 	"GetSubtree": `<rpc message-id="101" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-                              <get>
-                                <filter type="subtree">
-                                  <top xmlns="http://www.hp.com/netconf/data:1.0">
-                                    <ACL/>
-                                  </top>
-                                </filter>
-                              </get>
-                            </rpc>`,
+                     <get>
+                       <filter type="subtree">
+                         <top xmlns="http://www.hp.com/netconf/data:1.0">
+                           <ACL/>
+                         </top>
+                       </filter>
+                     </get>
+                   </rpc>`,
 	/* Subtree list:
 		<ACL/>                           5130 + |
 		<ARP/>                           5130 + |
@@ -289,7 +325,7 @@ var XMLMessagesHPE = map[string]string{
                            </top>
                          </config>
 	                   </edit-config>
-	</rpc>`,
+	                 </rpc>`,
 	"SetBinding": `<rpc message-id="201" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
                      <edit-config>
                        <target>
@@ -347,20 +383,20 @@ var XMLMessagesHPE = map[string]string{
                   </get>
                 </rpc>`,
 	"regexp": `<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
-      <get>
-        <filter type="subtree">
-            <top xmlns="http://www.hp.com/netconf/data:1.0">
-                <Ifmgr>
-                    <Ports>
-                        <Port>
+                <get>
+                  <filter type="subtree">
+                    <top xmlns="http://www.hp.com/netconf/data:1.0">
+                      <Ifmgr>
+                        <Ports>
+                          <Port>
 							<IfIndex xmlns:re="http://www.hp.com/netconf/base:1.0" re:regExp="2"/>
-                        </Port>
-                    </Ports>
-                </Ifmgr>
-            </top>
-        </filter>
-      </get>
-    </rpc>`,
+                          </Port>
+                        </Ports>
+                      </Ifmgr>
+                    </top>
+                  </filter>
+                </get>
+              </rpc>`,
 	"yang": `<rpc message-id="101" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
 			<get-schema xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring">
 				<identifier>ietf-netconf</identifier>
@@ -369,22 +405,22 @@ var XMLMessagesHPE = map[string]string{
 				</get-schema>
 			</rpc>`,
 	"ConditionalMatch": `<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
-<get>
-	<filter type="subtree">
-		<top xmlns="http://www.hp.com/netconf/data:1.0">
-			<MAC>
-				<MacUnicastTable>
-					<Unicast>
+            <get>
+	          <filter type="subtree">
+		        <top xmlns="http://www.hp.com/netconf/data:1.0">
+			      <MAC>
+				    <MacUnicastTable>
+					  <Unicast>
 						<VLANID>99</VLANID>
 						<MacAddress/>
 						<PortIndex xmlns:re="http://www.hp.com/netconf/base:1.0" re:match="notEqual:719"/>
 						<Status/>
 						<Aging/>
-					</Unicast>
-				</MacUnicastTable>
-			</MAC>
-		</top>
-	</filter>
-</get>
-</rpc>`,
+					  </Unicast>
+				    </MacUnicastTable>
+			      </MAC>
+		        </top>
+	          </filter>
+            </get>
+           </rpc>`,
 }
