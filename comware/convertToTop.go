@@ -321,3 +321,11 @@ func (route *IPv6StaticRoute) ConvertToTop() *Top {
 		},
 	}
 }
+
+func (base *STPBase) ConvertToTop() *Top {
+	return &Top{
+		STP: &STP{
+			Base: base,
+		},
+	}
+}
