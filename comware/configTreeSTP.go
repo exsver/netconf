@@ -24,12 +24,12 @@ type STPBase struct {
 	Mode int `xml:"Mode"`
 	// The max TCs that will be processed within the TC-protection period.
 	// values: 1 - 255
-	TcThreshold int `xml:"TcThreshold"`
+	TcThreshold int `xml:"TcThreshold,omitempty"`
 	// PathCostMethod - The path cost calculation method:
 	//  0 - Legacy
 	//  1 - IEEE 802.1D-1998
 	//  2 - IEEE 802.1t
-	PathCostMethod int  `xml:"PathCostMethod,omitempty"`
+	PathCostMethod int  `xml:"PathCostMethod"`
 	HelloTime      int  `xml:"HelloTime,omitempty"`    // The intervals in seconds. Valid values are: 1-10.
 	MaxHops        int  `xml:"MaxHops,omitempty"`      // Valid values are: 1-40.
 	MaxAge         int  `xml:"MaxAge,omitempty"`       // Valid values are: 6-40.
@@ -50,8 +50,8 @@ type STPInterfacesConfiguration struct {
 type STPInterfaceConfiguration struct {
 	XMLName           xml.Name `xml:"Interface"`
 	IfIndex           int      `xml:"IfIndex"`
-	PointToPoint      int      `xml:"PointToPoint,omitempty"`      //1 - Force-true; 2 - Force-false; 3 - Auto-negotiated by the link;
-	TransmitHoldCount int      `xml:"TransmitHoldCount,omitempty"` //Valid values are: 1-255.
+	PointToPoint      int      `xml:"PointToPoint,omitempty"`      // 1 - Force-true; 2 - Force-false; 3 - Auto-negotiated by the link;
+	TransmitHoldCount int      `xml:"TransmitHoldCount,omitempty"` // Valid values are: 1-255.
 	Enable            bool     `xml:"Enable,omitempty"`
 	EdgedPort         bool     `xml:"EdgedPort,omitempty"`
 	RootProtect       bool     `xml:"RootProtect,omitempty"`

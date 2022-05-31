@@ -64,4 +64,10 @@ const (
 	// ACL rule Actions
 	ACLRuleActionDeny   = 1
 	ACLRuleActionPermit = 2
+
+	// STP modes
+	STPModeSTP  = 0
+	STPModeRSTP = 2
+	STPModeMSTP = 3
+	STPModePVST = 4
 )

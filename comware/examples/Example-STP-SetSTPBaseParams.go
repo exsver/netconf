@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/exsver/netconf/comware"
 )
 
@@ -14,22 +15,20 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 
-	config := comware.STPBase{
-		Mode:           0,
-		TcThreshold:    0,
-		PathCostMethod: 0,
-		HelloTime:      0,
-		MaxHops:        0,
-		MaxAge:         0,
-		ForwardDelay:   0,
-		TcSnooping:     false,
-		DigestSnooping: false,
-		BPDUProtect:    false,
-		TcProtect:      false,
-		Enable:         false,
+	data, err := sw.GetDataSTP()
+	if err != nil {
+		log.Fatalf("%s", err)
 	}
 
-	err = sw.SetSTPBaseParams(config)
+	// Print running configuration
+	spew.Dump(data.Base)
+
+	// Chaging parameters
+	config := data.Base
+	config.Mode = comware.STPModeMSTP
+	config.HelloTime = 7
+
+	err = sw.SetSTPBaseParams(*config)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
