@@ -24,6 +24,11 @@ const (
 	InterfaceLinkTypeTrunk  = 2
 	InterfaceLinkTypeHybrid = 3
 
+	// Suppression units
+	SuppressionUnitRatio = 1
+	SuppressionUnitPps   = 2
+	SuppressionUnitKbps  = 3
+
 	// Protocols
 	ProtocolICMP = 1
 	ProtocolTCP  = 6

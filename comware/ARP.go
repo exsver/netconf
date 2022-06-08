@@ -28,3 +28,13 @@ func (targetDevice *TargetDevice) ARPRateLimitLogEnable(enable bool) error {
 
 	return targetDevice.Configure(*arpRateLimitLog.ConvertToTop(), "merge")
 }
+
+func (targetDevice *TargetDevice) SetArpFilterBinding(ifIndex string, ipv4Address string, macAddress string) error {
+	interfaceArpFilter := ArpInterfaceFilter{
+		IfIndex:     ifIndex,
+		Ipv4Address: ipv4Address,
+		MacAddress:  macAddress,
+	}
+
+	return targetDevice.Configure(*interfaceArpFilter.ConvertToTop(), "merge")
+}

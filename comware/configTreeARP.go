@@ -37,6 +37,7 @@ type ARP struct {
 	ArpRateLimitLog   *ArpRateLimitLog   `xml:"ArpRateLimitLog"`
 	ArpSpecification  *ArpSpecification  `xml:"ArpSpecification"`
 	ArpTable          *ArpTable          `xml:"ArpTable"`
+	ArpFilterBinding  *ArpFilterBinding  `xml:"ArpFilterBinding"`
 }
 
 // ArpDetection table contains the information about arp detections.
@@ -137,4 +138,16 @@ type ArpEntry struct {
 	PortIndex   int      `xml:"PortIndex"`
 	VrfIndex    int      `xml:"VrfIndex"`
 	ArpType     int      `xml:"ArpType"`
+}
+
+type ArpFilterBinding struct {
+	XMLName        xml.Name             `xml:"ArpFilterBinding"`
+	FilterBindings []ArpInterfaceFilter `xml:"FilterBinding"`
+}
+
+type ArpInterfaceFilter struct {
+	XMLName     xml.Name `xml:"FilterBinding"`
+	IfIndex     string   `xml:"IfIndex"`
+	Ipv4Address string   `xml:"Ipv4Address"`
+	MacAddress  string   `xml:"MacAddress"`
 }

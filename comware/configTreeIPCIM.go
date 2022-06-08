@@ -35,6 +35,6 @@ type IPVerifySource struct {
 type VerifySource struct {
 	XMLName          xml.Name `xml:"VerifySource"`
 	IfIndex          int      `xml:"IfIndex"`
-	VerifyIPAddress  bool     `xml:"VerifyIpAddress,omitempty"`
-	VerifyMacAddress bool     `xml:"VerifyMacAddress,omitempty"`
+	VerifyIPAddress  bool     `xml:"VerifyIpAddress"`
+	VerifyMacAddress bool     `xml:"VerifyMacAddress"`
 }

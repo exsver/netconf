@@ -70,19 +70,19 @@ type EthInterface struct {
 
 type BroadcastSuppression struct {
 	ConfigValue int `xml:"ConfigValue"`
-	ActualValue int `xml:"ActualValue"`
+	ActualValue int `xml:"ActualValue,omitempty"`
 	Unit        int `xml:"Unit"`
 }
 
 type UnknownUnicastSuppression struct {
 	ConfigValue int `xml:"ConfigValue"`
-	ActualValue int `xml:"ActualValue"`
+	ActualValue int `xml:"ActualValue,omitempty"`
 	Unit        int `xml:"Unit"`
 }
 
 type MulticastSuppression struct {
 	ConfigValue int `xml:"ConfigValue"`
-	ActualValue int `xml:"ActualValue"`
+	ActualValue int `xml:"ActualValue,omitempty"`
 	Unit        int `xml:"Unit"`
 	Flag        int `xml:"Flag,omitempty"`
 }
