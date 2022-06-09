@@ -38,3 +38,20 @@ func (targetDevice *TargetDevice) SetArpFilterBinding(ifIndex string, ipv4Addres
 
 	return targetDevice.Configure(*interfaceArpFilter.ConvertToTop(), "merge")
 }
+
+func (targetDevice *TargetDevice) AddIPArpFilterSource(ifIndex int, ipv4Addresses []string) error {
+	var filterSources []FilterSource
+
+	for _, address := range ipv4Addresses {
+		filterSources = append(filterSources, FilterSource{
+			IfIndex:     ifIndex,
+			Ipv4Address: address,
+		})
+	}
+
+	arpFilters := ArpFilterSource{
+		FilterSources: filterSources,
+	}
+
+	return targetDevice.Configure(*arpFilters.ConvertToTop(), "merge")
+}

@@ -40,23 +40,6 @@ func (targetDevice *TargetDevice) GetIPSourceBindings() ([]SourceBinding, error)
 	return data.Top.IPCIM.IPSourceBindingInterface.SourceBindings, nil
 }
 
-func (targetDevice *TargetDevice) AddIPArpFilterSource(ifIndex int, ipv4Addresses []string) error {
-	var filterSources []FilterSource
-
-	for _, address := range ipv4Addresses {
-		filterSources = append(filterSources, FilterSource{
-			IfIndex:     ifIndex,
-			Ipv4Address: address,
-		})
-	}
-
-	arpFilters := ArpFilterSource{
-		FilterSources: filterSources,
-	}
-
-	return targetDevice.Configure(*arpFilters.ConvertToTop(), "merge")
-}
-
 func (targetDevice *TargetDevice) AddIPSourceBinding(ifIndex string, ipv4Address string, macAddress string, vlanID string) error {
 	if vlanID == "" {
 		vlanID = "0"

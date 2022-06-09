@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/exsver/netconf/comware"
@@ -14,10 +15,9 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 
-	if err := sw.AddIPArpFilterSource(10, []string{"10.0.0.1", "10.0.0.2", "10.0.0.3"}); err != nil {
+	if err := sw.SetInterfaceBpduDrop(10, true); err != nil {
 		log.Fatalf("%s", err)
 	}
 
 	fmt.Println("End")
-
 }
