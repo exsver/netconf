@@ -8,7 +8,7 @@ import (
 	"github.com/exsver/netconf/netconf"
 )
 
-// Run ./Example-ACL-ACLCreate.go first
+// Run examples/ACL/ACLCreate/ACLCreate.go first
 
 func main() {
 	netconf.LogLevel.Verbose()
@@ -28,20 +28,20 @@ func main() {
 	rules := comware.IPv4NamedAdvanceRules{
 		IPv4NamedAdvanceRules: []comware.IPv4NamedAdvanceRule{
 			{
-				GroupIndex:   "testACL",
-				RuleID:       0,
+				GroupIndex: "testACL",
+				RuleID:     0,
 			},
 			{
-				GroupIndex:   "testACL",
-				RuleID:       5,
+				GroupIndex: "testACL",
+				RuleID:     5,
 			},
 			{
-				GroupIndex:   "testACL",
-				RuleID:       10,
+				GroupIndex: "testACL",
+				RuleID:     10,
 			},
 			{
-				GroupIndex:   "testACL",
-				RuleID:       15,
+				GroupIndex: "testACL",
+				RuleID:     15,
 			},
 		},
 	}
@@ -51,4 +51,3 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 }
-
