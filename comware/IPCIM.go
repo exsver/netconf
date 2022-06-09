@@ -41,6 +41,10 @@ func (targetDevice *TargetDevice) GetIPSourceBindings() ([]SourceBinding, error)
 }
 
 func (targetDevice *TargetDevice) AddIPSourceBinding(ifIndex string, ipv4Address string, macAddress string, vlanID string) error {
+	if vlanID == "" {
+		vlanID = "0"
+	}
+
 	binding := SourceBinding{
 		IfIndex:     ifIndex,
 		Ipv4Address: ipv4Address,
@@ -60,4 +64,14 @@ func (targetDevice *TargetDevice) DeleteIPSourceBinding(ifIndex string, ipv4Addr
 	}
 
 	return targetDevice.Configure(*binding.ConvertToTop(), "remove")
+}
+
+func (targetDevice *TargetDevice) AddIpVerifySource(ifIndex int, verifyIP bool, verifyMac bool) error {
+	ipSourceVerify := VerifySource{
+		IfIndex:          ifIndex,
+		VerifyIPAddress:  verifyIP,
+		VerifyMacAddress: verifyMac,
+	}
+
+	return targetDevice.Configure(*ipSourceVerify.ConvertToTop(), "merge")
 }

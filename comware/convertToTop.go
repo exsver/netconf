@@ -216,6 +216,24 @@ func (arpRateLimitLog *ArpRateLimitLog) ConvertToTop() *Top {
 	}
 }
 
+func (ifFilterBinding *ArpInterfaceFilter) ConvertToTop() *Top {
+	return &Top{
+		ARP: &ARP{
+			ArpFilterBinding: &ArpFilterBinding{
+				FilterBindings: []ArpInterfaceFilter{*ifFilterBinding},
+			},
+		},
+	}
+}
+
+func (ifFilterSource *ArpFilterSource) ConvertToTop() *Top {
+	return &Top{
+		ARP: &ARP{
+			ArpFilterSource: ifFilterSource,
+		},
+	}
+}
+
 func (dhcp *DHCP) ConvertToTop() *Top {
 	return &Top{
 		DHCP: dhcp,

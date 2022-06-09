@@ -454,3 +454,44 @@ func (targetDevice *TargetDevice) GetIfIndexesByDescription(description string, 
 
 	return targetDevice.GetIfIndexes(filters)
 }
+
+func (targetDevice *TargetDevice) SetInterfaceBpduDrop(ifIndex int, enable bool) error {
+
+	iface := EthInterface{
+		IfIndex:  ifIndex,
+		BPDUDrop: enable,
+	}
+
+	return targetDevice.Configure(*iface.ConvertToTop(), "merge")
+}
+
+func (targetDevice *TargetDevice) SetInterfaceSuppressionPps(ifIndex, broadcast, multicast, unknownunicast int) error {
+	return targetDevice.SetInterfaceSuppression(ifIndex, SuppressionUnitPps, broadcast, multicast, unknownunicast)
+}
+
+func (targetDevice *TargetDevice) SetInterfaceSuppression(ifIndex, suppressionUnit, broadcast, multicast, unknownunicast int) error {
+
+	iface := EthInterface{
+		IfIndex: ifIndex,
+		BroadcastSuppression: []BroadcastSuppression{
+			{
+				ConfigValue: broadcast,
+				Unit:        suppressionUnit,
+			},
+		},
+		MulticastSuppression: []MulticastSuppression{
+			{
+				ConfigValue: multicast,
+				Unit:        suppressionUnit,
+			},
+		},
+		UnknownUnicastSuppression: []UnknownUnicastSuppression{
+			{
+				ConfigValue: unknownunicast,
+				Unit:        suppressionUnit,
+			},
+		},
+	}
+
+	return targetDevice.Configure(*iface.ConvertToTop(), "merge")
+}

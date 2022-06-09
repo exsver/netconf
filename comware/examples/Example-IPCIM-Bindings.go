@@ -14,7 +14,16 @@ func main() {
 	}
 
 	// Add binding
+	// interface GigabitEthernet1/0/8
+	//   ip source binding ip-address 10.10.10.11 mac-address AABB-CCDD-EEFF
 	sw.AddIPSourceBinding("8", "10.10.10.11", "AA-BB-CC-DD-EE-FF", "220")
+
+	// interface GigabitEthernet1/0/8
+	//   ip verify source ip-address mac-address
+	err = sw.AddIpVerifySource(10, true, true)
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
 
 	// Get and print all bindings
 	b, _ := sw.GetIPSourceBindings()
@@ -23,5 +32,7 @@ func main() {
 	}
 
 	// Delete binding
+	// interface GigabitEthernet1/0/8
+	//   undo ip source binding ip-address 10.10.10.11 mac-address AABB-CCDD-EEFF
 	sw.DeleteIPSourceBinding("8", "10.10.10.11", "AA-BB-CC-DD-EE-FF", "220")
 }
