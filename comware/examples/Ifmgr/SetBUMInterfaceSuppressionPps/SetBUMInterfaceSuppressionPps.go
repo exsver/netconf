@@ -7,7 +7,12 @@ import (
 )
 
 func main() {
-	// netconf.LogLevel.Verbose()
+	// Setting the Log Level for netconf lib.
+	// One of:
+	//   netconf.LogLevel.Silent()
+	//   netconf.LogLevel.Default() - default
+	//   netconf.LogLevel.Messages()
+	//   netconf.LogLevel.Verbose()
 
 	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/exsver/netconf/comware"
 	"github.com/exsver/netconf/netconf"
 )
@@ -15,19 +15,17 @@ func main() {
 	//   netconf.LogLevel.Default() - default
 	//   netconf.LogLevel.Messages()
 	//   netconf.LogLevel.Verbose()
-	netconf.LogLevel.Messages()
+	netconf.LogLevel.Verbose()
 
 	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
-		log.Fatalf("%s", err)
+		log.Fatal(err)
 	}
 
-	ifIdentity, err := sw.GetIfIdentity()
+	data, err := sw.GetIfCommonInfo(10)
 	if err != nil {
-		log.Fatalf("%s", err)
+		log.Fatal(err)
 	}
 
-	for ifIndex, iface := range ifIdentity {
-		fmt.Printf("Index: %v, Name: %s, Abbreviated Name: %s, Description: %s\n", ifIndex, iface.Name, iface.AbbreviatedName, iface.Description)
-	}
+	spew.Dump(data)
 }

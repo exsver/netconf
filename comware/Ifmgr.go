@@ -22,7 +22,7 @@ func (targetDevice *TargetDevice) GetDataIfmgr() (*Ifmgr, error) {
 	return data.Top.Ifmgr, nil
 }
 
-//GetPortsList returns а list of all physical interfaces ([]Port), Bridge-aggregation interfaces, and Management interfaces. Exclude SVI.
+// GetPorts returns а list of all physical interfaces ([]Port), Bridge-aggregation interfaces, and Management interfaces. Exclude SVI.
 func (targetDevice *TargetDevice) GetPorts() ([]Port, error) {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><Ifmgr><Ports/></Ifmgr></top></filter></get>`),
@@ -37,9 +37,10 @@ func (targetDevice *TargetDevice) GetPorts() ([]Port, error) {
 	return data.Top.Ifmgr.Ports.Ports, nil
 }
 
-//RegExp Examples:
-// "^GigabitEthernet"       -- all GigabitEthernet ports
-// "^Ten-GigabitEthernet"   -- all Ten-GigabitEthernet ports
+// GetPortsRegExp returns а list of all physical interfaces matched by RegExp
+// RegExp Examples:
+//   "^GigabitEthernet"       -- all GigabitEthernet ports
+//   "^Ten-GigabitEthernet"   -- all Ten-GigabitEthernet ports
 func (targetDevice *TargetDevice) GetPortsRegExp(regExp string) ([]Port, error) {
 	request := netconf.RPCMessage{
 		InnerXML:    []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><Ifmgr><Ports><Port><Name nc:regExp="*"/><IfIndex/></Port></Ports></Ifmgr></top></filter></get>`),
@@ -62,17 +63,18 @@ func (targetDevice *TargetDevice) GetPortsRegExp(regExp string) ([]Port, error) 
 	return data.Top.Ifmgr.Ports.Ports, nil
 }
 
-//Filters examples:
-// all items -                    nil
-// all BAGG interfaces -          []string{`<ifType>161</ifType>`}
-// all ethernet Interfaces -      []string{`<ifType>6</ifType>`}
-// all Vlan-interfaces -          []string{`<ifType>136</ifType>`}
-// Port with ifIndex 10 -         []string{`<IfIndex>10</IfIndex>`}
-// Port with index 10 -           []string{`<PortIndex>10</PortIndex>`}
-// All Ports in Up state -        []string{`<OperStatus>1</OperStatus>`}
-// Port with Description "test" - []string{`<Description>test</Description>`}
-// all ethernet Interfaces in UP
-// state -                        []string{`<ifType>6</ifType>`, `<OperStatus>1</OperStatus>`}
+// GetInterfacesInfo returns а list of InterfacesInfo
+// Filters examples:
+//   all items -                           nil
+//   all BAGG interfaces -                 []string{`<ifType>161</ifType>`}
+//   all ethernet Interfaces -             []string{`<ifType>6</ifType>`}
+//   all Vlan-interfaces -                 []string{`<ifType>136</ifType>`}
+//   interface with ifIndex 10 -           []string{`<IfIndex>10</IfIndex>`}
+//   interface with index 10 -             []string{`<PortIndex>10</PortIndex>`}
+//   interface with name GE1/0/10          []string{`<AbbreviatedName>GE1/0/10</AbbreviatedName>`}
+//   all Ports in Up state -               []string{`<OperStatus>1</OperStatus>`}
+//   interfaces with Description "test" -  []string{`<Description>test</Description>`}
+//   all ethernet Interfaces in UP state - []string{`<ifType>6</ifType>`, `<OperStatus>1</OperStatus>`}
 func (targetDevice *TargetDevice) GetInterfacesInfo(filters []string) ([]Interface, error) {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><Ifmgr><Interfaces/></Ifmgr></top></filter></get>`),
@@ -137,6 +139,96 @@ func (targetDevice *TargetDevice) GetInterfacesInfo(filters []string) ([]Interfa
 	}
 
 	return data.Top.Ifmgr.Interfaces.Interfaces, nil
+}
+
+type IfCommonInfo struct {
+	Name            string
+	AbbreviatedName string
+	Description     string
+	IfIndex         int
+	AdminStatus     int
+	OperStatus      int
+	ConfigSpeed     int
+	ActualSpeed     int
+	ActualDuplex    int
+	Interval        int
+	InPkts          uint64
+	OutPkts         uint64
+	InOctets        uint64
+	OutOctets       uint64
+	InBits          uint64
+	OutBits         uint64
+}
+
+func (targetDevice *TargetDevice) GetIfCommonInfo(ifIndex int) (*IfCommonInfo, error) {
+	request := netconf.RPCMessage{
+		Xmlns: []string{netconf.BaseURI},
+		InnerXML: []byte(`<get>
+          <filter type="subtree">
+            <top xmlns="http://www.hp.com/netconf/data:1.0">
+              <Ifmgr>
+                <Interfaces>
+                  <Interface>
+                    <IfIndex/>
+                    <Name/>
+                    <AbbreviatedName/>
+                    <Description/>
+                    <AdminStatus/>
+                    <OperStatus/>
+                    <ConfigSpeed/>
+                    <ActualSpeed/>
+                    <ActualDuplex/>
+                  </Interface>
+                </Interfaces>
+                <TrafficStatistics>
+                  <Interfaces>
+                    <Interface>
+                     <IfIndex/>
+                     <Interval/>
+                     <InPkts/>
+                     <OutPkts/>
+                     <InOctets/>
+                     <OutOctets/>
+                     <InBits/>
+                     <OutBits/>
+                    </Interface>
+                  </Interfaces>
+                </TrafficStatistics>
+              </Ifmgr>
+            </top>
+          </filter>
+        </get>`),
+	}
+
+	request.InnerXML = bytes.Replace(request.InnerXML, []byte("<IfIndex/>"), append([]byte("<IfIndex>"), append([]byte(strconv.Itoa(ifIndex)), []byte("</IfIndex>")...)...), 2)
+
+	data, err := targetDevice.RetrieveData(request)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(data.Top.Ifmgr.Interfaces.Interfaces) != 1 || len(data.Top.Ifmgr.TrafficStatistics.TrafficStatistics.Interfaces) != 1 {
+		return nil, fmt.Errorf("invalid data")
+	}
+
+	return &IfCommonInfo{
+		Name:            data.Top.Ifmgr.Interfaces.Interfaces[0].Name,
+		AbbreviatedName: data.Top.Ifmgr.Interfaces.Interfaces[0].AbbreviatedName,
+		Description:     data.Top.Ifmgr.Interfaces.Interfaces[0].Description,
+		IfIndex:         data.Top.Ifmgr.Interfaces.Interfaces[0].IfIndex,
+		AdminStatus:     data.Top.Ifmgr.Interfaces.Interfaces[0].AdminStatus,
+		OperStatus:      data.Top.Ifmgr.Interfaces.Interfaces[0].OperStatus,
+		ConfigSpeed:     data.Top.Ifmgr.Interfaces.Interfaces[0].ConfigSpeed,
+		ActualSpeed:     data.Top.Ifmgr.Interfaces.Interfaces[0].ActualSpeed,
+		ActualDuplex:    data.Top.Ifmgr.Interfaces.Interfaces[0].ActualDuplex,
+		Interval:        data.Top.Ifmgr.TrafficStatistics.TrafficStatistics.Interfaces[0].Interval,
+		InPkts:          data.Top.Ifmgr.TrafficStatistics.TrafficStatistics.Interfaces[0].InPkts,
+		OutPkts:         data.Top.Ifmgr.TrafficStatistics.TrafficStatistics.Interfaces[0].OutPkts,
+		InOctets:        data.Top.Ifmgr.TrafficStatistics.TrafficStatistics.Interfaces[0].InOctets,
+		OutOctets:       data.Top.Ifmgr.TrafficStatistics.TrafficStatistics.Interfaces[0].OutOctets,
+		InBits:          data.Top.Ifmgr.TrafficStatistics.TrafficStatistics.Interfaces[0].InBits,
+		OutBits:         data.Top.Ifmgr.TrafficStatistics.TrafficStatistics.Interfaces[0].OutBits,
+	}, nil
 }
 
 type IfIdentity struct {
@@ -456,7 +548,6 @@ func (targetDevice *TargetDevice) GetIfIndexesByDescription(description string, 
 }
 
 func (targetDevice *TargetDevice) SetInterfaceBpduDrop(ifIndex int, enable bool) error {
-
 	iface := EthInterface{
 		IfIndex:  ifIndex,
 		BPDUDrop: enable,
