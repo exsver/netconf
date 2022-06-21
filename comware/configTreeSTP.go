@@ -39,6 +39,7 @@ type STPBase struct {
 	BPDUProtect    bool `xml:"BPDUProtect"`
 	TcProtect      bool `xml:"TcProtect"`
 	Enable         bool `xml:"Enable"`
+	Collector      string
 }
 
 // STPInterfacesConfiguration table contains information about interface-level STP functions.

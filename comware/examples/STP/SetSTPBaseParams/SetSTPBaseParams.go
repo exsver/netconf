@@ -26,7 +26,9 @@ func main() {
 	// Chaging parameters
 	config := data.Base
 	config.Mode = comware.STPModeMSTP
-	config.HelloTime = 7
+	config.HelloTime = 9
+	// To notify marshaller about active fields add names to Colletor field
+	config.Collector = "ModeHelloTime"
 
 	err = sw.SetSTPBaseParams(*config)
 	if err != nil {
