@@ -118,7 +118,7 @@ func (targetDevice *TargetDevice) GetIndexBoards() (index []int, err error) {
 	return index, nil
 }
 
-//Class:
+// Class:
 // 0 - all classes
 // 3 - physical switch (slot)
 // 5 - CONTAINER ???

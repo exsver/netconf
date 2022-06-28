@@ -18,5 +18,5 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 
-	fmt.Printf("Boards: %s\n", entities)
+	fmt.Printf("Boards: %v\n", entities)
 }
