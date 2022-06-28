@@ -1,6 +1,8 @@
 package comware
 
-import "github.com/exsver/netconf/netconf"
+import (
+	"github.com/exsver/netconf/netconf"
+)
 
 func (targetDevice *TargetDevice) GetDataSyslog() (*Syslog, error) {
 	request := netconf.RPCMessage{
@@ -14,4 +16,13 @@ func (targetDevice *TargetDevice) GetDataSyslog() (*Syslog, error) {
 	}
 
 	return data.Top.Syslog, nil
+}
+
+func (targetDevice *TargetDevice) ClearLogBuffer() error {
+	request := netconf.RPCMessage{
+		InnerXML: []byte(`<action><top xmlns="http://www.hp.com/netconf/action:1.0"><Syslog><LogBuffer><Clear/></LogBuffer></Syslog></top></action>`),
+		Xmlns:    []string{netconf.BaseURI},
+	}
+
+	return targetDevice.PerformAction(request)
 }

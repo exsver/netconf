@@ -22,8 +22,8 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 
-	// CLI equivalent "default" in interface view
-	err = sw.RestoreInterfaceDefaultConfiguration(10)
+	// CLI equivalent: reset logbuffer
+	err = sw.ClearLogBuffer()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
