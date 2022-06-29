@@ -55,8 +55,6 @@ func (targetDevice *TargetDevice) Configure(config Top, operation string) error 
 		return fmt.Errorf(`invalid operation string: "%s". Valid values are: "create", "merge", "replace", "remove", "delete"`, operation)
 	}
 
-	request.InnerXML = netconf.Normalize(request.InnerXML)
-
 	rpcReply, err := targetDevice.Action(request, "running")
 	if err != nil {
 		return err
@@ -77,8 +75,6 @@ func (targetDevice *TargetDevice) Configure(config Top, operation string) error 
 // Что-бы избежать nil pointer exception, в функциях, которые вызывают RetrieveData должна производится проверка на неравенство nil структуры data.top
 // По этому принципу работают все функции с именами Is****Exist(). Они вызывают RetrieveData() и в случае отсутствия ошибки проверяют data.top == nil. Если data.top существует - возвращают true.
 func (targetDevice *TargetDevice) RetrieveData(request netconf.RPCMessage) (data Data, err error) {
-	request.InnerXML = netconf.Normalize(request.InnerXML)
-
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {
 		return data, err
@@ -97,8 +93,6 @@ func (targetDevice *TargetDevice) RetrieveData(request netconf.RPCMessage) (data
 }
 
 func (targetDevice *TargetDevice) PerformAction(request netconf.RPCMessage) error {
-	request.InnerXML = netconf.Normalize(request.InnerXML)
-
 	rpcReply, err := targetDevice.Action(request, "running")
 	if err != nil {
 		return err

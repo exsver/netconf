@@ -27,7 +27,7 @@ func main() {
 
 	err := targetDevice.Connect(300 * time.Second)
 	if err != nil {
-		log.Printf("%s\n", err.Error())
+		log.Fatalf("%s\n", err.Error())
 	}
 
 	defer targetDevice.Disconnect()
