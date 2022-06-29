@@ -54,7 +54,7 @@ type CommitInformation struct {
 	Comment   string   `xml:"comment"`
 }
 
-//The confirmTimeout parameter specifies the rollback idle timeout time in the range of 1 to 65535 seconds.
+// The confirmTimeout parameter specifies the rollback idle timeout time in the range of 1 to 65535 seconds.
 func (targetDevice *TargetDevice) SavePointBegin(confirmTimeout int) (commitID int, err error) {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(fmt.Sprintf(`<save-point><begin><confirm-timeout>%s</confirm-timeout></begin></save-point>`, strconv.Itoa(confirmTimeout))),
@@ -65,7 +65,7 @@ func (targetDevice *TargetDevice) SavePointBegin(confirmTimeout int) (commitID i
 	return data.SavePoint.Commit.CommitID, err
 }
 
-//The system supports a maximum of 50 rollback points.
+// The system supports a maximum of 50 rollback points.
 func (targetDevice *TargetDevice) SavePointEnd() error {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<save-point><end/></save-point>`),

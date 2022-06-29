@@ -310,6 +310,8 @@ func (netconfSession *NetconfSession) unLockConfig(messageID string, config stri
 
 // Action simplifies netconf protocol operations. It performs initialization/closing sessions, message-id handling.
 func (targetDevice *TargetDevice) Action(rpcMessage RPCMessage, lockConfig string) (rpcReply *RPCReply, err error) {
+	rpcMessage.InnerXML = Normalize(rpcMessage.InnerXML)
+
 	isSessionExist := false
 	if targetDevice.NetconfSession != nil {
 		isSessionExist = true

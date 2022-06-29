@@ -27,7 +27,7 @@ func main() {
 
 	err := targetDevice.Connect(300 * time.Second)
 	if err != nil {
-		log.Printf("%s\n", err.Error())
+		log.Fatalf("%s\n", err.Error())
 	}
 
 	defer targetDevice.Disconnect()
@@ -326,6 +326,17 @@ var xmlMessagesHPE = map[string]string{
                          </config>
 	                   </edit-config>
 	                 </rpc>`,
+	"ClearLogBuffer": `<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="200">
+      <action>
+        <top xmlns="http://www.hp.com/netconf/action:1.0">
+          <Syslog>
+            <LogBuffer>
+              <Clear/>
+            </LogBuffer>
+          </Syslog>
+        </top>
+      </action>
+    </rpc>`,
 	"SetBinding": `<rpc message-id="201" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
                      <edit-config>
                        <target>
@@ -423,4 +434,18 @@ var xmlMessagesHPE = map[string]string{
 	          </filter>
             </get>
            </rpc>`,
+	"RestoreInterfaceDefaultConfiguration": `<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="456">
+      <action>
+        <top xmlns="http://www.hp.com/netconf/action:1.0">
+          <Ifmgr>
+            <Interfaces>
+              <Interface>
+                <IfIndex>11</IfIndex>
+                <Default/>
+              </Interface>
+            </Interfaces>
+          </Ifmgr>
+        </top>
+      </action>
+    </rpc>`,
 }

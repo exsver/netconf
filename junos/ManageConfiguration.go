@@ -45,7 +45,6 @@ func (targetDevice *TargetDevice) EditConfig(config *Config, operation string) e
 	}
 
 	request.InnerXML = bytes.Replace(request.InnerXML, []byte("<configuration/>"), configXML, 1)
-	request.InnerXML = netconf.Normalize(request.InnerXML)
 
 	rpcReply, err := targetDevice.Action(request, "")
 	if err != nil {

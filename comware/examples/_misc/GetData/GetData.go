@@ -36,7 +36,7 @@ func main() {
 	//  GetDataMGROUP()
 	//  GetDataResourceMonitor()
 	//  GetDataRoute()
-	//  GetDataSyslog
+	//  GetDataSyslog()
 	//  GetDataVLAN()
 	//
 	//  and others (one for each subtree)
