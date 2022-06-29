@@ -376,9 +376,17 @@ func (targetDevice *TargetDevice) RestoreInterfaceDefaultConfiguration(ifIndex i
 		Xmlns: []string{netconf.BaseURI},
 	}
 	request.InnerXML = bytes.Replace(request.InnerXML, []byte("<IfIndex/>"), append([]byte("<IfIndex>"), append([]byte(strconv.Itoa(ifIndex)), []byte("</IfIndex>")...)...), 1)
-	err := targetDevice.PerformAction(request)
 
-	return err
+	rpcReply, err := targetDevice.Action(request, "")
+	if err != nil {
+		return err
+	}
+
+	if rpcReply.GetErrors() != nil {
+		return rpcReply.GetErrors()
+	}
+
+	return nil
 }
 
 func (targetDevice *TargetDevice) GetTrafficStatistics() ([]InterfaceTrafficStatistics, error) {
