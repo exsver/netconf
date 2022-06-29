@@ -8,7 +8,7 @@ import (
 	"github.com/exsver/netconf/netconf"
 )
 
-//Operations:
+// Operations:
 // create:
 //   - If the table supports target creation and the specified target does not exist, the operation creates and then configures the target.
 //   - If the specified target exists, a data-exist error message is returned.
@@ -75,7 +75,7 @@ func (targetDevice *TargetDevice) Configure(config Top, operation string) error 
 
 // RetrieveData может вернуть структуру data без элементов. Это может возникнуть в случае запроса данных о несуществующем элементе. Например, если у 24-портового коммутатора спросить информацию о порте №30.
 // Что-бы избежать nil pointer exception, в функциях, которые вызывают RetrieveData должна производится проверка на неравенство nil структуры data.top
-// По этому принцыпу работают все функции с именами Is****Exist(). Они вызывают RetrieveData() и в случае отсутсвия ошибки проверяют data.top == nil. Если data.top существует - возвращают true.
+// По этому принципу работают все функции с именами Is****Exist(). Они вызывают RetrieveData() и в случае отсутствия ошибки проверяют data.top == nil. Если data.top существует - возвращают true.
 func (targetDevice *TargetDevice) RetrieveData(request netconf.RPCMessage) (data Data, err error) {
 	request.InnerXML = netconf.Normalize(request.InnerXML)
 
