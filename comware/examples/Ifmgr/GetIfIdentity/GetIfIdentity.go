@@ -28,6 +28,6 @@ func main() {
 	}
 
 	for ifIndex, iface := range ifIdentity {
-		fmt.Printf("Index: %v, Name: %s, Abbreviated Name: %s, Description: %s\n", ifIndex, iface.Name, iface.AbbreviatedName, iface.Description)
+		fmt.Printf("IfIndex: %v, IfType, %v, Name: %s, Abbreviated Name: %s, Description: %s\n", ifIndex, iface.IfType, iface.Name, iface.AbbreviatedName, iface.Description)
 	}
 }

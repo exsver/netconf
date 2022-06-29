@@ -41,6 +41,7 @@ func (targetDevice *TargetDevice) GetPorts() ([]Port, error) {
 // RegExp Examples:
 //   "^GigabitEthernet"       -- all GigabitEthernet ports
 //   "^Ten-GigabitEthernet"   -- all Ten-GigabitEthernet ports
+//   "1/0/"                   -- slot 1 ports
 func (targetDevice *TargetDevice) GetPortsRegExp(regExp string) ([]Port, error) {
 	request := netconf.RPCMessage{
 		InnerXML:    []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><Ifmgr><Ports><Port><Name nc:regExp="*"/><IfIndex/></Port></Ports></Ifmgr></top></filter></get>`),
@@ -232,6 +233,7 @@ func (targetDevice *TargetDevice) GetIfCommonInfo(ifIndex int) (*IfCommonInfo, e
 }
 
 type IfIdentity struct {
+	IfType          int
 	Name            string
 	AbbreviatedName string
 	Description     string
@@ -250,6 +252,7 @@ func (targetDevice *TargetDevice) GetIfIdentity() (map[int]IfIdentity, error) {
                     <Name/>
                     <AbbreviatedName/>
                     <Description/>
+                    <ifType/>
                   </Interface>
                 </Interfaces>
               </Ifmgr>
@@ -269,6 +272,7 @@ func (targetDevice *TargetDevice) GetIfIdentity() (map[int]IfIdentity, error) {
 	if data.Top != nil {
 		for _, v := range data.Top.Ifmgr.Interfaces.Interfaces {
 			ifIdentity[v.IfIndex] = IfIdentity{
+				IfType:          v.IfType,
 				Name:            v.Name,
 				AbbreviatedName: v.AbbreviatedName,
 				Description:     v.Description,

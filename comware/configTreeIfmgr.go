@@ -119,8 +119,9 @@ type Interface struct {
 	//  https://www.iana.org/assignments/ianaiftype-mib/ianaiftype-mib
 	// Examples:
 	//  6 - Physical ethernet Interface,
-	//  161 - Bridge-Aggregation,
+	//  24 - Loopback,
 	//  136 - Vlan-interface
+	//  161 - Bridge-Aggregation,
 	IfType int `xml:"ifType,omitempty"`
 	// Description - Interface description.
 	// String length constraints must be in range(0..255).
@@ -150,10 +151,19 @@ type Interface struct {
 	//                          32768 - 5Gbps
 	//
 	// Example: 37 - Auto-negotiation mode, and negotiation values are 100Mbps and 1000Mbps.
-	ConfigSpeed  int `xml:"ConfigSpeed,omitempty"`
-	ActualSpeed  int `xml:"ActualSpeed,omitempty"`
-	ConfigDuplex int `xml:"ConfigDuplex,omitempty"` // 1-full, 2-half, 3-auto
-	ActualDuplex int `xml:"ActualDuplex,omitempty"` // 1-full, 2-half, 3-auto
+	ConfigSpeed int `xml:"ConfigSpeed,omitempty"`
+	// Actual speed of an interface (units: kbps).
+	ActualSpeed int `xml:"ActualSpeed,omitempty"`
+	// Configured duplex mode of an interface:
+	//  1 - full
+	//  2 - half
+	//  3 - auto
+	ConfigDuplex int `xml:"ConfigDuplex,omitempty"`
+	// Actual duplex mode of an interface:
+	//  1 - full
+	//  2 - half
+	//  3 - auto
+	ActualDuplex int `xml:"ActualDuplex,omitempty"`
 	// PortLayer - Port layer of an interface as follows:
 	//  1 - Layer 2
 	//  2 - Layer 3
