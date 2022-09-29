@@ -51,6 +51,5 @@ func main() {
 
 	for _, v := range macs {
 		fmt.Printf("vlan: %s MAC: %s PortIndex: %v\n", v.VLANID, v.MacAddress, v.PortIndex)
-
 	}
 }

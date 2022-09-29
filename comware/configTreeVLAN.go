@@ -123,7 +123,7 @@ type HybridInterface struct {
 // VLANs table contains basic VLAN information.
 type VLANs struct {
 	XMLName xml.Name `xml:"VLANs"`
-	VLANs   []VLANID `xml:"VLANs"`
+	VLANs   []VLANID `xml:"VLANID"`
 }
 
 type VLANID struct {
