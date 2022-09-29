@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/exsver/netconf/comware"
-	"github.com/exsver/netconf/netconf"
 )
 
 func main() {
@@ -15,19 +14,22 @@ func main() {
 	//   netconf.LogLevel.Default() - default
 	//   netconf.LogLevel.Messages()
 	//   netconf.LogLevel.Verbose()
-	netconf.LogLevel.Messages()
 
 	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	ifIdentity, err := sw.GetIfIdentity()
+	data, err := sw.GetDataDeviceBase()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	for ifIndex, iface := range ifIdentity {
-		fmt.Printf("IfIndex: %v, IfType, %v, Name: %s, Abbreviated Name: %s, Description: %s\n", ifIndex, iface.IfType, iface.Name, iface.AbbreviatedName, iface.Description)
-	}
+	fmt.Printf("Hostname: '%s', Uptime: %v seconds, LocalTime: %s, BridgeMAC: %s, HostDescription: '%s'",
+		data.HostName,
+		data.Uptime,
+		data.LocalTime,
+		data.BridgeMAC,
+		data.HostDescription,
+	)
 }

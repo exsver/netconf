@@ -5,8 +5,9 @@ import (
 	"log"
 
 	"github.com/exsver/netconf/comware"
-	"github.com/exsver/netconf/netconf"
 )
+
+// Run examples/VLAN/VlanCreate/VlanCreate.go first
 
 func main() {
 	// Setting the Log Level for netconf lib.
@@ -15,19 +16,23 @@ func main() {
 	//   netconf.LogLevel.Default() - default
 	//   netconf.LogLevel.Messages()
 	//   netconf.LogLevel.Verbose()
-	netconf.LogLevel.Messages()
 
 	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	ifIdentity, err := sw.GetIfIdentity()
+	vlans := &comware.VLANs{
+		VLANs: []comware.VLANID{
+			{ID: 300},
+			{ID: 301},
+		},
+	}
+
+	err = sw.VlanRemove(vlans)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	for ifIndex, iface := range ifIdentity {
-		fmt.Printf("IfIndex: %v, IfType, %v, Name: %s, Abbreviated Name: %s, Description: %s\n", ifIndex, iface.IfType, iface.Name, iface.AbbreviatedName, iface.Description)
-	}
+	fmt.Println("Ok")
 }

@@ -2,7 +2,6 @@ package comware
 
 import (
 	"bytes"
-	"encoding/xml"
 	"fmt"
 	"strconv"
 	"strings"
@@ -10,30 +9,48 @@ import (
 	"github.com/exsver/netconf/netconf"
 )
 
-func (targetDevice *TargetDevice) GetDataVLAN() (VLAN, error) {
+func (targetDevice *TargetDevice) GetDataVLAN() (*VLAN, error) {
 	request := netconf.RPCMessage{
-		InnerXML: []byte(`
-        <get>
-          <filter type="subtree">
-            <top xmlns="http://www.hp.com/netconf/data:1.0"><VLAN/></top>
-          </filter>
-        </get>`),
-		Xmlns: []string{netconf.BaseURI},
+		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><VLAN/></top></filter></get>`),
+		Xmlns:    []string{netconf.BaseURI},
 	}
 
-	rpcReply, err := targetDevice.Action(request, "")
+	data, err := targetDevice.RetrieveData(request)
 	if err != nil {
-		return VLAN{}, err
+		return nil, err
 	}
 
-	var data Data
+	return data.Top.VLAN, nil
+}
 
-	err = xml.Unmarshal(rpcReply.Content, &data)
+func (targetDevice *TargetDevice) GetDataVLANs() (*VLANs, error) {
+	request := netconf.RPCMessage{
+		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><VLAN><VLANs/></VLAN></top></filter></get>`),
+		Xmlns:    []string{netconf.BaseURI},
+	}
+
+	data, err := targetDevice.RetrieveData(request)
 	if err != nil {
-		return VLAN{}, err
+		return nil, err
 	}
 
-	return *data.Top.VLAN, nil
+	return data.Top.VLAN.VLANs, nil
+}
+
+func (targetDevice *TargetDevice) VlanCreate(vlans *VLANs) error {
+	if vlans == nil {
+		return fmt.Errorf("VLANs is nil")
+	}
+
+	return targetDevice.Configure(*vlans.ConvertToTop(), "create")
+}
+
+func (targetDevice *TargetDevice) VlanRemove(vlans *VLANs) error {
+	if vlans == nil {
+		return fmt.Errorf("VLANs is nil")
+	}
+
+	return targetDevice.Configure(*vlans.ConvertToTop(), "remove")
 }
 
 func (targetDevice *TargetDevice) SetAccessInterfaceVlan(ifIndex int, vlanID int) error {

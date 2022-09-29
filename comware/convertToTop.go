@@ -347,3 +347,11 @@ func (base *STPBase) ConvertToTop() *Top {
 		},
 	}
 }
+
+func (vlans *VLANs) ConvertToTop() *Top {
+	return &Top{
+		VLAN: &VLAN{
+			VLANs: vlans,
+		},
+	}
+}

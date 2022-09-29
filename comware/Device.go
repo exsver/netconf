@@ -22,6 +22,20 @@ func (targetDevice *TargetDevice) GetDataDevice() (*Device, error) {
 	return data.Top.Device, nil
 }
 
+func (targetDevice *TargetDevice) GetDataDeviceBase() (*Base, error) {
+	request := netconf.RPCMessage{
+		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><Device><Base/></Device></top></filter></get>`),
+		Xmlns:    []string{netconf.BaseURI},
+	}
+
+	data, err := targetDevice.RetrieveData(request)
+	if err != nil {
+		return nil, err
+	}
+
+	return data.Top.Device.Base, nil
+}
+
 func (targetDevice *TargetDevice) GetExtPhysicalEntities(physicalIndexes []int) ([]ExtPhysicalEntity, error) {
 	entities := ""
 

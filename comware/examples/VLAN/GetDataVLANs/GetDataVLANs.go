@@ -15,19 +15,27 @@ func main() {
 	//   netconf.LogLevel.Default() - default
 	//   netconf.LogLevel.Messages()
 	//   netconf.LogLevel.Verbose()
-	netconf.LogLevel.Messages()
+	netconf.LogLevel.Verbose()
 
+	// Creating a new device.
 	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	ifIdentity, err := sw.GetIfIdentity()
+	data, err := sw.GetDataVLANs()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	for ifIndex, iface := range ifIdentity {
-		fmt.Printf("IfIndex: %v, IfType, %v, Name: %s, Abbreviated Name: %s, Description: %s\n", ifIndex, iface.IfType, iface.Name, iface.AbbreviatedName, iface.Description)
+	for _, vlan := range data.VLANs {
+		fmt.Printf("ID: %v, Name: '%s', Description: '%s', AccessPortList: '%s', UntaggedPortList: '%s', TaggedPortList: '%s'\n",
+			vlan.ID,
+			vlan.Name,
+			vlan.Description,
+			vlan.AccessPortList,
+			vlan.UntaggedPortList,
+			vlan.TaggedPortList,
+		)
 	}
 }
