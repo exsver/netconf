@@ -42,12 +42,31 @@ type Ifmgr struct {
 	     EthPortStatistics                         ***ReadOnly***
 	       []InterfacesEthPortStatistics           ***ReadOnly***
 	*/
-	EthInterfaces     *EthInterfaces     `xml:"EthInterfaces"`
-	Interfaces        *Interfaces        `xml:"Interfaces"`
-	Ports             *Ports             `xml:"Ports"`
-	Statistics        *Statistics        `xml:"Statistics"`
-	TrafficStatistics *TrafficStatistics `xml:"TrafficStatistics"`
-	EthPortStatistics *EthPortStatistics `xml:"EthPortStatistics"`
+	InterfaceCapabilities *InterfacesCapabilities `xml:"InterfaceCapabilities"`
+	EthInterfaces         *EthInterfaces          `xml:"EthInterfaces"`
+	Interfaces            *Interfaces             `xml:"Interfaces"`
+	Ports                 *Ports                  `xml:"Ports"`
+	Statistics            *Statistics             `xml:"Statistics"`
+	TrafficStatistics     *TrafficStatistics      `xml:"TrafficStatistics"`
+	EthPortStatistics     *EthPortStatistics      `xml:"EthPortStatistics"`
+}
+
+// InterfacesCapabilities table contains port capability information.
+type InterfacesCapabilities struct {
+	Interfaces []InterfaceCapabilities `xml:"Interface"`
+}
+
+// ReadOnly
+type InterfaceCapabilities struct {
+	XMLName      xml.Name `xml:"Interface"`
+	IfIndex      int      `xml:"IfIndex"`
+	Speed        int      `xml:"Speed"`
+	AutoSpeed    int      `xml:"AutoSpeed"`
+	Duplex       int      `xml:"Duplex"`
+	MDI          int      `xml:"MDI"`
+	Configurable bool     `xml:"Configurable"`
+	Shutdown     bool     `xml:"Shutdown"`
+	Removable    bool     `xml:"Removable"`
 }
 
 // EthInterfaces table contains Ethernet interfaces information.
