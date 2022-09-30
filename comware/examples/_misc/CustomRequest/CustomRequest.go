@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
+	"strings"
 
 	"github.com/exsver/netconf/comware"
 	"github.com/exsver/netconf/netconf"
@@ -39,6 +41,12 @@ func main() {
       </PhysicalEntities>
     </Device>
     <Ifmgr>
+      <InterfaceCapabilities>
+        <Interface>
+          <IfIndex/>
+          <Speed/>
+        </Interface>
+      </InterfaceCapabilities>
       <Interfaces>
         <Interface>
           <IfIndex/>
@@ -99,7 +107,73 @@ func main() {
 		}
 	}
 
-	for _, port := range data.Top.Ifmgr.Ports.Ports {
-		fmt.Printf("IfIndex: %v IfName: '%s', IfAbbreviatedName: '%s', Description: '%s'\n", port.IfIndex, port.Name, info[port.IfIndex].AbbreviatedName, info[port.IfIndex].Description)
+	type ifCapabilities struct {
+		Speed int
 	}
+
+	capabilities := make(map[int]ifCapabilities)
+	for _, ifCap := range data.Top.Ifmgr.InterfaceCapabilities.Interfaces {
+		capabilities[ifCap.IfIndex] = ifCapabilities{
+			Speed: ifCap.Speed,
+		}
+	}
+
+	for _, port := range data.Top.Ifmgr.Ports.Ports {
+		fmt.Printf("IfIndex: %v IfName: '%s', IfAbbreviatedName: '%s', Description: '%s' Speed: %s\n",
+			port.IfIndex,
+			port.Name,
+			info[port.IfIndex].AbbreviatedName,
+			info[port.IfIndex].Description,
+			IfSpeedString(capabilities[port.IfIndex].Speed),
+		)
+	}
+}
+
+func IfSpeedString(in int) string {
+	sp := make([]int, 0)
+
+	if (in & 65536) != 0 {
+		sp = append(sp, 25000)
+	}
+
+	if (in & 32768) != 0 {
+		sp = append(sp, 5000)
+	}
+
+	if (in & 16384) != 0 {
+		sp = append(sp, 100000)
+	}
+
+	if (in & 8192) != 0 {
+		sp = append(sp, 40000)
+	}
+
+	if (in & 1024) != 0 {
+		sp = append(sp, 10000)
+	}
+
+	if (in & 128) != 0 {
+		sp = append(sp, 2500)
+	}
+
+	if (in & 32) != 0 {
+		sp = append(sp, 1000)
+	}
+
+	if (in & 4) != 0 {
+		sp = append(sp, 100)
+	}
+
+	if (in & 2) != 0 {
+		sp = append(sp, 10)
+	}
+
+	sort.Ints(sp)
+
+	out := ""
+	for _, speed := range sp {
+		out = fmt.Sprintf("%s%v/", out, speed)
+	}
+
+	return strings.TrimSuffix(out, "/")
 }
