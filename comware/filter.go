@@ -20,7 +20,7 @@ type XMLFilter struct {
 	IsRegExp bool
 }
 
-func (filter *XMLFilter) convertToXML() []byte {
+func (filter *XMLFilter) ConvertToXML() []byte {
 	if filter.IsRegExp {
 		return []byte(fmt.Sprintf(`<%s xmlns:re="http://www.hp.com/netconf/base:1.0" re:regExp="%s"/>`, filter.Key, filter.Value))
 	}
@@ -30,7 +30,7 @@ func (filter *XMLFilter) convertToXML() []byte {
 
 func convertFiltersToXML(filters []XMLFilter) (xml []byte) {
 	for _, v := range filters {
-		xml = append(xml, v.convertToXML()...)
+		xml = append(xml, v.ConvertToXML()...)
 	}
 
 	return xml
