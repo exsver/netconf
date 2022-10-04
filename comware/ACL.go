@@ -187,7 +187,7 @@ func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesGet(filters []XMLFilte
 				return nil, fmt.Errorf("invalid filter: %s", filter.Key)
 			}
 
-			request.InnerXML = bytes.Replace(request.InnerXML, []byte(fmt.Sprintf("<%s/>", filter.Key)), filter.convertToXML(), 1)
+			request.InnerXML = bytes.Replace(request.InnerXML, []byte(fmt.Sprintf("<%s/>", filter.Key)), filter.ConvertToXML(), 1)
 		}
 	}
 
