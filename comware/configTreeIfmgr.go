@@ -247,6 +247,7 @@ type InterfaceStatistics struct {
 	OutErrors       uint64   `xml:"OutErrors"`
 	OutRate         uint64   `xml:"OutRate"`
 	// LastClear - Local time when the statistics on an interface were cleared most recently.
+	//  0000-00-00T00:00:00 mean newer
 	LastClear string `xml:"LastClear"`
 }
 
