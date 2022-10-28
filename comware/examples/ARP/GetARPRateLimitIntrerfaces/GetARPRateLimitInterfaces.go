@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/exsver/netconf/comware"
 	"github.com/exsver/netconf/netconf"
 )
@@ -23,29 +23,14 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 
-	// You can use any GetData* function.
-	// For example:
-	//  GetData()
-	//  GetDataACL()
-	//  GetDataARP()
-	//  GetDataDevice()
-	//  GetDataDHCPServer()
-	//  GetDataDHCPSP()
-	//  GetDataIfmgr()
-	//  GetDataIRF()
-	//  GetDataMAC()
-	//  GetDataMGROUP()
-	//  GetDataResourceMonitor()
-	//  GetDataRoute()
-	//  GetDataSyslog()
-	//  GetDataVLAN()
-	//
-	//  and others (one for each subtree)
-	data, err := sw.GetDataDevice()
+	// Getting data
+	limits, err := sw.GetARPRateLimitInterfaces()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	// Printing the data structures
-	spew.Dump(data)
+	// Print
+	for _, limit := range limits {
+		fmt.Printf("IfIndex: %v, RateLimitEnable: %v, RateLimitNum: %v\n", limit.IfIndex, limit.RateLimitEnable, limit.RateLimitNum)
+	}
 }

@@ -1,6 +1,10 @@
 package comware
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+
+	"github.com/exsver/netconf/netconf"
+)
 
 // Data used to collect information from device
 type Data struct {
@@ -34,6 +38,7 @@ type Top struct {
 	MGROUP          *MGROUP          `xml:"MGROUP"` // Port Mirroring
 	PoE             *PoE             `xml:"PoE"`
 	PortSecurity    *PortSecurity    `xml:"PortSecurity"`
+	RBAC            *RBAC            `xml:"RBAC"`
 	ResourceMonitor *ResourceMonitor `xml:"ResourceMonitor"`
 	Route           *Route           `xml:"Route"`
 	SNMP            *SNMP            `xml:"SNMP"`
@@ -41,4 +46,18 @@ type Top struct {
 	STP             *STP             `xml:"STP"`
 	Syslog          *Syslog          `xml:"Syslog"`
 	VLAN            *VLAN            `xml:"VLAN"`
+}
+
+func (targetDevice *TargetDevice) GetData() (*Top, error) {
+	request := netconf.RPCMessage{
+		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"></top></filter></get>`),
+		Xmlns:    []string{netconf.BaseURI},
+	}
+
+	data, err := targetDevice.RetrieveData(request)
+	if err != nil {
+		return nil, err
+	}
+
+	return data.Top, nil
 }

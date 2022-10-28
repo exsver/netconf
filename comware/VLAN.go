@@ -155,7 +155,7 @@ func (targetDevice *TargetDevice) IsVlanInTrunk(ifName string, vlanID int) (bool
 		return false, fmt.Errorf("interface with name %s isn't trunk", ifName)
 	}
 
-	vlans, err := (VlanListToIntSlice(iface.PermitVlanList))
+	vlans, err := VlanListToIntSlice(iface.PermitVlanList)
 	if err != nil {
 		return false, err
 	}
