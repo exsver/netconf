@@ -16,6 +16,9 @@ type RPCMessage struct {
 	CustomAttrs []string `xml:"-"`
 	// Set True for add optional XML header: `<?xml version="1.0" encoding="UTF-8"?>`.
 	AppendXMLHeader bool `xml:"-"`
+	// Set True for do not normalize request before sending.
+	// Needed for CLI commands.
+	NotNormalize bool `xml:"-"`
 }
 
 // MarshalRPCMessage generates and return a new RPC Message from RPCMessage struct.

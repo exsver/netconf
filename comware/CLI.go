@@ -23,7 +23,10 @@ type CDATA struct {
 // 		false - for execute commands in unprivileged mode
 //		true  - for execute commands in privileged mode (system-view)
 func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMode bool) ([]byte, error) {
-	request := netconf.RPCMessage{Xmlns: []string{netconf.BaseURI}}
+	request := netconf.RPCMessage{
+		Xmlns:        []string{netconf.BaseURI},
+		NotNormalize: true,
+	}
 
 	if configurationMode {
 		request.InnerXML = []byte(`<CLI><Configuration>cmd_line</Configuration></CLI>`)
