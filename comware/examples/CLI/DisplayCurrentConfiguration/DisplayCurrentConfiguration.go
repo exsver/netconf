@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
-
 	"github.com/exsver/netconf/comware"
-	"github.com/exsver/netconf/netconf"
+	"log"
 )
 
 func main() {
@@ -15,21 +13,21 @@ func main() {
 	//   netconf.LogLevel.Default() - default
 	//   netconf.LogLevel.Messages()
 	//   netconf.LogLevel.Verbose()
-	netconf.LogLevel.Verbose()
 
-	// Creating a new device.
 	sw, err := comware.NewTargetDevice("10.10.10.10", "netconf-user", "netconf-password")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	// Getting data
-	data, err := sw.GetDataResourceMonitor()
+	// Preparing a set of commands
+	commands := `display current-configuration`
+
+	// Executing commands in device
+	output, err := sw.RunCLICommand(commands, false)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	for _, monitor := range data.Monitors.Monitors {
-		fmt.Printf("Slot: %v, Name: %s, Used: %v, Total: %v\n", monitor.DeviceNode.Slot, monitor.Name, monitor.Used, monitor.Total)
-	}
+	// Printing output
+	fmt.Printf("%s", comware.CorrectNewLines(output))
 }

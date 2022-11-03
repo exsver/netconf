@@ -14,13 +14,13 @@ func main() {
 
 	}
 
-	agingTime, err := sw.GetMacAgingTime()
+	agingTime, err := sw.GetDataMacAgingTime()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 	fmt.Printf("Min AgingTime: %v seconds Max AgingTime: %v seconds, Current AgingTime: %v seconds\n", agingTime.AgingTimeMin, agingTime.AgingTimeMax, agingTime.AgingTime)
 
-	macSpecification, err := sw.GetMacSpecification()
+	macSpecification, err := sw.GetDataMacSpecification()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}

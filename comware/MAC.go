@@ -78,7 +78,7 @@ func (targetDevice *TargetDevice) GetMacTable(filters []XMLFilter) ([]MacTableEn
 	return data.Top.MAC.MacUnicastTable.Unicast, nil
 }
 
-func (targetDevice *TargetDevice) GetMacAgingTime() (*MacAging, error) {
+func (targetDevice *TargetDevice) GetDataMacAgingTime() (*MacAging, error) {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><MAC><MacAging/></MAC></top></filter></get>`),
 		Xmlns:    []string{netconf.BaseURI},
@@ -92,7 +92,7 @@ func (targetDevice *TargetDevice) GetMacAgingTime() (*MacAging, error) {
 	return data.Top.MAC.MacAging, nil
 }
 
-func (targetDevice *TargetDevice) GetMacSpecification() (*MacSpecification, error) {
+func (targetDevice *TargetDevice) GetDataMacSpecification() (*MacSpecification, error) {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><MAC><MacSpecification/></MAC></top></filter></get>`),
 		Xmlns:    []string{netconf.BaseURI},
