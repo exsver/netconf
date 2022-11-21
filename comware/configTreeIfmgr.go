@@ -58,15 +58,21 @@ type InterfacesCapabilities struct {
 
 // ReadOnly
 type InterfaceCapabilities struct {
-	XMLName      xml.Name `xml:"Interface"`
-	IfIndex      int      `xml:"IfIndex"`
-	Speed        int      `xml:"Speed"`
-	AutoSpeed    int      `xml:"AutoSpeed"`
-	Duplex       int      `xml:"Duplex"`
-	MDI          int      `xml:"MDI"`
-	Configurable bool     `xml:"Configurable"`
-	Shutdown     bool     `xml:"Shutdown"`
-	Removable    bool     `xml:"Removable"`
+	XMLName xml.Name `xml:"Interface"`
+	IfIndex int      `xml:"IfIndex"`
+	// Speed which can be configured.
+	// Each bit represents a speed as follows:
+	// 1:AuTo 2:10Mbps 4:100Mbps 8:155Mbps 16:622Mbps 32:1Gbps 64:2Gbps 128:2.5Gbps 256:4Gbps 512:8Gbps
+	// 1024:10Gbps 2048:16Gbps 4096:20Gbps 8192:40Gbps 16384:100Gbps 32768:5Gbps 65536:25Gbps 131072:32Gbps
+	//
+	// For interface 10/100/1000 Speed = 39 (1:AuTo + 2:10Mbps + 4:100Mbps + 32:1Gbps)
+	Speed        int  `xml:"Speed"`
+	AutoSpeed    int  `xml:"AutoSpeed"`
+	Duplex       int  `xml:"Duplex"`
+	MDI          int  `xml:"MDI"`
+	Configurable bool `xml:"Configurable"`
+	Shutdown     bool `xml:"Shutdown"`
+	Removable    bool `xml:"Removable"`
 }
 
 // EthInterfaces table contains Ethernet interfaces information.

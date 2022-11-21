@@ -49,17 +49,18 @@ type HybridInterfaces struct {
 	HybridInterfaces []HybridInterface `xml:"Interface"`
 }
 
+// VLANInterface - read-only struct
 type VLANInterface struct {
 	XMLName xml.Name `xml:"Interface"`
 	IfIndex int      `xml:"IfIndex"`
 	// LinkType:
 	// 1 - Access, 2 - Trunk, 3 - Hybrid
-	LinkType int `xml:"LinkType,omitempty"`
+	LinkType int `xml:"LinkType"`
 	// PVID value range: 1 to 4094.
-	PVID int `xml:"PVID,omitempty"`
+	PVID int `xml:"PVID"`
 	// Name - full name of the interface, including the interface type	and number.
 	// String. Length: up to 47	characters.
-	Name string `xml:"Name,omitempty"`
+	Name string `xml:"Name"`
 	// UntaggedVlanList is a comma-separated list of VLAN items.
 	// An item can be an individual VLAN ID or a VLAN ID range.
 	// Use a hyphen (-) to separate the start and end VLANs of a range.

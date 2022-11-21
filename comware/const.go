@@ -19,6 +19,13 @@ const (
 	InterfaceDuplexHalf = 2 // Half Duplex
 	InterfaceDuplexAuto = 3 // Duplex Auto
 
+	// Interface Type (IANAifType)
+	InterfaceTypeOther             = 1 // NULL interfaces
+	InterfaceTypeEthernet          = 6
+	InterfaceTypeLoopback          = 24
+	InterfaceTypeVlanInterface     = 136
+	InterfaceTypeBridgeAggregation = 161
+
 	// Interface Link Type (VLAN type of an interface)
 	InterfaceLinkTypeAccess = 1
 	InterfaceLinkTypeTrunk  = 2
