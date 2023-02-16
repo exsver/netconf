@@ -23,7 +23,13 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 
-	// Getting data
+	// Getting interfaces info
+	ifIdentity, err := sw.GetIfIdentity()
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+
+	// Getting ARP table
 	data, err := sw.GetDataARPTable()
 	if err != nil {
 		log.Fatalf("%s", err)
@@ -31,6 +37,14 @@ func main() {
 
 	// Print
 	for _, arpEntry := range data.ArpEntries {
-		fmt.Printf("IfIndex: %v, PortIndex: %v, VLANID: %v, IP: %s, MAC: %s", arpEntry.IfIndex, arpEntry.PortIndex, arpEntry.VLANID, arpEntry.Ipv4Address, arpEntry.MacAddress)
+		fmt.Printf("IfIndex: %v, IfName: %s, PortIndex: %v, PortName: %s, VLANID: %v, IP: %s, MAC: %s",
+			arpEntry.IfIndex,
+			ifIdentity[arpEntry.IfIndex].AbbreviatedName,
+			arpEntry.PortIndex,
+			ifIdentity[arpEntry.PortIndex].AbbreviatedName,
+			arpEntry.VLANID,
+			arpEntry.Ipv4Address,
+			arpEntry.MacAddress,
+		)
 	}
 }
