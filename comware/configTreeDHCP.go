@@ -25,6 +25,7 @@ type DHCPConfig struct {
 	XMLName      xml.Name          `xml:"DHCPConfig"`
 	DHCPEnable   bool              `xml:"DHCPEnable,omitempty"`
 	ServerConfig *DHCPServerConfig `xml:"ServerConfig"`
+	RelayConfig  *DHCPRelayConfig  `xml:"RelayConfig"`
 }
 
 type DHCPServerConfig struct {
@@ -33,15 +34,15 @@ type DHCPServerConfig struct {
 	IgnoreBOOTP       bool     `xml:"IgnoreBOOTP,omitempty"`
 	BOOTPReplyRFC1048 bool     `xml:"BOOTPReplyRFC1048,omitempty"`
 	Opt82Enabled      bool     `xml:"Opt82Enabled,omitempty"`
-	PingNumber        int      `xml:"PingNumber,omitempty"`  //Valid values are:0-10
-	PingTimeout       int      `xml:"PingTimeout,omitempty"` //Valid values are:0-10000
+	PingNumber        int      `xml:"PingNumber,omitempty"`  // Valid values are:0-10
+	PingTimeout       int      `xml:"PingTimeout,omitempty"` // Valid values are:0-10000
 }
 
 type DHCPRelayConfig struct {
 	XMLName           xml.Name `xml:"RelayConfig"`
 	UserInfoRecord    bool     `xml:"UserInfoRecord,omitempty"`
 	UserInfoRefresh   bool     `xml:"UserInfoRefresh,omitempty"`
-	UserInfoFlushTime int      `xml:"UserInfoFlushTime,omitempty"` //Valid values are:0-120
+	UserInfoFlushTime int      `xml:"UserInfoFlushTime,omitempty"` // Valid values are:0-120
 }
 
 // DHCPIfMode table contains DHCP interface mode information.

@@ -23,28 +23,16 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 
-	// Getting interfaces info
-	ifIdentity, err := sw.GetIfIdentity()
-	if err != nil {
-		log.Fatalf("%s", err)
-	}
-
-	// Getting ARP table
-	data, err := sw.GetDataARPTable()
+	// Getting IP List
+	data, err := sw.GetDataDHCPServerIpInUse()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
 	// Print
-	for _, arpEntry := range data.ArpEntries {
-		fmt.Printf("IfIndex: %v, IfName: %s, PortIndex: %v, PortName: %s, VLANID: %v, IP: %s, MAC: %s\n",
-			arpEntry.IfIndex,
-			ifIdentity[arpEntry.IfIndex].AbbreviatedName,
-			arpEntry.PortIndex,
-			ifIdentity[arpEntry.PortIndex].AbbreviatedName,
-			arpEntry.VLANID,
-			arpEntry.Ipv4Address,
-			arpEntry.MacAddress,
-		)
+	for _, ip := range data.IPInUse {
+		if ip.Type == 5 {
+			fmt.Printf("VLAN: %v, Ipv4Address: %s, CID: %s, EndLease: %s\n", ip.VLANID, ip.Ipv4Address, ip.CID, ip.EndLease)
+		}
 	}
 }
