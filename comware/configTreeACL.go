@@ -21,10 +21,21 @@ type ACL struct {
 	       []IPv6AdvanceRule
 	     IPv6BasicRules
 	       []IPv6BasicRule
+	     IPv6NamedAdvanceRules
+	       []IPv6NamedAdvanceRule
+	     IPv6NamedBasicRules
+	       []IPv6NamedBasicRule
+	     MACNamedRules
+	       []MACNamedRule
 	     MACRules
 	       []MACRule
+	     NamedGroups
+	     PfilterApply
 	     PfilterDefAction
+	     PfilterGroupRunInfo
 	     PfilterIgnoreAction
+	     PfilterRuleRunInfo
+	     PfilterStatisticSum
 	*/
 	Groups                *Groups                `xml:"Groups"`
 	NamedGroups           *NamedGroups           `xml:"NamedGroups"`
@@ -33,7 +44,9 @@ type ACL struct {
 	IPv4BasicRules        *IPv4BasicRules        `xml:"IPv4BasicRules"`
 	IPv4NamedBasicRules   *IPv4NamedBasicRules   `xml:"IPv4NamedBasicRules"`
 	IPv6AdvanceRules      *IPv6AdvanceRules      `xml:"IPv6AdvanceRules"`
+	IPv6NamedAdvanceRules *IPv6NamedAdvanceRules `xml:"IPv6NamedAdvanceRules"`
 	IPv6BasicRules        *IPv6BasicRules        `xml:"IPv6BasicRules"`
+	IPv6NamedBasicRules   *IPv6NamedBasicRules   `xml:"IPv6NamedBasicRules"`
 	MACRules              *MACRules              `xml:"MACRules"`
 	PfilterDefAction      *PfilterDefAction      `xml:"PfilterDefAction"`
 	PfilterApply          *PfilterApply          `xml:"PfilterApply"`
@@ -134,9 +147,19 @@ type IPv6AdvanceRules struct {
 	IPv6AdvanceRules []IPv6AdvanceRule `xml:"Rule"`
 }
 
+// IPv6NamedAdvanceRules table contains IPv6 advanced ACL rule information.
+type IPv6NamedAdvanceRules struct {
+	IPv6NamedAdvanceRules []IPv6NamedAdvanceRule `xml:"Rule"`
+}
+
 // IPv6BasicRules table contains information about IPv6 basic ACL rules.
 type IPv6BasicRules struct {
 	IPv6BasicRules []IPv6BasicRule `xml:"Rule"`
+}
+
+// IPv6NamedBasicRules table contains information about IPv6 basic ACL rules.
+type IPv6NamedBasicRules struct {
+	IPv6NamedBasicRules []IPv6NamedBasicRule `xml:"Rule"`
 }
 
 // MACRules table contains Ethernet frame header ACL rule information.
@@ -311,15 +334,73 @@ type IPv6AdvanceRule struct {
 	Comment string `xml:"Comment,omitempty"`
 }
 
-type IPv6BasicRule struct {
+type IPv6NamedAdvanceRule struct {
 	XMLName xml.Name `xml:"Rule"`
-	// Group ID. Range from 2000 to 2999.
-	GroupID int `xml:"GroupID"`
+	// GroupIndex - Acl Group Name or Index.
+	// If it's Index, range from 3000 to 3999.
+	GroupIndex string `xml:"GroupIndex"`
 	// Rule ID. Range from 0 to 65534
 	// If you set this column to 65535, the system automatically assigns a new rule ID.
 	RuleID int `xml:"RuleID"`
 	// Action on packets matching the rule.
 	// Action: 1 - Deny, 2 - Permit
+	Action int `xml:"Action"`
+	// ProtocolType defines:
+	// Protocol number INTEGER<0-255>, 256 - any IP protocol
+	// 6 - TCP
+	// 17 - UDP
+	// 58 - ICMPv6
+	// ...
+	// https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
+	ProtocolType int `xml:"ProtocolType"`
+	// SrcAny - the flag of matching any source IPv6 address.
+	SrcAny bool `xml:"SrcAny,omitempty"`
+	// SrcIPv6 - Source IPv6, including SrcIPv6Address and SrcIPv6Prefix.
+	SrcIPv6 SrcIPv6 `xml:"SrcIPv6,omitempty"`
+	// DstAny - the flag of matching any destination IPv6 address.
+	DstAny bool `xml:"DstAny,omitempty"`
+	// DstIPv6 - Destination IPv6.
+	DstIPv6 DstIPv6 `xml:"DstIPv6,omitempty"`
+	// DSCP - the value of DSCP of IPv6 packet.
+	// Range: 0 - 63 inclusive.
+	DSCP int `xml:"DSCP,omitempty"`
+	// The value of flow label of IPv6 packet header.
+	// Range: 0 - 1048575 inclusive.
+	FlowLabel int `xml:"FlowLabel,omitempty"`
+	// RoutingTypeAny - the flag of matching any routing header type.
+	RoutingTypeAny bool `xml:"RoutingTypeAny,omitempty"`
+	// RoutingTypeValue - the value of routing header type.
+	// Range: 0 - 255 inclusive.
+	RoutingTypeValue int     `xml:"RoutingTypeValue,omitempty"`
+	SrcPort          SrcPort `xml:"SrcPort,omitempty"`
+	DstPort          DstPort `xml:"DstPort,omitempty"`
+	// Fragment - hhe flag of matching fragmented packet.
+	//  0: the rule applies to all fragments and non-fragments,
+	//  1: the rule applies to only non-first fragments.
+	Fragment bool `xml:"Fragment,omitempty"`
+	Counting bool `xml:"Counting,omitempty"`
+	// Count the number of times the ACL rule has been matched.
+	Count uint64 `xml:"Count,omitempty"`
+	// Rule status:
+	// 1: active,
+	// 2: inactive.
+	Status int `xml:"Status,omitempty"`
+	// Logging - enables logs matching packets.
+	Logging bool `xml:"Logging,omitempty"`
+	// Rule comment,
+	// a case-sensitive string of 1 to 127 characters.
+	Comment string `xml:"Comment,omitempty"`
+}
+
+type IPv6BasicRule struct {
+	XMLName xml.Name `xml:"Rule"`
+	// Group ID. Range from 2000 to 2999.
+	GroupID int `xml:"GroupID"`
+	// Rule ID. Range from 0 to 65534.
+	// If you set this column to 65535, the system automatically assigns a new rule ID.
+	RuleID int `xml:"RuleID"`
+	// Action on packets matching the rule.
+	// Action: 1 - Deny, 2 - Permit.
 	Action int `xml:"Action,omitempty"`
 	// Rule status.
 	// Status: 1 - active, 2 - inactive.
@@ -341,6 +422,44 @@ type IPv6BasicRule struct {
 	SrcAny bool `xml:"SrcAny,omitempty"`
 	// Source IPv6, including SrcIPv6Address and SrcIPv6Prefix.
 	SrcIPv6 SrcIPv6 `xml:"SrcIPv6,omitempty"`
+	// Rule comment,
+	// a case-sensitive string of 1 to 127 characters.
+	Comment string `xml:"Comment,omitempty"`
+}
+
+type IPv6NamedBasicRule struct {
+	XMLName xml.Name `xml:"Rule"`
+	// GroupIndex - Acl Group Name or Index.
+	// If it's Index, range from 2000 to 2999.
+	GroupIndex string `xml:"GroupIndex"`
+	// Rule ID. Range from 0 to 65534
+	// If you set this column to 65535, the system automatically assigns a new rule ID.
+	RuleID int `xml:"RuleID"`
+	// Action on packets matching the rule.
+	// Action: 1 - Deny, 2 - Permit
+	Action int `xml:"Action,omitempty"`
+	// SrcAny - the flag of matching any source IPv6 address.
+	SrcAny bool `xml:"SrcAny,omitempty"`
+	// SrcIPv6 - Source IPv6, including SrcIPv6Address and SrcIPv6Prefix.
+	SrcIPv6 SrcIPv6 `xml:"SrcIPv6,omitempty"`
+	// RoutingTypeAny - the flag of matching any routing header type.
+	RoutingTypeAny bool `xml:"RoutingTypeAny,omitempty"`
+	// RoutingTypeValue - the value of routing header type.
+	// Range: 0 - 255 inclusive.
+	RoutingTypeValue int `xml:"RoutingTypeValue,omitempty"`
+	// Fragment - hhe flag of matching fragmented packet.
+	//  0: the rule applies to all fragments and non-fragments,
+	//  1: the rule applies to only non-first fragments.
+	Fragment bool `xml:"Fragment,omitempty"`
+	Counting bool `xml:"Counting,omitempty"`
+	// Count the number of times the ACL rule has been matched.
+	Count uint64 `xml:"Count,omitempty"`
+	// Rule status:
+	// 1: active,
+	// 2: inactive.
+	Status int `xml:"Status,omitempty"`
+	// Logging - enables logs matching packets.
+	Logging bool `xml:"Logging,omitempty"`
 	// Rule comment,
 	// a case-sensitive string of 1 to 127 characters.
 	Comment string `xml:"Comment,omitempty"`
@@ -379,7 +498,7 @@ type DstMACAddr struct {
 	DstMACMask    string `xml:"DstMACMask"`
 }
 
-//Protocol Represents EtherType
+// Protocol Represents EtherType
 // https://tools.ietf.org/html/rfc7042#appendix-B
 // For example:
 // 0800  IPv4
