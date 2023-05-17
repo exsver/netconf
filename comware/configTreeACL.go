@@ -323,12 +323,12 @@ type IPv6AdvanceRule struct {
 	Fragment       bool     `xml:"Fragment,omitempty"`
 	RoutingTypeAny bool     `xml:"RoutingTypeAny,omitempty"`
 	HopTypeAny     bool     `xml:"HopTypeAny,omitempty"`
-	SrcAny         bool     `xml:"SrcAny,omitempty"`
-	DstAny         bool     `xml:"DstAny,omitempty"`
-	SrcIPv6        SrcIPv6  `xml:"SrcIPv6,omitempty"`
-	DstIPv6        DstIPv6  `xml:"DstIPv6,omitempty"`
-	SrcPort        SrcPort  `xml:"SrcPort,omitempty"`
-	DstPort        DstPort  `xml:"DstPort,omitempty"`
+	SrcAny         *bool    `xml:"SrcAny,omitempty"`
+	DstAny         *bool    `xml:"DstAny,omitempty"`
+	SrcIPv6        *SrcIPv6 `xml:"SrcIPv6,omitempty"`
+	DstIPv6        *DstIPv6 `xml:"DstIPv6,omitempty"`
+	SrcPort        *SrcPort `xml:"SrcPort,omitempty"`
+	DstPort        *DstPort `xml:"DstPort,omitempty"`
 	// Rule comment,
 	// a case-sensitive string of 1 to 127 characters.
 	Comment string `xml:"Comment,omitempty"`
@@ -354,13 +354,13 @@ type IPv6NamedAdvanceRule struct {
 	// https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
 	ProtocolType int `xml:"ProtocolType"`
 	// SrcAny - the flag of matching any source IPv6 address.
-	SrcAny bool `xml:"SrcAny,omitempty"`
+	SrcAny *bool `xml:"SrcAny,omitempty"`
 	// SrcIPv6 - Source IPv6, including SrcIPv6Address and SrcIPv6Prefix.
-	SrcIPv6 SrcIPv6 `xml:"SrcIPv6,omitempty"`
+	SrcIPv6 *SrcIPv6 `xml:"SrcIPv6,omitempty"`
 	// DstAny - the flag of matching any destination IPv6 address.
-	DstAny bool `xml:"DstAny,omitempty"`
+	DstAny *bool `xml:"DstAny,omitempty"`
 	// DstIPv6 - Destination IPv6.
-	DstIPv6 DstIPv6 `xml:"DstIPv6,omitempty"`
+	DstIPv6 *DstIPv6 `xml:"DstIPv6,omitempty"`
 	// DSCP - the value of DSCP of IPv6 packet.
 	// Range: 0 - 63 inclusive.
 	DSCP int `xml:"DSCP,omitempty"`
@@ -419,9 +419,9 @@ type IPv6BasicRule struct {
 	// Counts times the ACL rule has been matched.
 	Counting bool `xml:"Counting,omitempty"`
 	// SrcAn - the flag of matching any source IPv6 address.
-	SrcAny bool `xml:"SrcAny,omitempty"`
+	SrcAny *bool `xml:"SrcAny,omitempty"`
 	// Source IPv6, including SrcIPv6Address and SrcIPv6Prefix.
-	SrcIPv6 SrcIPv6 `xml:"SrcIPv6,omitempty"`
+	SrcIPv6 *SrcIPv6 `xml:"SrcIPv6,omitempty"`
 	// Rule comment,
 	// a case-sensitive string of 1 to 127 characters.
 	Comment string `xml:"Comment,omitempty"`
@@ -439,9 +439,9 @@ type IPv6NamedBasicRule struct {
 	// Action: 1 - Deny, 2 - Permit
 	Action int `xml:"Action,omitempty"`
 	// SrcAny - the flag of matching any source IPv6 address.
-	SrcAny bool `xml:"SrcAny,omitempty"`
+	SrcAny *bool `xml:"SrcAny,omitempty"`
 	// SrcIPv6 - Source IPv6, including SrcIPv6Address and SrcIPv6Prefix.
-	SrcIPv6 SrcIPv6 `xml:"SrcIPv6,omitempty"`
+	SrcIPv6 *SrcIPv6 `xml:"SrcIPv6,omitempty"`
 	// RoutingTypeAny - the flag of matching any routing header type.
 	RoutingTypeAny bool `xml:"RoutingTypeAny,omitempty"`
 	// RoutingTypeValue - the value of routing header type.
