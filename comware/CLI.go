@@ -20,6 +20,7 @@ type CDATA struct {
 
 // RunCLICommand sends the specified cli commands via netconf.
 // Use configurationMode:
+//
 //	false - for execute commands in unprivileged mode
 //	true  - for execute commands in privileged mode (system-view)
 func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMode bool) ([]byte, error) {
@@ -62,7 +63,7 @@ func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMod
 // required Comware version >= 7.1.070
 func (targetDevice *TargetDevice) IsConfigurationSaved() (saved bool, diff []byte, err error) {
 	diff, err = targetDevice.RunCLICommand(`display current-configuration diff`, false)
-	diff = bytes.Replace(diff, []byte("\n\n\n"), []byte("\n"), -1)
+	diff = bytes.ReplaceAll(diff, []byte("\n\n\n"), []byte("\n"))
 	if err != nil {
 		return
 	}
@@ -104,5 +105,5 @@ func ParseVlansFromConfigString(configString string) (vlans []int) {
 
 // CorrectNewLines replaces "\n\n\n" with "\n"
 func CorrectNewLines(in []byte) []byte {
-	return bytes.Replace(in, []byte("\n\n\n"), []byte("\n"), -1)
+	return bytes.ReplaceAll(in, []byte("\n\n\n"), []byte("\n"))
 }

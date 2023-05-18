@@ -10,8 +10,8 @@ type Transport struct {
 
 func (t *Transport) Close() error {
 	t.Session.Close()
-	err := t.Connection.Close()
 
+	err := t.Connection.Close()
 	if err != nil {
 		if err.Error() == "EOF" {
 			return nil

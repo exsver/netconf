@@ -24,7 +24,7 @@ type ChassisInventoryItem struct {
 	ChassisModules []ChassisModule `xml:"chassis-module"`
 }
 
-type ChassisModule struct { //For example RE, CB, FPC, PEM and so on.
+type ChassisModule struct { // For example RE, CB, FPC, PEM and so on.
 	Name             string             `xml:"name"`
 	Version          string             `xml:"version"`
 	PartNumber       string             `xml:"part-number"`
@@ -35,7 +35,7 @@ type ChassisModule struct { //For example RE, CB, FPC, PEM and so on.
 	ChassisSubModule []ChassisSubModule `xml:"chassis-sub-module"`
 }
 
-type ChassisSubModule struct { //For example PIC
+type ChassisSubModule struct { // For example PIC
 	Name                 string                `xml:"name"`
 	Version              string                `xml:"version"`
 	PartNumber           string                `xml:"part-number"`
@@ -46,7 +46,7 @@ type ChassisSubModule struct { //For example PIC
 	ChassisSubSubModules []ChassisSubSubModule `xml:"chassis-sub-sub-module"`
 }
 
-type ChassisSubSubModule struct { //For example Transceivers
+type ChassisSubSubModule struct { // For example Transceivers
 	Name         string `xml:"name"`
 	Version      string `xml:"version"`
 	PartNumber   string `xml:"part-number"`

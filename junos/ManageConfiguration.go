@@ -11,12 +11,13 @@ import (
 )
 
 // Operations:
-//  merge:
-//    The device merges new configuration data into the existing configuration data. This is the default.
-//  replace:
-//    The device replaces existing configuration data with the new configuration data.
-//  none:
-//    The device does not change the existing configuration unless the new configuration element includes an operation attribute.
+//
+//	merge:
+//	  The device merges new configuration data into the existing configuration data. This is the default.
+//	replace:
+//	  The device replaces existing configuration data with the new configuration data.
+//	none:
+//	  The device does not change the existing configuration unless the new configuration element includes an operation attribute.
 func (targetDevice *TargetDevice) EditConfig(config *Config, operation string) error {
 	if config == nil {
 		return fmt.Errorf("nothing to configure")
@@ -64,21 +65,22 @@ func (targetDevice *TargetDevice) EditConfig(config *Config, operation string) e
 
 // CLI equivalent: show configuration *subtree*
 // Source:
-//  - "running"
-//  - "candidate"
+//   - "running"
+//   - "candidate"
+//
 // Subtree examples:
-//  - ""
-//  - "system"
-//  - "interfaces"
-//  - "snmp"
-//  - "forwarding-options"
-//  - "routing-options"
-//  - "routing-options/static"
-//  - "policy-options"
-//  - "protocols"
-//  - "protocols/bgp"
-//  - "vlans"
-//  - "firewall"
+//   - ""
+//   - "system"
+//   - "interfaces"
+//   - "snmp"
+//   - "forwarding-options"
+//   - "routing-options"
+//   - "routing-options/static"
+//   - "policy-options"
+//   - "protocols"
+//   - "protocols/bgp"
+//   - "vlans"
+//   - "firewall"
 func (targetDevice *TargetDevice) GetConfig(source string, subtree string) (*Configuration, error) {
 	request := netconf.RPCMessage{Xmlns: []string{netconf.BaseURI}}
 	if subtree == "" {
@@ -88,7 +90,8 @@ func (targetDevice *TargetDevice) GetConfig(source string, subtree string) (*Con
                <source>
                  <candidate/>
                </source>
-             </get-config>`)}
+             </get-config>`),
+		}
 	} else {
 		request = netconf.RPCMessage{
 			InnerXML: []byte(`
@@ -101,7 +104,8 @@ func (targetDevice *TargetDevice) GetConfig(source string, subtree string) (*Con
                    sub_tree
                  </configuration>
                </filter>
-             </get-config>`)}
+             </get-config>`),
+		}
 		request.InnerXML = bytes.Replace(request.InnerXML, []byte(`sub_tree`), netconf.ConvertToXML([]byte(subtree)), 1)
 	}
 
