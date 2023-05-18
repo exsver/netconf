@@ -7,6 +7,7 @@ func TestSrcIPv4_String(t *testing.T) {
 		SrcIPv4Addr     string
 		SrcIPv4Wildcard string
 	}
+
 	tests := []struct {
 		name   string
 		fields fields
@@ -172,6 +173,7 @@ func Test_wildcardToPrefix(t *testing.T) {
 			got, err := wildcardToPrefix(tt.wildcardAddress)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("wildcardToPrefix() error = %v, wantErr %v", err, tt.wantErr)
+
 				return
 			}
 

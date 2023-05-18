@@ -13,11 +13,9 @@ update:
 
 lint:
 	# linter binary will be $(go env GOPATH)/bin/golangci-lint
-	# curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.50.1
+	# curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
     # $(GO_BIN) get -u github.com/mgechev/revive
-	golangci-lint run ./netconf/*.go
-	golangci-lint run ./comware/*.go
-	golangci-lint run ./junos/*.go
+	golangci-lint run ./...
 	revive -config revive.toml ./netconf/*.go
 	revive -config revive.toml ./comware/*.go
 	revive -config revive.toml ./junos/*.go

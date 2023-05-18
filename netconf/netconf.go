@@ -108,11 +108,13 @@ func (netconfSession *NetconfSession) SendAndReceive(data []byte) ([]byte, error
 		rcv, err = netconfSession.Receive()
 		if err != nil {
 			LogLevel.Fail.Printf("Receiving payload failed: %s\n", err.Error())
+
 			return nil, err
 		}
 
 		if bytes.Equal(Normalize(rcv), Normalize(data)) {
 			LogLevel.Info.Printf("Message come back")
+
 			continue
 		}
 
@@ -137,6 +139,7 @@ func (targetDevice *TargetDevice) PrepareTransport(deadline time.Duration) (err 
 	targetDevice.NetconfSession.SessionTransport.Connection, err = ssh.Dial("tcp", target, &targetDevice.SSHConfig)
 	if err != nil {
 		LogLevel.Fail.Printf("SSH connection failed: %s\n", err.Error())
+
 		return err
 	}
 
@@ -147,6 +150,7 @@ func (targetDevice *TargetDevice) PrepareTransport(deadline time.Duration) (err 
 	targetDevice.NetconfSession.SessionTransport.Session, err = targetDevice.NetconfSession.SessionTransport.Connection.NewSession()
 	if err != nil {
 		LogLevel.Fail.Printf("Failed to create new session: %s\n", err.Error())
+
 		return err
 	}
 
@@ -157,6 +161,7 @@ func (targetDevice *TargetDevice) PrepareTransport(deadline time.Duration) (err 
 	err = targetDevice.NetconfSession.SessionTransport.Session.RequestSubsystem("netconf")
 	if err != nil {
 		LogLevel.Fail.Printf("Failed to set NETCONF subsystem: %s\n", err.Error())
+
 		return err
 	}
 
@@ -167,6 +172,7 @@ func (targetDevice *TargetDevice) PrepareTransport(deadline time.Duration) (err 
 	targetDevice.NetconfSession.WriteCloser, err = targetDevice.NetconfSession.SessionTransport.Session.StdinPipe()
 	if err != nil {
 		LogLevel.Fail.Printf("Failed to set StdinPipe: %s\n", err.Error())
+
 		return err
 	}
 
@@ -177,6 +183,7 @@ func (targetDevice *TargetDevice) PrepareTransport(deadline time.Duration) (err 
 	targetDevice.NetconfSession.Reader, err = targetDevice.NetconfSession.SessionTransport.Session.StdoutPipe()
 	if err != nil {
 		LogLevel.Fail.Printf("Failed to set StdoutPipe: %s\n", err.Error())
+
 		return err
 	}
 

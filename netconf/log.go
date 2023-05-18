@@ -1,7 +1,7 @@
 package netconf
 
 import (
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 )
@@ -18,9 +18,9 @@ type LogSeverity struct {
 
 func (logSeverity *LogSeverity) Default() {
 	LogLevel = &LogSeverity{
-		Info:    log.New(ioutil.Discard, "[Verbose]: ", log.LstdFlags|log.Lshortfile),
+		Info:    log.New(io.Discard, "[Verbose]: ", log.LstdFlags|log.Lshortfile),
 		Fail:    log.New(os.Stderr, "[Error]: ", log.LstdFlags|log.Lshortfile),
-		Message: log.New(ioutil.Discard, "[Message]: ", log.LstdFlags|log.Lshortfile),
+		Message: log.New(io.Discard, "[Message]: ", log.LstdFlags|log.Lshortfile),
 	}
 }
 
@@ -34,7 +34,7 @@ func (logSeverity *LogSeverity) Verbose() {
 
 func (logSeverity *LogSeverity) Messages() {
 	LogLevel = &LogSeverity{
-		Info:    log.New(ioutil.Discard, "[Verbose]: ", log.LstdFlags|log.Lshortfile),
+		Info:    log.New(io.Discard, "[Verbose]: ", log.LstdFlags|log.Lshortfile),
 		Fail:    log.New(os.Stderr, "[Error]: ", log.LstdFlags|log.Lshortfile),
 		Message: log.New(os.Stdout, "[Message]: ", log.LstdFlags|log.Lshortfile),
 	}
@@ -42,8 +42,8 @@ func (logSeverity *LogSeverity) Messages() {
 
 func (logSeverity *LogSeverity) Silent() {
 	LogLevel = &LogSeverity{
-		Info:    log.New(ioutil.Discard, "[Verbose]: ", log.LstdFlags|log.Lshortfile),
-		Fail:    log.New(ioutil.Discard, "[Error]: ", log.LstdFlags|log.Lshortfile),
-		Message: log.New(ioutil.Discard, "[Message]: ", log.LstdFlags|log.Lshortfile),
+		Info:    log.New(io.Discard, "[Verbose]: ", log.LstdFlags|log.Lshortfile),
+		Fail:    log.New(io.Discard, "[Error]: ", log.LstdFlags|log.Lshortfile),
+		Message: log.New(io.Discard, "[Message]: ", log.LstdFlags|log.Lshortfile),
 	}
 }

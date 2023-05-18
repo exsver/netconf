@@ -40,7 +40,7 @@ func (staticRoute *StaticRoute) ConvertToConfig() *Config {
 		Configuration: &Configuration{
 			RoutingOptions: &RoutingOptions{
 				Static: &RoutingOptionsStatic{
-					Routes:  []StaticRoute{*staticRoute},
+					Routes: []StaticRoute{*staticRoute},
 				},
 			},
 		},

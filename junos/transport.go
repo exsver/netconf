@@ -31,7 +31,8 @@ func NewTargetDevice(ipString string, username string, password string) (*Target
 				User:            username,
 				Auth:            []ssh.AuthMethod{ssh.Password(password)},
 				HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-				Timeout:         30 * time.Second},
+				Timeout:         30 * time.Second,
+			},
 		},
 	}, nil
 }
