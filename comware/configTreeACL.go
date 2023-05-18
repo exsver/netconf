@@ -1,6 +1,12 @@
 package comware
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
+)
 
 type ACL struct {
 	/* top level
@@ -281,9 +287,27 @@ type SrcIPv4 struct {
 	SrcIPv4Wildcard string `xml:"SrcIPv4Wildcard"`
 }
 
+func (ip *SrcIPv4) String() string {
+	mask, err := wildcardToPrefix(ip.SrcIPv4Wildcard)
+	if err != nil {
+		return ""
+	}
+
+	return fmt.Sprintf("%s/%v", ip.SrcIPv4Addr, mask)
+}
+
 type DstIPv4 struct {
 	DstIPv4Addr     string `xml:"DstIPv4Addr"`
 	DstIPv4Wildcard string `xml:"DstIPv4Wildcard"`
+}
+
+func (ip *DstIPv4) String() string {
+	mask, err := wildcardToPrefix(ip.DstIPv4Wildcard)
+	if err != nil {
+		return ""
+	}
+
+	return fmt.Sprintf("%s/%v", ip.DstIPv4Addr, mask)
 }
 
 type SrcPort struct {
@@ -470,9 +494,17 @@ type SrcIPv6 struct {
 	SrcIPv6Prefix string `xml:"SrcIPv6Prefix"`
 }
 
+func (ip *SrcIPv6) String() string {
+	return fmt.Sprintf("%s/%s", ip.SrcIPv6Addr, ip.SrcIPv6Prefix)
+}
+
 type DstIPv6 struct {
 	DstIPv6Addr   string `xml:"DstIPv6Addr"`
 	DstIPv6Prefix string `xml:"DstIPv6Prefix"`
+}
+
+func (ip *DstIPv6) String() string {
+	return fmt.Sprintf("%s/%s", ip.DstIPv6Addr, ip.DstIPv6Prefix)
 }
 
 type MACRule struct {
@@ -566,4 +598,35 @@ type GroupRunInfo struct {
 	ACLGroupPermitBytes int      `xml:"AclGroupPermitBytes"` // The number of bytes permitted.
 	ACLGroupDenyPkts    int      `xml:"AclGroupDenyPkts"`    // The number of packets denied.
 	ACLGroupDenyBytes   int      `xml:"AclGroupDenyBytes"`   // The number of bytes denied.
+}
+
+func wildcardToPrefix(wildcardAddress string) (int, error) {
+	wildcardOctets := strings.Split(wildcardAddress, ".")
+	if len(wildcardOctets) != 4 {
+		return -1, fmt.Errorf("bad wildcard length")
+	}
+
+	binaryString := ""
+
+	for _, octetString := range wildcardOctets {
+		octetInt, err := strconv.Atoi(octetString)
+		if err != nil {
+			return -1, fmt.Errorf("bad octet '%s': %w", octetString, err)
+		}
+
+		binaryString = fmt.Sprintf("%s%08s", binaryString, strconv.FormatInt(int64(octetInt), 2))
+	}
+
+	if len(binaryString) != 32 {
+		return -1, fmt.Errorf("bad wildcard string '%s'", binaryString)
+	}
+
+	pattern := "^0{0,32}1{0,32}$"
+
+	match, _ := regexp.MatchString(pattern, binaryString)
+	if !match {
+		return -1, fmt.Errorf("bad wildcard string '%s'", binaryString)
+	}
+
+	return strings.Count(binaryString, "0"), nil
 }
