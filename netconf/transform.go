@@ -10,13 +10,13 @@ func CorrectBackspaces(in []byte) (out []byte) {
 	temp := bytes.SplitAfter(in, []byte{0x8})
 
 	for _, v := range temp {
-		if len(v) == 0 { //empty slice in the end
+		if len(v) == 0 { // empty slice in the end
 			continue
 		}
 
 		if len(v) == 1 {
 			if v[0] == 0x8 {
-				if len(out) == 0 { //nothing to delete
+				if len(out) == 0 { // nothing to delete
 					continue
 				}
 
@@ -39,8 +39,8 @@ func CorrectBackspaces(in []byte) (out []byte) {
 func Normalize(in []byte) (out []byte) {
 	reSpaces := regexp.MustCompile(`[\s]{1,}`)
 	out = reSpaces.ReplaceAll(in, []byte(" "))
-	out = bytes.Replace(out, []byte(" <"), []byte("<"), -1)
-	out = bytes.Replace(out, []byte("> "), []byte(">"), -1)
+	out = bytes.ReplaceAll(out, []byte(" <"), []byte("<"))
+	out = bytes.ReplaceAll(out, []byte("> "), []byte(">"))
 
 	return out
 }
@@ -69,14 +69,17 @@ func ConvertToSelfClosingTag(in []byte) []byte {
 	return out
 }
 
-//Convert:
-//  level1/level2/level3
-//to (without spaces):
-//  <level1>
-//    <level2>
-//      <level3/>
-//    </level2>
-//  </level1>
+// Convert:
+//
+//	level1/level2/level3
+//
+// to (without spaces):
+//
+//	<level1>
+//	  <level2>
+//	    <level3/>
+//	  </level2>
+//	</level1>
 func ConvertToXML(in []byte) (out []byte) {
 	ins := bytes.Split(in, []byte(`/`))
 	out = append([]byte(`<`), append(ins[len(ins)-1], []byte(`/>`)...)...)

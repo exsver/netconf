@@ -101,5 +101,6 @@ type hello struct {
 
 func unmarshalHello(raw []byte) (hello *hello, err error) {
 	err = xml.Unmarshal(raw, &hello)
+
 	return hello, err
 }

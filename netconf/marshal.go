@@ -44,6 +44,7 @@ func (message *RPCMessage) MarshalRPCMessage() (rpc []byte, err error) {
 
 	return
 }
+
 func generateLock(config string) []byte {
 	lockXML := []byte(`<lock><target><running/></target></lock>`)
 	if config != "" {

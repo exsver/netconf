@@ -39,9 +39,10 @@ func (targetDevice *TargetDevice) GetPorts() ([]Port, error) {
 
 // GetPortsRegExp returns а list of all physical interfaces matched by RegExp
 // RegExp Examples:
-//   "^GigabitEthernet"       -- all GigabitEthernet ports
-//   "^Ten-GigabitEthernet"   -- all Ten-GigabitEthernet ports
-//   "1/0/"                   -- slot 1 ports
+//
+//	"^GigabitEthernet"       -- all GigabitEthernet ports
+//	"^Ten-GigabitEthernet"   -- all Ten-GigabitEthernet ports
+//	"1/0/"                   -- slot 1 ports
 func (targetDevice *TargetDevice) GetPortsRegExp(regExp string) ([]Port, error) {
 	request := netconf.RPCMessage{
 		InnerXML:    []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><Ifmgr><Ports><Port><Name nc:regExp="*"/><IfIndex/></Port></Ports></Ifmgr></top></filter></get>`),
@@ -66,16 +67,17 @@ func (targetDevice *TargetDevice) GetPortsRegExp(regExp string) ([]Port, error) 
 
 // GetInterfacesInfo returns а list of InterfacesInfo
 // Filters examples:
-//   all items -                           nil
-//   all BAGG interfaces -                 []string{`<ifType>161</ifType>`}
-//   all ethernet Interfaces -             []string{`<ifType>6</ifType>`}
-//   all Vlan-interfaces -                 []string{`<ifType>136</ifType>`}
-//   interface with ifIndex 10 -           []string{`<IfIndex>10</IfIndex>`}
-//   interface with index 10 -             []string{`<PortIndex>10</PortIndex>`}
-//   interface with name GE1/0/10          []string{`<AbbreviatedName>GE1/0/10</AbbreviatedName>`}
-//   all Ports in Up state -               []string{`<OperStatus>1</OperStatus>`}
-//   interfaces with Description "test" -  []string{`<Description>test</Description>`}
-//   all ethernet Interfaces in UP state - []string{`<ifType>6</ifType>`, `<OperStatus>1</OperStatus>`}
+//
+//	all items -                           nil
+//	all BAGG interfaces -                 []string{`<ifType>161</ifType>`}
+//	all ethernet Interfaces -             []string{`<ifType>6</ifType>`}
+//	all Vlan-interfaces -                 []string{`<ifType>136</ifType>`}
+//	interface with ifIndex 10 -           []string{`<IfIndex>10</IfIndex>`}
+//	interface with index 10 -             []string{`<PortIndex>10</PortIndex>`}
+//	interface with name GE1/0/10          []string{`<AbbreviatedName>GE1/0/10</AbbreviatedName>`}
+//	all Ports in Up state -               []string{`<OperStatus>1</OperStatus>`}
+//	interfaces with Description "test" -  []string{`<Description>test</Description>`}
+//	all ethernet Interfaces in UP state - []string{`<ifType>6</ifType>`, `<OperStatus>1</OperStatus>`}
 func (targetDevice *TargetDevice) GetInterfacesInfo(filters []string) ([]Interface, error) {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><Ifmgr><Interfaces/></Ifmgr></top></filter></get>`),
@@ -573,7 +575,6 @@ func (targetDevice *TargetDevice) SetInterfaceSuppressionPps(ifIndex, broadcast,
 }
 
 func (targetDevice *TargetDevice) SetInterfaceSuppression(ifIndex, suppressionUnit, broadcast, multicast, unknownunicast int) error {
-
 	iface := EthInterface{
 		IfIndex: ifIndex,
 		BroadcastSuppression: []BroadcastSuppression{

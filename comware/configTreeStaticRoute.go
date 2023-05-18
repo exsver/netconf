@@ -32,7 +32,7 @@ type IPv4StaticRoute struct {
 	Preference         int      `xml:"Preference,omitempty"`
 	Permanent          bool     `xml:"Permanent"`
 	// RecursiveHost - Recursive look up ARP host route.
-	RecursiveHost      bool     `xml:"RecursiveHost"`
+	RecursiveHost bool `xml:"RecursiveHost"`
 }
 
 type Ipv6StaticRouteConfigurations struct {

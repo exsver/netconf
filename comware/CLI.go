@@ -20,8 +20,8 @@ type CDATA struct {
 
 // RunCLICommand sends the specified cli commands via netconf.
 // Use configurationMode:
-// 		false - for execute commands in unprivileged mode
-//		true  - for execute commands in privileged mode (system-view)
+//	false - for execute commands in unprivileged mode
+//	true  - for execute commands in privileged mode (system-view)
 func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMode bool) ([]byte, error) {
 	request := netconf.RPCMessage{
 		Xmlns:        []string{netconf.BaseURI},
@@ -59,7 +59,7 @@ func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMod
 	return cliResponse.Execution.Data, nil
 }
 
-// required Comvare version >= 7.1.070
+// required Comware version >= 7.1.070
 func (targetDevice *TargetDevice) IsConfigurationSaved() (saved bool, diff []byte, err error) {
 	diff, err = targetDevice.RunCLICommand(`display current-configuration diff`, false)
 	diff = bytes.Replace(diff, []byte("\n\n\n"), []byte("\n"), -1)
@@ -81,8 +81,8 @@ func vlanListCLIToIntSlice(vlanList string) ([]int, error) {
 	vlanList = strings.TrimSuffix(vlanList, " tagged")                 // for hybrid port config
 	vlanList = strings.TrimSuffix(vlanList, " untagged")               // for hybrid port config
 	vlanList = strings.TrimPrefix(vlanList, "port access vlan ")       // for access port config
-	vlanList = strings.Replace(vlanList, " to ", "-", -1)
-	vlanList = strings.Replace(vlanList, " ", ",", -1)
+	vlanList = strings.ReplaceAll(vlanList, " to ", "-")
+	vlanList = strings.ReplaceAll(vlanList, " ", ",")
 
 	return VlanListToIntSlice(vlanList)
 }
