@@ -45,7 +45,7 @@ func main() {
 	acl := comware.NamedGroup{
 		GroupType:     comware.ACLGroupTypeIPv4,
 		GroupCategory: comware.ACLGroupCategoryAdvanced,
-		GroupIndex:    "testACL",     // ACL name
+		GroupIndex:    "testACL", // ACL name
 		Description:   "ACL example",
 	}
 

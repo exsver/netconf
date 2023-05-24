@@ -19,3 +19,6 @@ lint:
 	revive -config revive.toml ./netconf/*.go
 	revive -config revive.toml ./comware/*.go
 	revive -config revive.toml ./junos/*.go
+
+test:
+	$(GO_BIN) test -v -failfast ./comware/...
