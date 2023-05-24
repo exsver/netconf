@@ -280,28 +280,3 @@ func (targetDevice *TargetDevice) ACLRemove(acl *NamedGroup) error {
 
 	return targetDevice.Configure(*acl.ConvertToTop(), "remove")
 }
-
-func (targetDevice *TargetDevice) GetACLConfig() (*ACL, error) {
-	request := netconf.RPCMessage{InnerXML: []byte(`
-      <get-config>
-        <source>
-          <running/>
-        </source>
-        <filter type="subtree">
-          <top xmlns="http://www.hp.com/netconf/config:1.0">
-            <ACL><IPv4NamedAdvanceRules><Rule>
-				<ProtocolType>1</ProtocolType>
-            </Rule></IPv4NamedAdvanceRules></ACL>
-          </top>
-        </filter>
-      </get-config>`),
-		Xmlns: []string{netconf.BaseURI},
-	}
-
-	data, err := targetDevice.RetrieveData(request)
-	if err != nil {
-		return nil, err
-	}
-
-	return data.Top.ACL, nil
-}
