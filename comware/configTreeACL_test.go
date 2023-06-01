@@ -183,3 +183,116 @@ func Test_wildcardToPrefix(t *testing.T) {
 		})
 	}
 }
+
+func TestACLStatus_String(t *testing.T) {
+	tests := []struct {
+		name   string
+		status ACLStatus
+		want   string
+	}{
+		{
+			name:   "Active",
+			status: ACLRuleStatusActive,
+			want:   AclRuleStatusActiveString,
+		},
+		{
+			name:   "Inactive",
+			status: ACLRuleStatusInactive,
+			want:   ACLRuleStatusInactiveString,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.status.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestACLRuleAction_String(t *testing.T) {
+	tests := []struct {
+		name   string
+		action ACLRuleAction
+		want   string
+	}{
+		{
+			name:   "Permit",
+			action: ACLRuleActionPermit,
+			want:   ACLRuleActionPermitString,
+		},
+		{
+			name:   "Deny",
+			action: ACLRuleActionDeny,
+			want:   ACLRuleActionDenyString,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.action.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestACLGroupType_String(t *testing.T) {
+	tests := []struct {
+		name  string
+		gType ACLGroupType
+		want  string
+	}{
+		{
+			name:  "IPv4",
+			gType: ACLGroupTypeIPv4,
+			want:  ACLGroupTypeIPv4String,
+		},
+		{
+			name:  "IPv6",
+			gType: ACLGroupTypeIPv6,
+			want:  ACLGroupTypeIPv6String,
+		},
+		{
+			name:  "Other",
+			gType: 100,
+			want:  UnknownString,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.gType.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestACLGroupCategory_String(t *testing.T) {
+	tests := []struct {
+		name     string
+		category ACLGroupCategory
+		want     string
+	}{
+		{
+			name:     "Basic",
+			category: ACLGroupCategoryBasic,
+			want:     ACLGroupCategoryBasicString,
+		},
+		{
+			name:     "Advanced",
+			category: ACLGroupCategoryAdvanced,
+			want:     ACLGroupCategoryAdvancedString,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.category.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

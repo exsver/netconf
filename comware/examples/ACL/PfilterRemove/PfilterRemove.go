@@ -16,11 +16,11 @@ func main() {
 	}
 
 	pfilter := comware.Pfilter{
-		AppObjType:   1,         // 1 - interface, 2 - vlan, 3 - global.
-		AppObjIndex:  8,         // For interface ifIndex.
-		AppDirection: 1,         // Apply Direction: 1 - inbound, 2 - outbound.
-		AppACLType:   1,         // 1 - IPv4, 2 - IPv6, 3 - MAC, 4 - User-defined, 5 - default.
-		AppACLGroup:  "testACL", // ACLName
+		AppObjType:   comware.PFilterAppObjTypeInterface,   // 1 - interface, 2 - vlan, 3 - global.
+		AppObjIndex:  8,                                    // For interface ifIndex.
+		AppDirection: comware.PFilterApplyDirectionInbound, // Apply Direction: 1 - inbound, 2 - outbound.
+		AppACLType:   comware.ACLGroupTypeIPv4,             // 1 - IPv4, 2 - IPv6, 3 - MAC, 4 - User-defined, 5 - default.
+		AppACLGroup:  "testACL",                            // ACLName
 	}
 
 	err = sw.PfilterRemove(&pfilter)
