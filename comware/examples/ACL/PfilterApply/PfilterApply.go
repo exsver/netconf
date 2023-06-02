@@ -7,6 +7,8 @@ import (
 	"github.com/exsver/netconf/netconf"
 )
 
+// Run examples/ACL/ACLCreate/ACLCreate.go first.
+
 func main() {
 	// Setting the Log Level for netconf lib.
 	// One of:
@@ -22,6 +24,9 @@ func main() {
 		log.Fatalf("%s", err)
 	}
 
+	// CLI:
+	// interface GigabitEthernet 1/0/8
+	//  packet-filter name testACL inbound
 	pfilter := comware.Pfilter{
 		AppObjType:   comware.PFilterAppObjTypeInterface,   // 1 - interface, 2 - vlan, 3 - global.
 		AppObjIndex:  8,                                    // For interface ifIndex.

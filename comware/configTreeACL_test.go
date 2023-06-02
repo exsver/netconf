@@ -184,10 +184,10 @@ func Test_wildcardToPrefix(t *testing.T) {
 	}
 }
 
-func TestACLStatus_String(t *testing.T) {
+func TestACLRuleStatus_String(t *testing.T) {
 	tests := []struct {
 		name   string
-		status ACLStatus
+		status ACLRuleStatus
 		want   string
 	}{
 		{

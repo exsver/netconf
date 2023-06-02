@@ -96,10 +96,10 @@ const (
 	OperationRangeString    = "Range"
 
 	// ACL apply directions
-	PFilterApplyDirectionInbound       = 1
-	PfilterApplyDirectionInboundtring  = "Inbound"
-	PFilterApplyDirectionOutbound      = 2
-	PfilterApplyDirectionOutboundtring = "Outbound"
+	PFilterApplyDirectionInbound        = 1
+	PfilterApplyDirectionInboundString  = "Inbound"
+	PFilterApplyDirectionOutbound       = 2
+	PfilterApplyDirectionOutboundString = "Outbound"
 
 	// ACL apply object types
 	PFilterAppObjTypeInterface = 1
