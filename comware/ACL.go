@@ -84,32 +84,33 @@ func (targetDevice *TargetDevice) ACLGetNamedGroups(filters []string) ([]NamedGr
 
 // ACLIPv4NamedAdvanceRulesGet returns ACL rules ([]IPv4NamedAdvanceRule) and error
 // Available filters are:
-//  - GroupIndex
-//  - RuleID
-//  - Action
-//  - ProtocolType
-//  - Fragment
-//  - Logging
-//  - Counting
-//  - Status
-//  - SrcIPv4Addr
-//  - SrcIPv4Wildcard
-//  - DstIPv4Addr
-//  - DstIPv4Wildcard
-//  - SrcPortOp
-//  - SrcPortValue1
-//  - SrcPortValue2
-//  - DstPortOp
-//  - DstPortValue1
-//  - DstPortValue2
-//  - Comment
+//   - GroupIndex
+//   - RuleID
+//   - Action
+//   - ProtocolType
+//   - Fragment
+//   - Logging
+//   - Counting
+//   - Status
+//   - SrcIPv4Addr
+//   - SrcIPv4Wildcard
+//   - DstIPv4Addr
+//   - DstIPv4Wildcard
+//   - SrcPortOp
+//   - SrcPortValue1
+//   - SrcPortValue2
+//   - DstPortOp
+//   - DstPortValue1
+//   - DstPortValue2
+//   - Comment
+//
 // Filter examples:
-//  - all rules for acl named testACL                           []comware.XMLFilter{{Key: "GroupIndex", Value: "testACL", IsRegExp: false}}
-//  - all rules with ProtocolType "ICMP"					    []comware.XMLFilter{{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false}}
-//  - all rules with Action "Deny"							    []comware.XMLFilter{{Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false}}
-//  - all rules with ProtocolType "ICMP" and Action "Deny"      []comware.XMLFilter{{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false}, {Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false}}
-//  - all rules with DstIPv4Addr matches by regexp "^10.100"    []comware.XMLFilter{{Key: "DstIPv4Addr", Value: "^10.100", IsRegExp: true}}
-//  - all rules with Counting                                   []comware.XMLFilter{{Key: "Counting", Value: "true", IsRegExp: false}}
+//   - all rules for acl named testACL                           []comware.XMLFilter{{Key: "GroupIndex", Value: "testACL", IsRegExp: false}}
+//   - all rules with ProtocolType "ICMP"					    []comware.XMLFilter{{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false}}
+//   - all rules with Action "Deny"							    []comware.XMLFilter{{Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false}}
+//   - all rules with ProtocolType "ICMP" and Action "Deny"      []comware.XMLFilter{{Key: "ProtocolType", Value: strconv.Itoa(comware.ProtocolICMP), IsRegExp: false}, {Key: "Action", Value: strconv.Itoa(comware.ACLRuleActionDeny), IsRegExp: false}}
+//   - all rules with DstIPv4Addr matches by regexp "^10.100"    []comware.XMLFilter{{Key: "DstIPv4Addr", Value: "^10.100", IsRegExp: true}}
+//   - all rules with Counting                                   []comware.XMLFilter{{Key: "Counting", Value: "true", IsRegExp: false}}
 func (targetDevice *TargetDevice) ACLIPv4NamedAdvanceRulesGet(filters []XMLFilter) ([]IPv4NamedAdvanceRule, error) {
 	request := netconf.RPCMessage{
 		InnerXML: []byte(`<get><filter type="subtree"><top xmlns="http://www.hp.com/netconf/data:1.0"><ACL><IPv4NamedAdvanceRules/></ACL></top></filter></get>`),
@@ -255,7 +256,7 @@ func (targetDevice *TargetDevice) PfilterRemove(pfilter *Pfilter) error {
 	return targetDevice.Configure(*pfilter.ConvertToTop(), "remove")
 }
 
-func (namedGroup *NamedGroup) NewPfilter(applyObjectType, applyObjectIndex, applyDirection int) *Pfilter {
+func (namedGroup *NamedGroup) NewPfilter(applyObjectType, applyObjectIndex int, applyDirection ACLApplyDirection) *Pfilter {
 	return &Pfilter{
 		AppObjType:   applyObjectType,
 		AppObjIndex:  applyObjectIndex,
