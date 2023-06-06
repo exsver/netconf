@@ -55,7 +55,7 @@ type VLANInterface struct {
 	IfIndex int      `xml:"IfIndex"`
 	// LinkType:
 	// 1 - Access, 2 - Trunk, 3 - Hybrid
-	LinkType int `xml:"LinkType"`
+	LinkType IfLinkType `xml:"LinkType"`
 	// PVID value range: 1 to 4094.
 	PVID int `xml:"PVID"`
 	// Name - full name of the interface, including the interface type	and number.
@@ -145,4 +145,24 @@ type Ipv4 struct {
 	XMLName     xml.Name `xml:"Ipv4"`
 	Ipv4Address string   `xml:"Ipv4Address"`
 	Ipv4Mask    string   `xml:"Ipv4Mask"`
+}
+
+// IfLinkType
+//
+//  1 - Access,
+//  2 - Trunk,
+//  3 - Hybrid
+type IfLinkType int
+
+func (linkType IfLinkType) String() string {
+	switch linkType {
+	case InterfaceLinkTypeAccess:
+		return InterfaceLinkTypeAccessString
+	case InterfaceLinkTypeTrunk:
+		return InterfaceLinkTypeTrunkString
+	case InterfaceLinkTypeHybrid:
+		return InterfaceLinkTypeHybridString
+	}
+
+	return UnknownString
 }

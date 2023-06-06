@@ -154,7 +154,7 @@ type Interface struct {
 	// AdminStatus - Interface administration status
 	//  1 - Admin Up
 	//  2 - Admin Down
-	AdminStatus int `xml:"AdminStatus,omitempty"`
+	AdminStatus InterfaceAdminStatus `xml:"AdminStatus,omitempty"`
 	// OperStatus - Interface operation status
 	//  1 - up
 	//  2 - down
@@ -163,7 +163,7 @@ type Interface struct {
 	//  5 - dormant
 	//  6 - notPresent
 	//  7 - lowerLayerDown
-	OperStatus int `xml:"OperStatus,omitempty"`
+	OperStatus InterfaceOperStatus `xml:"OperStatus,omitempty"`
 	// Configured speed of an interface
 	//  1 - auto				8 - 155Mbps
 	//  2 - 10Mbps				16 - 622Mbps
@@ -183,12 +183,12 @@ type Interface struct {
 	//  1 - full
 	//  2 - half
 	//  3 - auto
-	ConfigDuplex int `xml:"ConfigDuplex,omitempty"`
+	ConfigDuplex InterfaceDuplex `xml:"ConfigDuplex,omitempty"`
 	// Actual duplex mode of an interface:
 	//  1 - full
 	//  2 - half
 	//  3 - auto
-	ActualDuplex int `xml:"ActualDuplex,omitempty"`
+	ActualDuplex InterfaceDuplex `xml:"ActualDuplex,omitempty"`
 	// PortLayer - Port layer of an interface as follows:
 	//  1 - Layer 2
 	//  2 - Layer 3
@@ -197,13 +197,13 @@ type Interface struct {
 	//  1 - Access
 	//  2 - Trunk
 	//  3 - Hybrid
-	LinkType             int `xml:"LinkType,omitempty"`
-	PVID                 int `xml:"PVID,omitempty"`
-	PhysicalIndex        int `xml:"PhysicalIndex,omitempty"`
-	ForwardingAttributes int `xml:"ForwardingAttributes,omitempty"`
-	ConfigMTU            int `xml:"ConfigMTU,omitempty"`
-	ActualMTU            int `xml:"ActualMTU,omitempty"`
-	Loopback             int `xml:"Loopback,omitempty"`
+	LinkType             IfLinkType `xml:"LinkType,omitempty"`
+	PVID                 int        `xml:"PVID,omitempty"`
+	PhysicalIndex        int        `xml:"PhysicalIndex,omitempty"`
+	ForwardingAttributes int        `xml:"ForwardingAttributes,omitempty"`
+	ConfigMTU            int        `xml:"ConfigMTU,omitempty"`
+	ActualMTU            int        `xml:"ActualMTU,omitempty"`
+	Loopback             int        `xml:"Loopback,omitempty"`
 	// MDI mode of an interface
 	//  1 - MDI-II (straight-through cable)
 	//  2 - MDI-X (crossover cable)
@@ -353,4 +353,73 @@ type InterfaceEthPortStatistics struct {
 	OutLostCarriers   uint64 `xml:"OutLostCarriers"`
 	OutSpeedPeakBytes uint64 `xml:"OutSpeedPeakBytes"`
 	OutSpeedPeakTime  string `xml:"OutSpeedPeakTime"`
+}
+
+// InterfaceAdminStatus
+//
+//  1 - AdmUp,
+//  2 - AdmDown,
+type InterfaceAdminStatus int
+
+func (status InterfaceAdminStatus) String() string {
+	switch status {
+	case InterfaceAdminStatusUP:
+		return InterfaceAdminStatusUPString
+	case InterfaceAdminStatusDown:
+		return InterfaceAdminStatusDownString
+	}
+
+	return UnknownString
+}
+
+// InterfaceDuplex
+//
+//  1 - Full,
+//  2 - Half,
+//  3 - Auto
+type InterfaceDuplex int
+
+func (duplex InterfaceDuplex) String() string {
+	switch duplex {
+	case InterfaceDuplexFull:
+		return InterfaceDuplexFullString
+	case InterfaceDuplexHalf:
+		return InterfaceDuplexHalfString
+	case InterfaceDuplexAuto:
+		return InterfaceDuplexAutoString
+	}
+
+	return UnknownString
+}
+
+// InterfaceOperStatus
+//
+//  1 - Up,
+//  2 - Down,
+//  3 - Testing,
+//  4 - Unknown,
+//  5 - Dormant,
+//  6 - NotPresent,
+//  7 - LowerLayerDown
+type InterfaceOperStatus int
+
+func (status InterfaceOperStatus) String() string {
+	switch status {
+	case InterfaceStatusUp:
+		return InterfaceStatusUpString
+	case InterfaceStatusDown:
+		return InterfaceStatusDownString
+	case InterfaceStatusTesting:
+		return InterfaceStatusTestingString
+	case InterfaceStatusUnknown:
+		return InterfaceStatusUnknownString
+	case InterfaceStatusDormant:
+		return InterfaceStatusDormantString
+	case InterfaceStatusNotPresent:
+		return InterfaceStatusNotPresentString
+	case InterfaceStatusLowerLayerDown:
+		return InterfaceStatusLowerLayerDownString
+	}
+
+	return UnknownString
 }
