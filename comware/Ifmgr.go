@@ -149,11 +149,11 @@ type IfCommonInfo struct {
 	AbbreviatedName string
 	Description     string
 	IfIndex         int
-	AdminStatus     int
-	OperStatus      int
+	AdminStatus     InterfaceAdminStatus
+	OperStatus      InterfaceOperStatus
 	ConfigSpeed     int
 	ActualSpeed     int
-	ActualDuplex    int
+	ActualDuplex    InterfaceDuplex
 	Interval        int
 	InPkts          uint64
 	OutPkts         uint64

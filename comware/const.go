@@ -36,11 +36,6 @@ const (
 	InterfaceTypeVlanInterface     = 136
 	InterfaceTypeBridgeAggregation = 161
 
-	// Interface Link Type (VLAN type of an interface)
-	InterfaceLinkTypeAccess = 1
-	InterfaceLinkTypeTrunk  = 2
-	InterfaceLinkTypeHybrid = 3
-
 	// Interface status
 	InterfaceStatusUp                   = 1
 	InterfaceStatusUpString             = "Up"
@@ -57,13 +52,13 @@ const (
 	InterfaceStatusLowerLayerDown       = 7
 	InterfaceStatusLowerLayerDownString = "LowerLayerDown"
 
-	// Link type
-	IfLinkTypeAccess       = 1
-	IfLinkTypeAccessString = "Access"
-	IfLinkTypeTrunk        = 2
-	IfLinkTypeTrunkString  = "Trunk"
-	IfLinkTypeHybrid       = 3
-	IfLinkTypeHybridString = "Hybrid"
+	// Interface Link Type (VLAN type of an interface)
+	InterfaceLinkTypeAccess       = 1
+	InterfaceLinkTypeAccessString = "Access"
+	InterfaceLinkTypeTrunk        = 2
+	InterfaceLinkTypeTrunkString  = "Trunk"
+	InterfaceLinkTypeHybrid       = 3
+	InterfaceLinkTypeHybridString = "Hybrid"
 
 	// Suppression units
 	SuppressionUnitRatio = 1

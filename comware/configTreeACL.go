@@ -681,6 +681,7 @@ func (action ACLRuleAction) String() string {
 }
 
 // ACLApplyDirection
+//
 //  1 - Inbound,
 //  2 - Outbound.
 type ACLApplyDirection int
@@ -691,6 +692,32 @@ func (direction ACLApplyDirection) String() string {
 		return PfilterApplyDirectionInboundString
 	case PFilterApplyDirectionOutbound:
 		return PfilterApplyDirectionOutboundString
+	}
+
+	return UnknownString
+}
+
+// ACLRulePortOperation
+//
+//  1 - less
+//  2 - Equal
+//  3 - Greater
+//  4 - NotEqual
+//  5 - Range
+type ACLRulePortOperation int
+
+func (operation ACLRulePortOperation) String() string {
+	switch operation {
+	case OperationLess:
+		return OperationLessString
+	case OperationEqual:
+		return OperationEqualString
+	case OperationGreater:
+		return OperationGreaterString
+	case OperationNotEqual:
+		return OperationNotEqualString
+	case OperationRange:
+		return OperationRangeString
 	}
 
 	return UnknownString

@@ -296,3 +296,40 @@ func TestACLGroupCategory_String(t *testing.T) {
 		})
 	}
 }
+
+func TestACLRulePortOperation_String(t *testing.T) {
+	tests := []struct {
+		name      string
+		operation ACLRulePortOperation
+		want      string
+	}{
+		{
+			name:      "Less",
+			operation: OperationLess,
+			want:      OperationLessString,
+		},
+		{
+			name:      "Equal",
+			operation: OperationEqual,
+			want:      OperationEqualString,
+		},
+		{
+			name:      "Greater",
+			operation: OperationGreater,
+			want:      OperationGreaterString,
+		},
+		{
+			name:      "RandomValue",
+			operation: 2114,
+			want:      UnknownString,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.operation.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
