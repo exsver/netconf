@@ -319,6 +319,7 @@ func TestInterfaceOperStatus_String(t *testing.T) {
 			want:   InterfaceStatusTestingString,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.status.String(); got != tt.want {
@@ -350,6 +351,7 @@ func TestInterfaceLinkType_String(t *testing.T) {
 			want:     UnknownString,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.linkType.String(); got != tt.want {
@@ -381,6 +383,7 @@ func TestInterfaceDuplex_String(t *testing.T) {
 			want:   UnknownString,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.duplex.String(); got != tt.want {
@@ -412,6 +415,7 @@ func TestInterfaceAdminStatus_String(t *testing.T) {
 			want:   UnknownString,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.status.String(); got != tt.want {
@@ -448,6 +452,7 @@ func TestACLRulePortOperation_String(t *testing.T) {
 			want:      UnknownString,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.operation.String(); got != tt.want {
