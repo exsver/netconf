@@ -197,13 +197,13 @@ type Interface struct {
 	//  1 - Access
 	//  2 - Trunk
 	//  3 - Hybrid
-	LinkType             IfLinkType `xml:"LinkType,omitempty"`
-	PVID                 int        `xml:"PVID,omitempty"`
-	PhysicalIndex        int        `xml:"PhysicalIndex,omitempty"`
-	ForwardingAttributes int        `xml:"ForwardingAttributes,omitempty"`
-	ConfigMTU            int        `xml:"ConfigMTU,omitempty"`
-	ActualMTU            int        `xml:"ActualMTU,omitempty"`
-	Loopback             int        `xml:"Loopback,omitempty"`
+	LinkType             InterfaceLinkType `xml:"LinkType,omitempty"`
+	PVID                 int               `xml:"PVID,omitempty"`
+	PhysicalIndex        int               `xml:"PhysicalIndex,omitempty"`
+	ForwardingAttributes int               `xml:"ForwardingAttributes,omitempty"`
+	ConfigMTU            int               `xml:"ConfigMTU,omitempty"`
+	ActualMTU            int               `xml:"ActualMTU,omitempty"`
+	Loopback             int               `xml:"Loopback,omitempty"`
 	// MDI mode of an interface
 	//  1 - MDI-II (straight-through cable)
 	//  2 - MDI-X (crossover cable)
