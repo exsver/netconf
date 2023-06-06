@@ -296,3 +296,163 @@ func TestACLGroupCategory_String(t *testing.T) {
 		})
 	}
 }
+
+func TestInterfaceOperStatus_String(t *testing.T) {
+	tests := []struct {
+		name   string
+		status InterfaceOperStatus
+		want   string
+	}{
+		{
+			name:   "Up",
+			status: InterfaceStatusUp,
+			want:   InterfaceStatusUpString,
+		},
+		{
+			name:   "Down",
+			status: InterfaceStatusDown,
+			want:   InterfaceStatusDownString,
+		},
+		{
+			name:   "Testing",
+			status: InterfaceStatusTesting,
+			want:   InterfaceStatusTestingString,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.status.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestInterfaceLinkType_String(t *testing.T) {
+	tests := []struct {
+		name     string
+		linkType InterfaceLinkType
+		want     string
+	}{
+		{
+			name:     "Access",
+			linkType: IfLinkTypeAccess,
+			want:     IfLinkTypeAccessString,
+		},
+		{
+			name:     "Trunk",
+			linkType: IfLinkTypeTrunk,
+			want:     IfLinkTypeTrunkString,
+		},
+		{
+			name:     "Other",
+			linkType: 100,
+			want:     UnknownString,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.linkType.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestInterfaceDuplex_String(t *testing.T) {
+	tests := []struct {
+		name   string
+		duplex InterfaceDuplex
+		want   string
+	}{
+		{
+			name:   "Full",
+			duplex: InterfaceDuplexFull,
+			want:   InterfaceDuplexFullString,
+		},
+		{
+			name:   "Half",
+			duplex: InterfaceDuplexHalf,
+			want:   InterfaceDuplexHalfString,
+		},
+		{
+			name:   "Other",
+			duplex: 100,
+			want:   UnknownString,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.duplex.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestInterfaceAdminStatus_String(t *testing.T) {
+	tests := []struct {
+		name   string
+		status InterfaceAdminStatus
+		want   string
+	}{
+		{
+			name:   "Up",
+			status: InterfaceAdminStatusUP,
+			want:   InterfaceAdminStatusUPString,
+		},
+		{
+			name:   "Down",
+			status: InterfaceAdminStatusDown,
+			want:   InterfaceAdminStatusDownString,
+		},
+		{
+			name:   "Testing",
+			status: 300,
+			want:   UnknownString,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.status.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestACLRulePortOperation_String(t *testing.T) {
+	tests := []struct {
+		name      string
+		operation ACLRulePortOperation
+		want      string
+	}{
+		{
+			name:      "Less",
+			operation: OperationLess,
+			want:      OperationLessString,
+		},
+		{
+			name:      "Equal",
+			operation: OperationEqual,
+			want:      OperationEqualString,
+		},
+		{
+			name:      "Greater",
+			operation: OperationGreater,
+			want:      OperationGreaterString,
+		},
+		{
+			name:      "Range",
+			operation: 2114,
+			want:      UnknownString,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.operation.String(); got != tt.want {
+				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

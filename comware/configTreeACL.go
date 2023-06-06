@@ -681,6 +681,7 @@ func (action ACLRuleAction) String() string {
 }
 
 // ACLApplyDirection
+//
 //  1 - Inbound,
 //  2 - Outbound.
 type ACLApplyDirection int
@@ -691,6 +692,121 @@ func (direction ACLApplyDirection) String() string {
 		return PfilterApplyDirectionInboundString
 	case PFilterApplyDirectionOutbound:
 		return PfilterApplyDirectionOutboundString
+	}
+
+	return UnknownString
+}
+
+// ACLRulePortOperation
+//
+// 1 - less
+// 2 - Equal
+// 3 - Greater
+// 4 - NotEqual
+// 5 - Range
+type ACLRulePortOperation int
+
+func (operation ACLRulePortOperation) String() string {
+	switch operation {
+	case OperationLess:
+		return OperationLessString
+	case OperationEqual:
+		return OperationEqualString
+	case OperationGreater:
+		return OperationGreaterString
+	case OperationNotEqual:
+		return OperationNotEqualString
+	case OperationRange:
+		return OperationRangeString
+	}
+
+	return UnknownString
+}
+
+// InterfaceAdminStatus
+//
+// 1 - AdmUp,
+// 2 - AdmDown,
+type InterfaceAdminStatus int
+
+func (status InterfaceAdminStatus) String() string {
+	switch status {
+	case InterfaceAdminStatusUP:
+		return InterfaceAdminStatusUPString
+	case InterfaceAdminStatusDown:
+		return InterfaceAdminStatusDownString
+	}
+
+	return UnknownString
+}
+
+// InterfaceDuplex
+//
+// 1 - Full,
+// 2 - Half,
+// 3 - Auto
+type InterfaceDuplex int
+
+func (duplex InterfaceDuplex) String() string {
+	switch duplex {
+	case InterfaceDuplexFull:
+		return InterfaceDuplexFullString
+	case InterfaceDuplexHalf:
+		return InterfaceDuplexHalfString
+	case InterfaceDuplexAuto:
+		return InterfaceDuplexAutoString
+	}
+
+	return UnknownString
+}
+
+// InterfaceLinkType
+//
+// 1 - Access,
+// 2 - Trunk,
+// 3 - Hybrid
+type InterfaceLinkType int
+
+func (linkType InterfaceLinkType) String() string {
+	switch linkType {
+	case IfLinkTypeAccess:
+		return IfLinkTypeAccessString
+	case IfLinkTypeTrunk:
+		return IfLinkTypeTrunkString
+	case IfLinkTypeHybrid:
+		return IfLinkTypeHybridString
+	}
+
+	return UnknownString
+}
+
+// InterfaceOperStatus
+//
+// 1 - Up,
+// 2 - Down,
+// 3 - Testing,
+// 4 - Unknown,
+// 5 - Dormant,
+// 6 - NotPresent,
+// 7 - LowerLayerDown
+type InterfaceOperStatus int
+
+func (status InterfaceOperStatus) String() string {
+	switch status {
+	case InterfaceStatusUp:
+		return InterfaceStatusUpString
+	case InterfaceStatusDown:
+		return InterfaceStatusDownString
+	case InterfaceStatusTesting:
+		return InterfaceStatusTestingString
+	case InterfaceStatusUnknown:
+		return InterfaceStatusUnknownString
+	case InterfaceStatusDormant:
+		return InterfaceStatusDormantString
+	case InterfaceStatusNotPresent:
+		return InterfaceStatusNotPresentString
+	case InterfaceStatusLowerLayerDown:
+		return InterfaceStatusLowerLayerDownString
 	}
 
 	return UnknownString
