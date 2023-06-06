@@ -317,7 +317,7 @@ type SrcPort struct {
 	// 3 - gt    Greater than given port number
 	// 4 - neq   Not equal to given port number
 	// 5 - range Between two port numbers
-	SrcPortOp int `xml:"SrcPortOp"`
+	SrcPortOp ACLRulePortOperation `xml:"SrcPortOp"`
 	// SrcPortValue1 specify a source port
 	SrcPortValue1 int `xml:"SrcPortValue1"`
 	// SrcPortValue2 used only in range case
@@ -331,7 +331,7 @@ type DstPort struct {
 	// 3 - gt    Greater than given port number
 	// 4 - neq   Not equal to given port number
 	// 5 - range Between two port numbers
-	DstPortOp int `xml:"DstPortOp"`
+	DstPortOp ACLRulePortOperation `xml:"DstPortOp"`
 	// DstPortValue1 specify a destination port
 	DstPortValue1 int `xml:"DstPortValue1"`
 	// DstPortValue2 used only in range case
@@ -558,8 +558,8 @@ type ICMP struct {
 }
 
 type PfilterDefAction struct {
-	XMLName       xml.Name `xml:"PfilterDefAction"`
-	DefaultAction int      `xml:"DefaultAction"` // ACL Default Action. 1:Permit, 2:Deny.
+	XMLName       xml.Name      `xml:"PfilterDefAction"`
+	DefaultAction ACLRuleAction `xml:"DefaultAction"` // ACL Default Action. 1:Permit, 2:Deny.
 }
 
 // PfilterApply table contains information about packet filter application.
