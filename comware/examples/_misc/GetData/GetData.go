@@ -33,6 +33,7 @@ func main() {
 	//  GetDataDHCPSP()
 	//  GetDataIfmgr()
 	//  GetDataIRF()
+	//  GetDataLAGG()
 	//  GetDataMAC()
 	//  GetDataMGROUP()
 	//  GetDataResourceMonitor()

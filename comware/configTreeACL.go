@@ -193,8 +193,8 @@ type IPv4AdvanceRule struct {
 	Fragment     bool          `xml:"Fragment,omitempty"`
 	Logging      bool          `xml:"Logging,omitempty"`
 	Counting     bool          `xml:"Counting,omitempty"`
-	SrcAny       bool          `xml:"SrcAny,omitempty"`
-	DstAny       bool          `xml:"DstAny,omitempty"`
+	SrcAny       *bool         `xml:"SrcAny,omitempty"`
+	DstAny       *bool         `xml:"DstAny,omitempty"`
 	SrcIPv4      *SrcIPv4      `xml:"SrcIPv4,omitempty"`
 	DstIPv4      *DstIPv4      `xml:"DstIPv4,omitempty"`
 	SrcPort      *SrcPort      `xml:"SrcPort,omitempty"`
@@ -395,9 +395,9 @@ type IPv6NamedAdvanceRule struct {
 	RoutingTypeAny bool `xml:"RoutingTypeAny,omitempty"`
 	// RoutingTypeValue - the value of routing header type.
 	// Range: 0 - 255 inclusive.
-	RoutingTypeValue int     `xml:"RoutingTypeValue,omitempty"`
-	SrcPort          SrcPort `xml:"SrcPort,omitempty"`
-	DstPort          DstPort `xml:"DstPort,omitempty"`
+	RoutingTypeValue int      `xml:"RoutingTypeValue,omitempty"`
+	SrcPort          *SrcPort `xml:"SrcPort,omitempty"`
+	DstPort          *DstPort `xml:"DstPort,omitempty"`
 	// Fragment - hhe flag of matching fragmented packet.
 	//  0: the rule applies to all fragments and non-fragments,
 	//  1: the rule applies to only non-first fragments.
@@ -682,8 +682,8 @@ func (action ACLRuleAction) String() string {
 
 // ACLApplyDirection
 //
-//  1 - Inbound,
-//  2 - Outbound.
+//	1 - Inbound,
+//	2 - Outbound.
 type ACLApplyDirection int
 
 func (direction ACLApplyDirection) String() string {
@@ -699,11 +699,11 @@ func (direction ACLApplyDirection) String() string {
 
 // ACLRulePortOperation
 //
-//  1 - less
-//  2 - Equal
-//  3 - Greater
-//  4 - NotEqual
-//  5 - Range
+//	1 - Less
+//	2 - Equal
+//	3 - Greater
+//	4 - NotEqual
+//	5 - Range
 type ACLRulePortOperation int
 
 func (operation ACLRulePortOperation) String() string {
