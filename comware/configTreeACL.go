@@ -254,7 +254,7 @@ type IPv4BasicRule struct {
 	// Counts times the ACL rule has been matched.
 	Counting bool `xml:"Counting,omitempty"`
 	// SrcAny - The flag of matching any IP address.
-	SrcAny bool `xml:"SrcAny,omitempty"`
+	SrcAny *bool `xml:"SrcAny,omitempty"`
 	// SrcIPv4 - Source IP address.
 	SrcIPv4 *SrcIPv4 `xml:"SrcIPv4,omitempty"`
 	// Rule comment,
@@ -270,7 +270,7 @@ type IPv4NamedBasicRule struct {
 	GroupIndex string        `xml:"GroupIndex"`
 	RuleID     int           `xml:"RuleID"`
 	Action     ACLRuleAction `xml:"Action,omitempty"` // Action: 1 - Deny, 2 - Permit
-	SrcAny     bool          `xml:"SrcAny,omitempty"`
+	SrcAny     *bool         `xml:"SrcAny,omitempty"`
 	Fragment   bool          `xml:"Fragment,omitempty"`
 	Counting   bool          `xml:"Counting,omitempty"`
 	Logging    bool          `xml:"Logging,omitempty"`
