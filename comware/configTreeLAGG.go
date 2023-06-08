@@ -1,6 +1,11 @@
 package comware
 
-import "encoding/xml"
+import (
+	"encoding/base64"
+	"encoding/xml"
+	"fmt"
+	"strings"
+)
 
 type LAGG struct {
 	/* top level
@@ -31,18 +36,20 @@ type LAGGGroups struct {
 }
 
 type LAGGGroup struct {
-	XMLName               xml.Name `xml:"LAGGGroup"`
-	GroupId               int      `xml:"GroupId"`
-	LinkMode              int      `xml:"LinkMode,omitempty"`
-	IfIndex               int      `xml:"IfIndex,omitempty"`
-	LoadSharingMode       int      `xml:"LoadSharingMode,omitempty"`
-	ManagementPort        int      `xml:"ManagementPort,omitempty"`
-	PartnerSystemPriority int      `xml:"PartnerSystemPriority,omitempty"`
-	PartnerSystemID       string   `xml:"PartnerSystemID,omitempty"`
+	XMLName               xml.Name       `xml:"LAGGGroup"`
+	GroupId               int            `xml:"GroupId"`
+	LinkMode              LAGGLinkMode   `xml:"LinkMode,omitempty"`
+	IfIndex               int            `xml:"IfIndex,omitempty"`
+	MemberList            LAGGMemberList `xml:"MemberList,omitempty"`
+	SelectedMemberList    LAGGMemberList `xml:"SelectedMemberList,omitempty"`
+	LoadSharingMode       int            `xml:"LoadSharingMode,omitempty"`
+	ManagementPort        int            `xml:"ManagementPort,omitempty"`
+	PartnerSystemPriority int            `xml:"PartnerSystemPriority,omitempty"`
+	PartnerSystemID       string         `xml:"PartnerSystemID,omitempty"`
 }
 
 type LAGGMembers struct {
-	Member []LAGGMember `xml:"LAGGMember"`
+	Members []LAGGMember `xml:"LAGGMember"`
 }
 
 type LAGGMember struct {
@@ -97,4 +104,55 @@ type LAGGMember struct {
 	ManagementPortEnable  bool   `xml:"ManagementPortEnable"`
 	LacpEnable            bool   `xml:"LacpEnable"`
 	LacpShortPeriodEnable bool   `xml:"LacpShortPeriodEnable"`
+}
+
+// LAGGLinkMode
+//
+//	1 - Static,
+//	2 - Dynamic.
+type LAGGLinkMode int
+
+func (mode LAGGLinkMode) String() string {
+	switch mode {
+	case LAGGLinkModeStatic:
+		return LAGGLinkModeStaticString
+	case LAGGLinkModeDynamic:
+		return LAGGLinkModeDynamicString
+	}
+
+	return UnknownString
+}
+
+type LAGGMemberList string
+
+func (list LAGGMemberList) List() []int {
+	return getLAGGPortListByMap(string(list))
+}
+
+func (list LAGGMemberList) String() string {
+	ports := getLAGGPortListByMap(string(list))
+
+	str := ""
+	for _, port := range ports {
+		str = fmt.Sprintf("%s %v", str, port)
+	}
+
+	return strings.TrimSpace(str)
+}
+
+func getLAGGPortListByMap(sMap string) []int {
+	aMap, _ := base64.StdEncoding.DecodeString(sMap)
+
+	var members []int
+
+	for i := 0; i < len(aMap); i++ {
+		iNum := aMap[i]
+		for k := 7; k >= 0; k-- {
+			if iNum&(1<<k) != 0 {
+				members = append(members, i*8+8-k)
+			}
+		}
+	}
+
+	return members
 }

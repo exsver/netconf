@@ -136,6 +136,12 @@ const (
 	ACLRuleStatusInactive       = 2
 	ACLRuleStatusInactiveString = "Inactive"
 
+	// LAGG modes
+	LAGGLinkModeStatic        = 1
+	LAGGLinkModeStaticString  = "Static"
+	LAGGLinkModeDynamic       = 2
+	LAGGLinkModeDynamicString = "Dynamic"
+
 	// STP modes
 	STPModeSTP  = 0
 	STPModeRSTP = 2
