@@ -142,6 +142,14 @@ const (
 	LAGGLinkModeDynamic       = 2
 	LAGGLinkModeDynamicString = "Dynamic"
 
+	// LAGG member selected status
+	LAGGMemberSelectedStatusSelected         = 1
+	LAGGMemberSelectedStatusSelectedString   = "Selected"
+	LAGGMemberSelectedStatusUnselected       = 2
+	LAGGMemberSelectedStatusUnselectedString = "Unselected"
+	LAGGMemberSelectedStatusIndividual       = 3
+	LAGGMemberSelectedStatusIndividualString = "Individual"
+
 	// STP modes
 	STPModeSTP  = 0
 	STPModeRSTP = 2
