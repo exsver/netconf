@@ -36,16 +36,23 @@ type LAGGGroups struct {
 }
 
 type LAGGGroup struct {
-	XMLName               xml.Name       `xml:"LAGGGroup"`
-	GroupId               int            `xml:"GroupId"`
-	LinkMode              LAGGLinkMode   `xml:"LinkMode,omitempty"`
-	IfIndex               int            `xml:"IfIndex,omitempty"`
-	MemberList            LAGGMemberList `xml:"MemberList,omitempty"`
-	SelectedMemberList    LAGGMemberList `xml:"SelectedMemberList,omitempty"`
-	LoadSharingMode       int            `xml:"LoadSharingMode,omitempty"`
-	ManagementPort        int            `xml:"ManagementPort,omitempty"`
-	PartnerSystemPriority int            `xml:"PartnerSystemPriority,omitempty"`
-	PartnerSystemID       string         `xml:"PartnerSystemID,omitempty"`
+	XMLName            xml.Name       `xml:"LAGGGroup"`
+	GroupId            int            `xml:"GroupId"`
+	LinkMode           LAGGLinkMode   `xml:"LinkMode,omitempty"`
+	IfIndex            int            `xml:"IfIndex,omitempty"`
+	MemberList         LAGGMemberList `xml:"MemberList,omitempty"`
+	SelectedMemberList LAGGMemberList `xml:"SelectedMemberList,omitempty"`
+	// LoadSharingMode - link-aggregation load sharing mode.
+	//  2 - destination-mac,
+	//  4 - source-mac,
+	//  6 - destination-mac source-mac,
+	//  8 - destination-ip,
+	//  16 - source-ip,
+	//  24 - destination-ip source-ip.
+	LoadSharingMode       int    `xml:"LoadSharingMode,omitempty"`
+	ManagementPort        int    `xml:"ManagementPort,omitempty"`
+	PartnerSystemPriority int    `xml:"PartnerSystemPriority,omitempty"`
+	PartnerSystemID       string `xml:"PartnerSystemID,omitempty"`
 }
 
 type LAGGMembers struct {
@@ -62,7 +69,7 @@ type LAGGMember struct {
 	//   1 - Selected
 	//   2 - Unselected
 	//   3 - Individual
-	SelectedStatus int `xml:"SelectedStatus"`
+	SelectedStatus LAGGMemberSelectedStatus `xml:"SelectedStatus"`
 	// UnSelectedReason - Unselected reason of a member port:
 	//   0 - The port is attached to this aggregator.
 	//       Indicate that selected status of a member port is Selected or Individual.
@@ -155,4 +162,24 @@ func getLAGGPortListByMap(sMap string) []int {
 	}
 
 	return members
+}
+
+// LAGGMemberSelectedStatus
+//
+//	1 - Selected,
+//	2 - Unselected,
+//	3 - Individual.
+type LAGGMemberSelectedStatus int
+
+func (status LAGGMemberSelectedStatus) String() string {
+	switch status {
+	case LAGGMemberSelectedStatusSelected:
+		return LAGGMemberSelectedStatusSelectedString
+	case LAGGMemberSelectedStatusUnselected:
+		return LAGGMemberSelectedStatusUnselectedString
+	case LAGGMemberSelectedStatusIndividual:
+		return LAGGMemberSelectedStatusIndividualString
+	}
+
+	return UnknownString
 }
