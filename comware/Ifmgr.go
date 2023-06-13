@@ -574,7 +574,7 @@ func (targetDevice *TargetDevice) SetInterfaceSuppressionPps(ifIndex, broadcast,
 	return targetDevice.SetInterfaceSuppression(ifIndex, SuppressionUnitPps, broadcast, multicast, unknownunicast)
 }
 
-func (targetDevice *TargetDevice) SetInterfaceSuppression(ifIndex, suppressionUnit, broadcast, multicast, unknownunicast int) error {
+func (targetDevice *TargetDevice) SetInterfaceSuppression(ifIndex int, suppressionUnit SuppressionUnit, broadcast, multicast, unknownunicast int) error {
 	iface := EthInterface{
 		IfIndex: ifIndex,
 		BroadcastSuppression: []BroadcastSuppression{
