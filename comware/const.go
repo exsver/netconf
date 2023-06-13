@@ -61,9 +61,12 @@ const (
 	InterfaceLinkTypeHybridString = "Hybrid"
 
 	// Suppression units
-	SuppressionUnitRatio = 1
-	SuppressionUnitPps   = 2
-	SuppressionUnitKbps  = 3
+	SuppressionUnitRatio       = 1
+	SuppressionUnitRatioString = "Ratio"
+	SuppressionUnitPps         = 2
+	SuppressionUnitPpsString   = "Pps"
+	SuppressionUnitKbps        = 3
+	SuppressionUnitKbpsString  = "Kbps"
 
 	// Protocols
 	ProtocolICMP    = 1

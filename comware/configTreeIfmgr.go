@@ -94,22 +94,22 @@ type EthInterface struct {
 }
 
 type BroadcastSuppression struct {
-	ConfigValue int `xml:"ConfigValue"`
-	ActualValue int `xml:"ActualValue,omitempty"`
-	Unit        int `xml:"Unit"`
+	ConfigValue int             `xml:"ConfigValue"`
+	ActualValue int             `xml:"ActualValue,omitempty"`
+	Unit        SuppressionUnit `xml:"Unit"`
 }
 
 type UnknownUnicastSuppression struct {
-	ConfigValue int `xml:"ConfigValue"`
-	ActualValue int `xml:"ActualValue,omitempty"`
-	Unit        int `xml:"Unit"`
+	ConfigValue int             `xml:"ConfigValue"`
+	ActualValue int             `xml:"ActualValue,omitempty"`
+	Unit        SuppressionUnit `xml:"Unit"`
 }
 
 type MulticastSuppression struct {
-	ConfigValue int `xml:"ConfigValue"`
-	ActualValue int `xml:"ActualValue,omitempty"`
-	Unit        int `xml:"Unit"`
-	Flag        int `xml:"Flag,omitempty"`
+	ConfigValue int             `xml:"ConfigValue"`
+	ActualValue int             `xml:"ActualValue,omitempty"`
+	Unit        SuppressionUnit `xml:"Unit"`
+	Flag        int             `xml:"Flag,omitempty"`
 }
 
 // Interfaces table contains basic interface information.
@@ -357,8 +357,8 @@ type InterfaceEthPortStatistics struct {
 
 // InterfaceAdminStatus
 //
-//  1 - AdmUp,
-//  2 - AdmDown,
+//	1 - AdmUp,
+//	2 - AdmDown,
 type InterfaceAdminStatus int
 
 func (status InterfaceAdminStatus) String() string {
@@ -374,9 +374,9 @@ func (status InterfaceAdminStatus) String() string {
 
 // InterfaceDuplex
 //
-//  1 - Full,
-//  2 - Half,
-//  3 - Auto
+//	1 - Full,
+//	2 - Half,
+//	3 - Auto
 type InterfaceDuplex int
 
 func (duplex InterfaceDuplex) String() string {
@@ -394,13 +394,13 @@ func (duplex InterfaceDuplex) String() string {
 
 // InterfaceOperStatus
 //
-//  1 - Up,
-//  2 - Down,
-//  3 - Testing,
-//  4 - Unknown,
-//  5 - Dormant,
-//  6 - NotPresent,
-//  7 - LowerLayerDown
+//	1 - Up,
+//	2 - Down,
+//	3 - Testing,
+//	4 - Unknown,
+//	5 - Dormant,
+//	6 - NotPresent,
+//	7 - LowerLayerDown
 type InterfaceOperStatus int
 
 func (status InterfaceOperStatus) String() string {
@@ -419,6 +419,26 @@ func (status InterfaceOperStatus) String() string {
 		return InterfaceStatusNotPresentString
 	case InterfaceStatusLowerLayerDown:
 		return InterfaceStatusLowerLayerDownString
+	}
+
+	return UnknownString
+}
+
+// SuppressionUnit
+//
+//	1 - ratio (suppression threshold in percentage),
+//	2 - pps (suppression threshold in pps),
+//	3 - kbps (suppression threshold in kbps).
+type SuppressionUnit int
+
+func (unit SuppressionUnit) String() string {
+	switch unit {
+	case SuppressionUnitRatio:
+		return SuppressionUnitRatioString
+	case SuppressionUnitPps:
+		return SuppressionUnitPpsString
+	case SuppressionUnitKbps:
+		return SuppressionUnitKbpsString
 	}
 
 	return UnknownString
