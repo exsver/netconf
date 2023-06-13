@@ -577,23 +577,17 @@ func (targetDevice *TargetDevice) SetInterfaceSuppressionPps(ifIndex, broadcast,
 func (targetDevice *TargetDevice) SetInterfaceSuppression(ifIndex int, suppressionUnit SuppressionUnit, broadcast, multicast, unknownunicast int) error {
 	iface := EthInterface{
 		IfIndex: ifIndex,
-		BroadcastSuppression: []BroadcastSuppression{
-			{
-				ConfigValue: broadcast,
-				Unit:        suppressionUnit,
-			},
+		BroadcastSuppression: BroadcastSuppression{
+			ConfigValue: broadcast,
+			Unit:        suppressionUnit,
 		},
-		MulticastSuppression: []MulticastSuppression{
-			{
-				ConfigValue: multicast,
-				Unit:        suppressionUnit,
-			},
+		MulticastSuppression: MulticastSuppression{
+			ConfigValue: multicast,
+			Unit:        suppressionUnit,
 		},
-		UnknownUnicastSuppression: []UnknownUnicastSuppression{
-			{
-				ConfigValue: unknownunicast,
-				Unit:        suppressionUnit,
-			},
+		UnknownUnicastSuppression: UnknownUnicastSuppression{
+			ConfigValue: unknownunicast,
+			Unit:        suppressionUnit,
 		},
 	}
 
