@@ -81,16 +81,16 @@ type EthInterfaces struct {
 }
 
 type EthInterface struct {
-	XMLName                   xml.Name                  `xml:"Interface"`
-	IfIndex                   int                       `xml:"IfIndex"`
-	FlowControl               int                       `xml:"FlowControl,omitempty"`
-	Jumboframe                int                       `xml:"Jumboframe,omitempty"`
-	AutoPowerDown             bool                      `xml:"AutoPowerDown,omitempty"`
-	BPDUDrop                  bool                      `xml:"BPDUDrop,omitempty"`
-	EEE                       bool                      `xml:"EEE,omitempty"`
-	BroadcastSuppression      BroadcastSuppression      `xml:"BroadcastSuppression,omitempty"`
-	MulticastSuppression      MulticastSuppression      `xml:"MulticastSuppression,omitempty"`
-	UnknownUnicastSuppression UnknownUnicastSuppression `xml:"UnknownUnicastSuppression,omitempty"`
+	XMLName                   xml.Name                   `xml:"Interface"`
+	IfIndex                   int                        `xml:"IfIndex"`
+	FlowControl               int                        `xml:"FlowControl,omitempty"`
+	Jumboframe                int                        `xml:"Jumboframe,omitempty"`
+	AutoPowerDown             bool                       `xml:"AutoPowerDown,omitempty"`
+	BPDUDrop                  bool                       `xml:"BPDUDrop,omitempty"`
+	EEE                       bool                       `xml:"EEE,omitempty"`
+	BroadcastSuppression      *BroadcastSuppression      `xml:"BroadcastSuppression,omitempty"`
+	MulticastSuppression      *MulticastSuppression      `xml:"MulticastSuppression,omitempty"`
+	UnknownUnicastSuppression *UnknownUnicastSuppression `xml:"UnknownUnicastSuppression,omitempty"`
 }
 
 type BroadcastSuppression struct {
