@@ -190,9 +190,9 @@ type IPv4AdvanceRule struct {
 	ProtocolType int           `xml:"ProtocolType,omitempty"`
 	Count        int           `xml:"Count,omitempty"`
 	Status       ACLRuleStatus `xml:"Status,omitempty"`
-	Fragment     bool          `xml:"Fragment,omitempty"`
-	Logging      bool          `xml:"Logging,omitempty"`
-	Counting     bool          `xml:"Counting,omitempty"`
+	Fragment     *bool         `xml:"Fragment,omitempty"`
+	Logging      *bool         `xml:"Logging,omitempty"`
+	Counting     *bool         `xml:"Counting,omitempty"`
 	SrcAny       *bool         `xml:"SrcAny,omitempty"`
 	DstAny       *bool         `xml:"DstAny,omitempty"`
 	SrcIPv4      *SrcIPv4      `xml:"SrcIPv4,omitempty"`
