@@ -82,7 +82,7 @@ func main() {
 					DstIPv4Addr:     "10.100.100.1",
 					DstIPv4Wildcard: "0.0.0.0",
 				},
-				Counting: true,
+				Counting: comware.NewTrue(),
 				Comment:  "Deny UDP", // a case-sensitive string of 1 to 127 characters
 			},
 			// rule 10 permit tcp destination 10.100.100.1 0 destination-port eq 80
