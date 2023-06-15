@@ -69,7 +69,7 @@ type LAGGMember struct {
 	//   1 - Selected
 	//   2 - Unselected
 	//   3 - Individual
-	SelectedStatus LAGGMemberSelectedStatus `xml:"SelectedStatus"`
+	SelectedStatus LAGGMemberSelectedStatus `xml:"SelectedStatus,omitempty"`
 	// UnSelectedReason - Unselected reason of a member port:
 	//   0 - The port is attached to this aggregator.
 	//       Indicate that selected status of a member port is Selected or Individual.
@@ -108,9 +108,9 @@ type LAGGMember struct {
 	PartnerPort int `xml:"PartnerPort,omitempty"`
 	// PartnerSystemID - The Partner's System ID
 	PartnerSystemID       string `xml:"PartnerSystemID,omitempty"`
-	ManagementPortEnable  bool   `xml:"ManagementPortEnable"`
-	LacpEnable            bool   `xml:"LacpEnable"`
-	LacpShortPeriodEnable bool   `xml:"LacpShortPeriodEnable"`
+	ManagementPortEnable  *bool  `xml:"ManagementPortEnable,omitempty"`
+	LacpEnable            *bool  `xml:"LacpEnable,omitempty"`
+	LacpShortPeriodEnable *bool  `xml:"LacpShortPeriodEnable,omitempty"`
 }
 
 // LAGGLinkMode
