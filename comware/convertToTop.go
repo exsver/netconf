@@ -310,6 +310,16 @@ func (base *LAGGBase) ConvertToTop() *Top {
 	}
 }
 
+func (group *LAGGGroup) ConvertToTop() *Top {
+	return &Top{
+		LAGG: &LAGG{
+			LAGGGroups: &LAGGGroups{
+				Groups: []LAGGGroup{*group},
+			},
+		},
+	}
+}
+
 func (member *LAGGMember) ConvertToTop() *Top {
 	return &Top{
 		LAGG: &LAGG{
