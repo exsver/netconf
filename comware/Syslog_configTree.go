@@ -81,7 +81,7 @@ type Logs struct {
 	Logs    []Log    `xml:"Log"`
 }
 
-//ReadOnly struct
+// ReadOnly struct
 type Log struct {
 	XMLName xml.Name `xml:"Log"`
 	// Index - number of the log as table index.
