@@ -368,7 +368,7 @@ type IPv6NamedAdvanceRule struct {
 	RuleID int `xml:"RuleID"`
 	// Action on packets matching the rule.
 	// Action: 1 - Deny, 2 - Permit
-	Action ACLRuleAction `xml:"Action"`
+	Action ACLRuleAction `xml:"Action,omitempty"`
 	// ProtocolType defines:
 	// Protocol number INTEGER<0-255>, 256 - any IP protocol
 	// 6 - TCP
@@ -376,7 +376,7 @@ type IPv6NamedAdvanceRule struct {
 	// 58 - ICMPv6
 	// ...
 	// https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
-	ProtocolType int `xml:"ProtocolType"`
+	ProtocolType int `xml:"ProtocolType,omitempty"`
 	// SrcAny - the flag of matching any source IPv6 address.
 	SrcAny *bool `xml:"SrcAny,omitempty"`
 	// SrcIPv6 - Source IPv6, including SrcIPv6Address and SrcIPv6Prefix.
