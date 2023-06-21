@@ -48,6 +48,34 @@ func (rule *IPv4NamedBasicRule) ConvertToTop() *Top {
 	}
 }
 
+func (rules *IPv6NamedAdvanceRules) ConvertToTop() *Top {
+	return &Top{
+		ACL: &ACL{
+			IPv6NamedAdvanceRules: rules,
+		},
+	}
+}
+
+func (rule *IPv6NamedAdvanceRule) ConvertToTop() *Top {
+	return &Top{
+		ACL: &ACL{
+			IPv6NamedAdvanceRules: &IPv6NamedAdvanceRules{
+				IPv6NamedAdvanceRules: []IPv6NamedAdvanceRule{*rule},
+			},
+		},
+	}
+}
+
+func (rule *IPv6NamedBasicRule) ConvertToTop() *Top {
+	return &Top{
+		ACL: &ACL{
+			IPv6NamedBasicRules: &IPv6NamedBasicRules{
+				IPv6NamedBasicRules: []IPv6NamedBasicRule{*rule},
+			},
+		},
+	}
+}
+
 func (pfilter *Pfilter) ConvertToTop() *Top {
 	return &Top{
 		ACL: &ACL{
