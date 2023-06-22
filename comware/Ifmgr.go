@@ -564,7 +564,11 @@ func (targetDevice *TargetDevice) GetIfIndexesByDescription(description string, 
 func (targetDevice *TargetDevice) SetInterfaceBpduDrop(ifIndex int, enable bool) error {
 	iface := EthInterface{
 		IfIndex:  ifIndex,
-		BPDUDrop: enable,
+		BPDUDrop: NewFalse(),
+	}
+
+	if enable {
+		iface.BPDUDrop = NewTrue()
 	}
 
 	return targetDevice.Configure(*iface.ConvertToTop(), "merge")
