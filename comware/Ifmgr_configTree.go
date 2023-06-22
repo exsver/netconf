@@ -85,12 +85,16 @@ type EthInterface struct {
 	IfIndex                   int                        `xml:"IfIndex"`
 	FlowControl               int                        `xml:"FlowControl,omitempty"`
 	Jumboframe                int                        `xml:"Jumboframe,omitempty"`
-	AutoPowerDown             bool                       `xml:"AutoPowerDown,omitempty"`
-	BPDUDrop                  bool                       `xml:"BPDUDrop,omitempty"`
-	EEE                       bool                       `xml:"EEE,omitempty"`
+	AutoPowerDown             *bool                      `xml:"AutoPowerDown,omitempty"`
+	BPDUDrop                  *bool                      `xml:"BPDUDrop,omitempty"`
+	EEE                       *bool                      `xml:"EEE,omitempty"`
 	BroadcastSuppression      *BroadcastSuppression      `xml:"BroadcastSuppression,omitempty"`
 	MulticastSuppression      *MulticastSuppression      `xml:"MulticastSuppression,omitempty"`
 	UnknownUnicastSuppression *UnknownUnicastSuppression `xml:"UnknownUnicastSuppression,omitempty"`
+	// FiberOrCopper - actual fiber or copper mode of an interface
+	//  1 - fiber
+	//  2 - copper
+	FiberOrCopper EthernetFiberOrCopperMode `xml:"FiberOrCopper,omitempty"`
 }
 
 type BroadcastSuppression struct {
@@ -439,6 +443,23 @@ func (unit SuppressionUnit) String() string {
 		return SuppressionUnitPpsString
 	case SuppressionUnitKbps:
 		return SuppressionUnitKbpsString
+	}
+
+	return UnknownString
+}
+
+// EthernetFiberOrCopperMode
+//
+//	1 - fiber mode,
+//	2 - copper mode.
+type EthernetFiberOrCopperMode int
+
+func (mode EthernetFiberOrCopperMode) String() string {
+	switch mode {
+	case EthInterfaceModeFiber:
+		return EthInterfaceModeFiberString
+	case EthInterfaceModeCopper:
+		return EthInterfaceModeCopperString
 	}
 
 	return UnknownString

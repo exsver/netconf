@@ -68,6 +68,12 @@ const (
 	SuppressionUnitKbps        = 3
 	SuppressionUnitKbpsString  = "Kbps"
 
+	// EthInterface Modes
+	EthInterfaceModeFiber        = 1
+	EthInterfaceModeFiberString  = "Fiber"
+	EthInterfaceModeCopper       = 2
+	EthInterfaceModeCopperString = "Copper"
+
 	// Protocols
 	ProtocolICMP    = 1
 	ProtocolIGMP    = 2
