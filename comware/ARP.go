@@ -43,7 +43,7 @@ func (targetDevice *TargetDevice) GetARPRateLimitInterfaces() ([]ArpRateLimitInt
 		return nil, err
 	}
 
-	return data.Top.ARP.ArpRateLimit.RateLimitInterfaces, nil
+	return data.Top.ARP.ArpRateLimit.Interfaces, nil
 }
 
 // CLI equivalent

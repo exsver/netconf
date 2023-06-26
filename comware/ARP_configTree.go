@@ -9,6 +9,8 @@ type ARP struct {
 	      ArpAuthorized
 	      ArpDetection
 	        []Detect
+	      ArpDetectionInterface
+	        []Detection
 	      ArpDetectionTrust
 	        []Interface
 	      ArpFilterSource
@@ -33,6 +35,8 @@ type ARP struct {
 	ArpDetectionTrust *ArpDetectionTrust `xml:"ArpDetectionTrust"`
 	ArpFilterSource   *ArpFilterSource   `xml:"ArpFilterSource"`
 	ArpGratuitous     *ArpGratuitous     `xml:"ArpGratuitous"`
+	ArpLearnLimit     *ArpLearnLimit     `xml:"ArpLearnLimit"`
+	ArpProxy          *ArpProxy          `xml:"ArpProxy"`
 	ArpRateLimit      *ArpRateLimit      `xml:"ArpRateLimit"`
 	ArpRateLimitLog   *ArpRateLimitLog   `xml:"ArpRateLimitLog"`
 	ArpSpecification  *ArpSpecification  `xml:"ArpSpecification"`
@@ -103,10 +107,36 @@ type ArpSpecification struct {
 	LearnMaxNumDefault   int      `xml:"LearnMaxNumDefault"`
 }
 
+// ArpLearnLimit table
+type ArpLearnLimit struct {
+	XMLName    xml.Name                 `xml:"ArpLearnLimit"`
+	Interfaces []ArpLearnLimitInterface `xml:"LearnLimit"`
+}
+
+type ArpLearnLimitInterface struct {
+	XMLName             xml.Name `xml:"LearnLimit"`
+	IfIndex             int      `xml:"IfIndex"`
+	LearnMaxNum         int      `xml:"LearnMaxNum"`
+	LearnAlarmThreshold int      `xml:"LearnAlarmThreshold"`
+}
+
+// ArpProxy table
+type ArpProxy struct {
+	XMLName    xml.Name            `xml:"ArpProxy"`
+	Interfaces []ArpProxyInterface `xml:"Proxy"`
+}
+
+type ArpProxyInterface struct {
+	XMLName          xml.Name `xml:"Proxy"`
+	IfIndex          int      `xml:"IfIndex"`
+	ProxyEnable      *bool    `xml:"ProxyEnable,omitempty"`
+	LocalProxyEnable *bool    `xml:"LocalProxyEnable,omitempty"`
+}
+
 // ArpRateLimit table contains ARP rate limit information.
 type ArpRateLimit struct {
-	XMLName             xml.Name                `xml:"ArpRateLimit"`
-	RateLimitInterfaces []ArpRateLimitInterface `xml:"RateLimit"`
+	XMLName    xml.Name                `xml:"ArpRateLimit"`
+	Interfaces []ArpRateLimitInterface `xml:"RateLimit"`
 }
 
 type ArpRateLimitInterface struct {
