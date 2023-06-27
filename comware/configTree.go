@@ -23,6 +23,7 @@ type Top struct {
 	XMLName         xml.Name         `xml:"top"`
 	ACL             *ACL             `xml:"ACL"`
 	ARP             *ARP             `xml:"ARP"`
+	Configuration   *Configuration   `xml:"Configuration"`
 	Device          *Device          `xml:"Device"`
 	DHCP            *DHCP            `xml:"DHCP"`
 	DHCPSP          *DHCPSP          `xml:"DHCPSP"`

@@ -28,6 +28,7 @@ func main() {
 	//  GetData()
 	//  GetDataACL()
 	//  GetDataARP()
+	//  GetDataConfiguration()
 	//  GetDataDevice()
 	//  GetDataDHCP()
 	//  GetDataDHCPSP()
