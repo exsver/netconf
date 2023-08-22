@@ -60,9 +60,17 @@ func (targetDevice *TargetDevice) SavePointBegin(confirmTimeout int) (commitID i
 		InnerXML: []byte(fmt.Sprintf(`<save-point><begin><confirm-timeout>%s</confirm-timeout></begin></save-point>`, strconv.Itoa(confirmTimeout))),
 		Xmlns:    []string{netconf.BaseURI},
 	}
-	data, err := targetDevice.RetrieveData(request)
 
-	return data.SavePoint.Commit.CommitID, err
+	data, err := targetDevice.RetrieveData(request)
+	if err != nil {
+		return -1, err
+	}
+
+	if data.SavePoint == nil || data.SavePoint.Commit == nil {
+		return -1, fmt.Errorf("empty data")
+	}
+
+	return data.SavePoint.Commit.CommitID, nil
 }
 
 // The system supports a maximum of 50 rollback points.
