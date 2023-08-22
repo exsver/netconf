@@ -63,10 +63,11 @@ func (targetDevice *TargetDevice) RunCLICommand(command string, configurationMod
 // required Comware version >= 7.1.070
 func (targetDevice *TargetDevice) IsConfigurationSaved() (saved bool, diff []byte, err error) {
 	diff, err = targetDevice.RunCLICommand(`display current-configuration diff`, false)
-	diff = bytes.ReplaceAll(diff, []byte("\n\n\n"), []byte("\n"))
 	if err != nil {
 		return
 	}
+
+	diff = CorrectNewLines(diff)
 
 	diffLines := bytes.Split(diff, []byte("\n"))
 	if len(diffLines) == 2 && bytes.Equal(diffLines[1], []byte{}) {
@@ -91,7 +92,7 @@ func vlanListCLIToIntSlice(vlanList string) ([]int, error) {
 func ParseVlansFromConfigString(configString string) (vlans []int) {
 	lines := strings.Split(configString, "\n")
 	for _, line := range lines {
-		line := strings.TrimSpace(line)
+		line = strings.TrimSpace(line)
 		if strings.HasPrefix(line, "port trunk permit vlan ") || strings.HasPrefix(line, "port hybrid vlan ") || strings.HasPrefix(line, "port access vlan ") {
 			v, err := vlanListCLIToIntSlice(line)
 			if err == nil {
