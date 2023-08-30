@@ -94,7 +94,7 @@ type EthInterface struct {
 	// FiberOrCopper - actual fiber or copper mode of an interface
 	//  1 - fiber
 	//  2 - copper
-	FiberOrCopper EthernetFiberOrCopperMode `xml:"FiberOrCopper,omitempty"`
+	FiberOrCopper *EthernetFiberOrCopperMode `xml:"FiberOrCopper,omitempty"`
 }
 
 type BroadcastSuppression struct {
